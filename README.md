@@ -2,7 +2,7 @@
 
 **The NFT Scavenger Hunt Game** is a blockchain-powered, gamified dApp built on the StarkNet ecosystem. It challenges players to solve puzzles, follow clues, and earn exclusive NFTs as rewards, while seamlessly introducing them to the StarkNet blockchain and its ecosystem.
 
-![Logo](/NFTT.PNG)
+![Logo](https://github.com/DistinctCodes/NFT-Scavenger-Hunt-Game/blob/main/frontend/public/NFTT.PNG)
 
 ## 📌 Features
 
