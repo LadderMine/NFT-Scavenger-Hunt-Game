@@ -1,6 +1,6 @@
 # NFT Scavenger Hunt Game
 
-A gamified blockchain application built on the StarkNet ecosystem that combines educational puzzles with NFT rewards. Players can solve cryptographic riddles and blockchain-related challenges to earn unique NFTs while learning about the StarkNet ecosystem.
+A gamified blockchain application built on the StarkNet ecosystem that combines educational puzzles with NFT rewards. Players can solve riddles and blockchain-related challenges to earn unique NFTs while learning about the StarkNet ecosystem.
 
 ## Features
 
