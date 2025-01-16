@@ -12,12 +12,24 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Trophy, Brain, Lock, CheckCircle, Home } from "lucide-react";
+import ShareButton from "@/components/ShareButton";
 
 const GamePage = () => {
   const [currentLevel, setCurrentLevel] = useState(1);
   const [answer, setAnswer] = useState("");
   const [message, setMessage] = useState("");
   const [completedLevels, setCompletedLevels] = useState([]);
+
+  // Generate share message based on progress
+  const getShareMessage = () => {
+    if (completedLevels.length === 0) {
+      return "I've just started my NFT Scavenger Hunt journey! Join me in solving puzzles and earning NFTs! 🎮✨";
+    } else if (completedLevels.length === puzzles.length) {
+      return `I've completed all ${puzzles.length} levels of the NFT Scavenger Hunt! Can you match my achievement? 🏆✨`;
+    } else {
+      return `I've completed ${completedLevels.length} out of ${puzzles.length} levels in the NFT Scavenger Hunt! Join the adventure! 🎮✨`;
+    }
+  };
 
   // Example puzzles - in a real app, these would come from your backend
   const puzzles = [
@@ -72,7 +84,7 @@ const GamePage = () => {
     <div className="min-h-screen w-full bg-gradient-to-br from-black via-purple-900 to-black p-6">
       <div className="max-w-4xl mx-auto">
         {/* Back button */}
-        <div className="mb-6">
+        <div className="mb-6 flex items-center justify-between">
           <Button
             asChild
             variant="ghost"
@@ -83,6 +95,8 @@ const GamePage = () => {
               Back to Home
             </Link>
           </Button>
+
+          <ShareButton message={getShareMessage()} className="bg-transparent" />
         </div>
 
         {/* Progress tracker */}
@@ -195,6 +209,25 @@ const GamePage = () => {
             </CardContent>
           </Card>
         </div>
+
+        {/* Add share button after completing all levels */}
+        {completedLevels.length === puzzles.length && (
+          <div className="mt-8">
+            <Card className="backdrop-blur-lg bg-white/10 border-white/20 text-white">
+              <CardContent className="pt-6">
+                <div className="text-center space-y-4">
+                  <Trophy className="w-12 h-12 text-yellow-400 mx-auto" />
+                  <h3 className="text-xl font-bold">Congratulations!</h3>
+                  <p>You've completed all levels! Share your achievement:</p>
+                  <ShareButton
+                    message={`🎉 I've mastered the NFT Scavenger Hunt! All ${puzzles.length} levels completed! Can you match my achievement? 🏆✨`}
+                    className="mx-auto bg-transparent"
+                  />
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+        )}
       </div>
     </div>
   );
