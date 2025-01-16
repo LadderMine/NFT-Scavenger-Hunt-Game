@@ -1,6 +1,6 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  output: "standalone", // Necessary for deploying to Netlify
+  output: "export", // Necessary for deploying to Netlify
   trailingSlash: true,
 };
 
