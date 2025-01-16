@@ -1,5 +1,6 @@
 "use client";
 import React, { useState } from "react";
+import Link from "next/link";
 import {
   Card,
   CardContent,
@@ -10,7 +11,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Alert, AlertDescription } from "@/components/ui/alert";
-import { Trophy, Brain, Lock, CheckCircle } from "lucide-react";
+import { Trophy, Brain, Lock, CheckCircle, Home } from "lucide-react";
 
 const GamePage = () => {
   const [currentLevel, setCurrentLevel] = useState(1);
@@ -70,6 +71,20 @@ const GamePage = () => {
   return (
     <div className="min-h-screen w-full bg-gradient-to-br from-black via-purple-900 to-black p-6">
       <div className="max-w-4xl mx-auto">
+        {/* Back button */}
+        <div className="mb-6">
+          <Button
+            asChild
+            variant="ghost"
+            className="text-white hover:bg-white/10"
+          >
+            <Link href="/" className="flex items-center gap-2">
+              <Home size={20} />
+              Back to Home
+            </Link>
+          </Button>
+        </div>
+
         {/* Progress tracker */}
         <div className="flex justify-between mb-8">
           {puzzles.map((puzzle, index) => (
@@ -95,6 +110,7 @@ const GamePage = () => {
           ))}
         </div>
 
+        {/* Rest of the component remains the same... */}
         {/* Current puzzle */}
         <Card className="backdrop-blur-lg bg-white/10 border-white/20 text-white">
           <CardHeader>
@@ -127,7 +143,7 @@ const GamePage = () => {
 
                 <Button
                   variant="outline"
-                  className="w-full border-white/20 text-white hover:bg-white/10"
+                  className="w-full border-white/20 text-white bg-transparent hover:text-white hover:bg-white/10"
                   onClick={() => setMessage(currentPuzzle.hint)}
                 >
                   Need a Hint?
