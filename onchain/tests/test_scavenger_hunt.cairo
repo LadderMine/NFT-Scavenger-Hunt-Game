@@ -9,6 +9,11 @@ fn deploy_contract() -> ContractAddress {
     let (contract_address, _) = contract.deploy(@ArrayTrait::new()).unwrap();
     contract_address
 }
+#[test]
+fn test_addition() {
+    assert_eq!(2, 1 + 1);
+}
+
 // #[test]
 // fn test() {
 // }
