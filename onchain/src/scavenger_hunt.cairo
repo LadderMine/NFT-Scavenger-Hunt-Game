@@ -25,12 +25,13 @@ mod ScavengerHunt {
 
     #[abi(embed_v0)]
     impl ScavengerHuntImpl of IScavengerHunt<ContractState> {
-        //TODO
-        fn set_question_per_level(ref self: ContractState, amount: u8) {}
+        fn set_question_per_level(ref self: ContractState, amount: u8) {
+            assert!(amount > 0, "Question per level must be greater than 0");
+            self.question_per_level.write(amount);
+        }
 
-        //TODO
         fn get_question_per_level(self: @ContractState, amount: u8) -> u8 {
-            1
+            self.question_per_level.read()
         }
     }
 }

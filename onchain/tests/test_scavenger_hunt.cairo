@@ -11,6 +11,17 @@ fn deploy_contract() -> ContractAddress {
 }
 
 #[test]
+fn test_set_question_per_level() {
+    let contract_address = deploy_contract();
+    let dispatcher = IScavengerHuntDispatcher { contract_address };
+
+    dispatcher.set_question_per_level(5);
+
+    let question_per_level = dispatcher.get_question_per_level(0);
+    assert!(question_per_level == 5, "Expected 5 questions per level, got {}", question_per_level);
+}
+
+#[test]
 fn test_addition() {
     assert(1 == 1, 'wrong answer');
 }
