@@ -19,7 +19,7 @@ import databaseConfig from 'config/database.config';
       isGlobal: true,
       envFilePath: ['.env'],
       load: [appConfig, databaseConfig],
-      cache: true
+      cache: true,
     }),
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule],
@@ -33,7 +33,7 @@ import databaseConfig from 'config/database.config';
         database: configService.get('database.name'),
         blog: configService.get('database.blog'),
         synchronize: configService.get('database.synchronize'),
-        autoLoadEntities: configService.get('database.autoload')
+        autoLoadEntities: configService.get('database.autoload'),
       }),
     }),
     UsersModule,
