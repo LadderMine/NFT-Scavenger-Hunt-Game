@@ -15,7 +15,4 @@ export default registerAs('appConfig', () => ({
         ],
         credentials: true,
     }
-}))
-  enviromemt: process.env.NODE_ENV || 'development',
-  apiVersion: process.env.API_VERSION,
 }));
