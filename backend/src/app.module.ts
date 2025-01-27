@@ -10,6 +10,7 @@ import { AnswersModule } from './answers/answers.module';
 import { HintsModule } from './hints/hints.module';
 import { UserProgressModule } from './user-progress/user-progress.module';
 import { ConfigModule, ConfigService } from '@nestjs/config';
+import { AuthModule } from './auth/auth.module';
 import appConfig from 'config/app.config';
 import databaseConfig from 'config/database.config';
 
@@ -19,7 +20,7 @@ import databaseConfig from 'config/database.config';
       isGlobal: true,
       envFilePath: ['.env'],
       load: [appConfig, databaseConfig],
-      cache: true
+      cache: true,
     }),
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule],
@@ -33,7 +34,7 @@ import databaseConfig from 'config/database.config';
         database: configService.get('database.name'),
         blog: configService.get('database.blog'),
         synchronize: configService.get('database.synchronize'),
-        autoLoadEntities: configService.get('database.autoload')
+        autoLoadEntities: configService.get('database.autoload'),
       }),
     }),
     UsersModule,
@@ -43,6 +44,7 @@ import databaseConfig from 'config/database.config';
     AnswersModule,
     HintsModule,
     UserProgressModule,
+    AuthModule,
   ],
   controllers: [AppController],
   providers: [AppService],
