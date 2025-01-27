@@ -13,7 +13,9 @@ mod ScavengerHunt {
         questions_by_level: Map<(Levels, u64), u64>, // (levels, index) -> question_id
         question_per_level: u8,
         player_progress: Map<ContractAddress, PlayerProgress>,
-        player_level_progress: Map<ContractAddress, LevelProgress>,
+        player_level_progress: Map<
+            (ContractAddress, Levels), LevelProgress
+        >, // (user, level) -> LevelProgress
     }
 
     #[event]
@@ -25,6 +27,7 @@ mod ScavengerHunt {
 
     #[abi(embed_v0)]
     impl ScavengerHuntImpl of IScavengerHunt<ContractState> {
+        //TODO: restrict to admin
         fn set_question_per_level(ref self: ContractState, amount: u8) {
             assert!(amount > 0, "Question per level must be greater than 0");
             self.question_per_level.write(amount);
