@@ -1,7 +1,4 @@
-Here's the content for a well-structured README file:  
-
-```markdown
-# NFT Scavenger Hunt Backend
+## NFT Scavenger Hunt Backend
 
 This repository contains the backend for the **NFT Scavenger Hunt** application, built with [NestJS](https://nestjs.com/). The backend is responsible for handling authentication, API endpoints, database interactions, and other server-side functionality required for the NFT Scavenger Hunt experience.
 
@@ -41,6 +38,8 @@ Ensure the following are installed on your system:
 - [npm](https://www.npmjs.com/) or [yarn](https://yarnpkg.com/)
 - [PostgreSQL](https://www.postgresql.org/) (v13 or later)
 - [Git](https://git-scm.com/)
+
+---
 
 ## Installation and Setup
 
