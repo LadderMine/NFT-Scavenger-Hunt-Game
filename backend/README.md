@@ -58,6 +58,30 @@ $ npm run test:e2e
 $ npm run test:cov
 ```
 
+## CORS Configuration
+
+The backend is configured to handle Cross-Origin Resource Sharing (CORS) for development purposes:
+
+- Frontend Origin: http://localhost:3000
+- Allowed Methods: GET, POST, PUT, DELETE, OPTIONS
+- Security Headers: Origin, X-Requested-With, Content-Type, Accept, Authorization
+- Credentials: Enabled
+
+### Setup Instructions
+
+1. Create a `.env` file in the root directory
+2. Add the following environment variables:
+   PORT=3001
+   FRONTEND_URL=http://localhost:3000
+   NODE_ENV=development
+
+To test if everything is working:
+
+Start your backend (should run on port 3001)
+Start your frontend (should run on port 3000)
+Make a test request from frontend to backend
+Check browser's developer tools Network tab - you should see no CORS errors
+
 ## Deployment
 
 When you're ready to deploy your NestJS application to production, there are some key steps you can take to ensure it runs as efficiently as possible. Check out the [deployment documentation](https://docs.nestjs.com/deployment) for more information.
