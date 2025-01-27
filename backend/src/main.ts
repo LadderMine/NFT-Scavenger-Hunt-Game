@@ -1,9 +1,15 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
+import { ConfigService } from '@nestjs/config';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
+  const configService = app.get(ConfigService);
+
+  // Enable CORS with config
+  app.enableCors(configService.get('appConfig.cors'));
+
   //Swagger configuration
   const config = new DocumentBuilder()
   .setTitle('NFT-Scavengers Hunt-Game API')
