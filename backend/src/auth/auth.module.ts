@@ -7,11 +7,16 @@ import databaseConfig from 'config/database.config';
 import { UsersModule } from 'src/users/users.module';
 import { ConfigModule } from '@nestjs/config';
 import { BcryptProvider } from './providers/bcrypt.provider';
+import { AccessTokenGuard } from './guard/access-token/access-token.guard';
+import { JwtModule } from '@nestjs/jwt';
+import jwtConfig from './config/jwt.config';
 
 @Module({
   imports: [
     forwardRef(() => UsersModule),
     ConfigModule.forFeature(databaseConfig),
+    ConfigModule.forFeature(jwtConfig),
+    JwtModule.registerAsync(jwtConfig.asProvider())
   ],
   controllers: [AuthController],
   providers: [
@@ -20,7 +25,8 @@ import { BcryptProvider } from './providers/bcrypt.provider';
       provide: HashingProvider,
       useClass: BcryptProvider,
     },
+    AccessTokenGuard
   ],
-  exports: [AuthService, HashingProvider],
+  exports: [AuthService, HashingProvider, AccessTokenGuard],
 })
 export class AuthModule {}

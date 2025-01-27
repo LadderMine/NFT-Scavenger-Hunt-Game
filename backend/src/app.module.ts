@@ -13,6 +13,10 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { AuthModule } from './auth/auth.module';
 import appConfig from 'config/app.config';
 import databaseConfig from 'config/database.config';
+import { JwtModule } from '@nestjs/jwt';
+import jwtConfig from './auth/config/jwt.config';
+import { APP_GUARD } from '@nestjs/core';
+import { AuthTokenGuard } from './auth/guard/auth-token/auth-token.guard';
 
 @Module({
   imports: [
@@ -45,8 +49,14 @@ import databaseConfig from 'config/database.config';
     HintsModule,
     UserProgressModule,
     AuthModule,
+    ConfigModule.forFeature(jwtConfig),
+      JwtModule.registerAsync(jwtConfig.asProvider()),
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [AppService,
+  {
+    provide: APP_GUARD,
+    useClass:AuthTokenGuard,
+  }],
 })
 export class AppModule {}
