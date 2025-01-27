@@ -10,6 +10,7 @@ import { AnswersModule } from './answers/answers.module';
 import { HintsModule } from './hints/hints.module';
 import { UserProgressModule } from './user-progress/user-progress.module';
 import { ConfigModule, ConfigService } from '@nestjs/config';
+import { AuthModule } from './auth/auth.module';
 import appConfig from 'config/app.config';
 import databaseConfig from 'config/database.config';
 
@@ -43,6 +44,7 @@ import databaseConfig from 'config/database.config';
     AnswersModule,
     HintsModule,
     UserProgressModule,
+    AuthModule,
   ],
   controllers: [AppController],
   providers: [AppService],
