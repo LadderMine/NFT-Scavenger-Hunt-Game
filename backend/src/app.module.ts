@@ -27,6 +27,8 @@ import { AuthTokenGuard } from './auth/guard/auth-token/auth-token.guard';
       cache: true,
     }),
     TypeOrmModule.forRootAsync({
+      
+      //end
       imports: [ConfigModule],
       inject: [ConfigService],
       useFactory: (configService: ConfigService) => ({
