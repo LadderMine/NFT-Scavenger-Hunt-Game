@@ -1,8 +1,10 @@
+"use client";
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import Link from "next/link";
 import { UserPlus, Loader2 } from "lucide-react";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
+import GradientButton from "@/components/GradientButton";
 
 const Register = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -15,7 +17,10 @@ const Register = () => {
       .matches(/[A-Z]/, "Password must contain at least one uppercase letter")
       .matches(/[a-z]/, "Password must contain at least one lowercase letter")
       .matches(/[0-9]/, "Password must contain at least one number")
-      .matches(/[@$!%*?&#]/, "Password must contain at least one special character")
+      .matches(
+        /[@$!%*?&#]/,
+        "Password must contain at least one special character"
+      )
       .required("Password is required"),
   });
 
@@ -32,9 +37,9 @@ const Register = () => {
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-black via-purple-900 to-black p-4">
       <div className="w-full max-w-md p-6 rounded-lg shadow-lg backdrop-blur-lg bg-white/10 border border-white/20">
-      <h2 className="text-3xl font-bold text-center mb-6 bg-clip-text text-transparent bg-gradient-to-r from-pink-400 via-purple-500 to-pink-500">
-  Join the Adventure
-</h2>
+        <h2 className="text-3xl font-bold text-center mb-6 bg-clip-text text-transparent bg-gradient-to-r from-pink-400 via-purple-500 to-pink-500">
+          Join the Adventure
+        </h2>
 
         {success ? (
           <div className="text-center text-green-500 font-bold">
@@ -74,31 +79,25 @@ const Register = () => {
                     className="text-sm text-red-500 mt-1"
                   />
                 </div>
-                <button
+
+                <GradientButton
                   type="submit"
-                  className="w-full py-2 rounded-md bg-gradient-to-r from-purple-600 to-pink-500 text-white font-bold flex items-center justify-center space-x-2 hover:opacity-90 transition disabled:opacity-50"
+                  icon={UserPlus}
+                  isLoading={isSubmitting}
                   disabled={isSubmitting}
                 >
-                  {isSubmitting ? (
-                    <Loader2 className="w-5 h-5 animate-spin" />
-                  ) : (
-                    <>
-                      <UserPlus className="w-5 h-5" />
-                      <span>Register</span>
-                    </>
-                  )}
-                </button>
+                  Register
+                </GradientButton>
               </Form>
             )}
           </Formik>
         )}
         <p className="text-center font-semibold text-white text-lg mt-4">
-  Already have an account?{" "}
-  <Link to="/login" className="font-bold hover:underline">
-    Login
-  </Link>
-</p>
-
+          Already have an account?{" "}
+          <Link href="/login" className="font-bold hover:underline">
+            Login
+          </Link>
+        </p>
       </div>
     </div>
   );
