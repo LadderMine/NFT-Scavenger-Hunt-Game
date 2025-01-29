@@ -26,5 +26,13 @@ import {
   
     @UpdateDateColumn()
     updatedAt: Date;
-  }
+    
+    
+    @OneToMany(
+      () => UserProgress,
+      (userProgress) => userProgress.user,
+    )
+    userProgress: UserProgress[]
+    
+    }
   
