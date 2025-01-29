@@ -8,6 +8,7 @@ import { AuthModule } from 'src/auth/auth.module';
 import { ConfigModule } from '@nestjs/config';
 import { CreateUserProvider } from './providers/create-user-provider.provider';
 import databaseConfig from 'config/database.config';
+import { FindByUsername } from './providers/find-by-username.provider';
 
 @Module({
   imports: [
@@ -16,7 +17,7 @@ import databaseConfig from 'config/database.config';
     ConfigModule.forFeature(databaseConfig),
   ],
   controllers: [UsersController],
-  providers: [UsersService, CreateUserProvider],
+  providers: [UsersService, CreateUserProvider, FindByUsername],
   exports: [UsersService],
 })
 export class UsersModule {}
