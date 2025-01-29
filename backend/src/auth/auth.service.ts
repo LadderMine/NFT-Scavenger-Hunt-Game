@@ -2,27 +2,19 @@
 import { Injectable } from '@nestjs/common';
 import { forwardRef, Inject } from '@nestjs/common';
 import { UsersService } from 'src/users/users.service';
+import { LogInProvider } from './providers/log-in.provider';
+import { LogInDto } from './dto/log-in.dto';
 
 @Injectable()
 export class AuthService {
   constructor(
     @Inject(forwardRef(() => UsersService))
     private readonly userService: UsersService,
+
+    private readonly logInProvider: LogInProvider,
   ) {}
 
-  findAll() {
-    return `This action returns all auth`;
-  }
-  create() {
-    return `This action returns all auth`;
-  }
-  findOne(id: number) {
-    return `This action returns a #${id} auth`;
-  }
-  update(id: number) {
-    return `This action removes a #${id} auth`;
-  }
-  remove(id: number) {
-    return `This action removes a #${id} auth`;
+  public async LogIn(logInDto: LogInDto) {
+    return this.logInProvider.LogInToken(logInDto);
   }
 }
