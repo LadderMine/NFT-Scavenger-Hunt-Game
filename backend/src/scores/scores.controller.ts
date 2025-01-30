@@ -3,10 +3,10 @@ import { ScoresService } from './scores.service';
 
 @Controller('scores')
 export class ScoresController {
-    constructor(private readonly socresSerivce : ScoresService){}
+  constructor(private readonly socresSerivce: ScoresService) {}
 
-    //GET method leaderboard? page=1&limit=10
-    @Get()
+  //GET method leaderboard? page=1&limit=10
+  @Get()
   async getScores(
     @Query('page') page: string = '1',
     @Query('limit') limit: string = '10',
@@ -17,7 +17,7 @@ export class ScoresController {
     return this.socresSerivce.getLeaderboard(pageNumber, limitNumber);
   }
 
-     // POST /update-score
+  // POST /update-score
   @Post('/update-score')
   updateScore(@Body() body: { username: string; score: number }) {
     const { username, score } = body;

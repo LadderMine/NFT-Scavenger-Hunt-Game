@@ -10,13 +10,15 @@ import { BcryptProvider } from './providers/bcrypt.provider';
 import { AccessTokenGuard } from './guard/access-token/access-token.guard';
 import { JwtModule } from '@nestjs/jwt';
 import jwtConfig from './config/jwt.config';
+import { LogInProvider } from './providers/log-in.provider';
+import { GenerateTokenProvider } from './providers/generate-token.provider';
 
 @Module({
   imports: [
     forwardRef(() => UsersModule),
     ConfigModule.forFeature(databaseConfig),
     ConfigModule.forFeature(jwtConfig),
-    JwtModule.registerAsync(jwtConfig.asProvider())
+    JwtModule.registerAsync(jwtConfig.asProvider()),
   ],
   controllers: [AuthController],
   providers: [
@@ -25,7 +27,9 @@ import jwtConfig from './config/jwt.config';
       provide: HashingProvider,
       useClass: BcryptProvider,
     },
-    AccessTokenGuard
+    AccessTokenGuard,
+    LogInProvider,
+    GenerateTokenProvider,
   ],
   exports: [AuthService, HashingProvider, AccessTokenGuard],
 })
