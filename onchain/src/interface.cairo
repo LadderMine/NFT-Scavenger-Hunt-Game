@@ -2,6 +2,14 @@ use starknet::ContractAddress;
 
 #[starknet::interface]
 pub trait IScavengerHunt<TContractState> {
+    fn add_question(
+        ref self: TContractState,
+        level: Levels,
+        question: ByteArray,
+        answer: ByteArray,
+        hint: ByteArray,
+    );
+    fn get_question(self: @TContractState, question_id: u64) -> Question;
     fn set_question_per_level(ref self: TContractState, amount: u8);
     fn get_question_per_level(self: @TContractState, amount: u8) -> u8;
 }
