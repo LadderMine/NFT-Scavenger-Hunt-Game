@@ -62,6 +62,7 @@ fn test_add_and_get_question() {
 
     // Add a question
     start_cheat_caller_address(contract_address, ADMIN());
+    dispatcher.set_question_per_level(5);
     dispatcher.add_question(level, question.clone(), answer.clone(), hint.clone());
     stop_cheat_caller_address(contract_address);
 
@@ -127,6 +128,7 @@ fn test_submit_answer() {
 
     // Add a question
     start_cheat_caller_address(contract_address, ADMIN());
+    dispatcher.set_question_per_level(5);
     dispatcher.add_question(level, question.clone(), correct_answer.clone(), hint.clone());
     stop_cheat_caller_address(contract_address);
 
@@ -158,6 +160,7 @@ fn test_request_hint() {
 
     // Add a question
     start_cheat_caller_address(contract_address, ADMIN());
+    dispatcher.set_question_per_level(5);
     dispatcher.add_question(level, question.clone(), answer.clone(), hint.clone());
     stop_cheat_caller_address(contract_address);
 

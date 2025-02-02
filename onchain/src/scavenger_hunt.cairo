@@ -29,8 +29,9 @@ mod ScavengerHunt {
     struct Storage {
         questions: Map<u64, Question>,
         question_count: u64,
-        questions_by_level: Map<(felt252, u64), u64>, // (levels, index) -> question_id
+        questions_by_level: Map<(felt252, u8), u64>, // (levels, index) -> question_id
         question_per_level: u8,
+        question_per_level_index: Map<felt252, u8>,
         player_progress: Map<ContractAddress, PlayerProgress>,
         player_level_progress: Map<
             (ContractAddress, felt252), LevelProgress,
@@ -86,8 +87,13 @@ mod ScavengerHunt {
             self.questions.write(question_id, new_question);
 
             // Store the new question by level
+            let question_per_level = self.question_per_level.read();
+            let question_per_level_index = self.question_per_level_index.read(level.into());
 
-            self.questions_by_level.write((level.into(), question_id), question_id);
+            assert(question_per_level_index < question_per_level, 'question per level limit');
+
+            self.questions_by_level.write((level.into(), question_per_level_index), question_id);
+            self.question_per_level_index.write(level.into(), question_per_level_index + 1);
 
             // Emit event
             self.emit(QuestionAdded { question_id, level });
