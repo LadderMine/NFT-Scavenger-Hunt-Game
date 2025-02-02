@@ -141,3 +141,30 @@ fn test_submit_answer() {
     let result_correct = dispatcher.submit_answer(question_id, correct_answer.clone());
     assert!(result_correct, "expected_sub_with_correct_ans");
 }
+
+#[test]
+fn test_request_hint() {
+    // Deploy the contract
+    let contract_address = deploy_contract();
+    let dispatcher = IScavengerHuntDispatcher { contract_address };
+
+    start_cheat_caller_address(contract_address, USER());
+
+    // Define test data
+    let level = Levels::Easy;
+    let question = "What is the capital of France?"; // ByteArray
+    let answer = "Paris"; // ByteArray
+    let hint = "It starts with 'P'"; // ByteArray
+
+    // Add a question
+    start_cheat_caller_address(contract_address, ADMIN());
+    dispatcher.add_question(level, question.clone(), answer.clone(), hint.clone());
+    stop_cheat_caller_address(contract_address);
+
+    // Retrieve the hint for the question
+    let question_id = 1; // Assuming the first question has ID 1
+    let retrieved_hint = dispatcher.request_hint(question_id);
+
+    // Verify that the retrieved hint matches the expected hint
+    assert!(retrieved_hint == hint, "Expected hint '{}', got '{}'", hint, retrieved_hint);
+}

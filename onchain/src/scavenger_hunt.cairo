@@ -140,5 +140,13 @@ mod ScavengerHunt {
             self.player_level_progress.write((caller, question_data.level.into()), level_progress);
             false
         }
+
+        fn request_hint(self: @ContractState, question_id: u64) -> ByteArray {
+            // Retrieve the question from storage
+            let question = self.questions.read(question_id);
+
+            // Return the hint stored in the question
+            question.hint
+        }
     }
 }
