@@ -154,5 +154,11 @@ mod ScavengerHunt {
             // Return the hint stored in the question
             question.hint
         }
+
+        fn get_question_in_level(self: @ContractState, level: Levels, index: u8) -> ByteArray {
+            let question_id = self.questions_by_level.read((level.into(), index));
+            let question_struct = self.questions.read(question_id);
+            question_struct.question
+        }
     }
 }

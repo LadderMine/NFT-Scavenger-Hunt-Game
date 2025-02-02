@@ -171,3 +171,29 @@ fn test_request_hint() {
     // Verify that the retrieved hint matches the expected hint
     assert!(retrieved_hint == hint, "Expected hint '{}', got '{}'", hint, retrieved_hint);
 }
+
+#[test]
+fn test_get_question_in_level() {
+    let contract_address = deploy_contract();
+    let dispatcher = IScavengerHuntDispatcher { contract_address };
+
+    let level = Levels::Easy;
+    let question = "What is the capital of France?";
+    let answer = "Paris";
+    let hint = "It starts with 'P'";
+    let index = 0;
+
+    start_cheat_caller_address(contract_address, ADMIN());
+    dispatcher.set_question_per_level(5);
+    dispatcher.add_question(level, question.clone(), answer.clone(), hint.clone());
+    stop_cheat_caller_address(contract_address);
+
+    let retrieved_question = dispatcher.get_question_in_level(level, index);
+
+    assert!(
+        retrieved_question == question,
+        "Expected question '{}', got '{}'",
+        question,
+        retrieved_question,
+    );
+}
