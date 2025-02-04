@@ -1,10 +1,11 @@
 #[starknet::contract]
 mod ScavengerHunt {
-    use starknet::{ContractAddress, get_caller_address};
+    use starknet::event::EventEmitter;
     use starknet::storage::{
-        StoragePointerReadAccess, StoragePointerWriteAccess, StorageMapReadAccess,
-        StorageMapWriteAccess, Map,
+        StoragePointerReadAccess, StoragePointerWriteAccess, StoragePathEntry, Map,
+        StorageMapReadAccess, StorageMapWriteAccess
     };
+    use starknet::{ContractAddress, get_caller_address};
     use openzeppelin::introspection::src5::SRC5Component;
     use openzeppelin::access::accesscontrol::AccessControlComponent;
     use AccessControlComponent::InternalTrait;
@@ -46,6 +47,7 @@ mod ScavengerHunt {
     #[derive(Drop, starknet::Event)]
     pub enum Event {
         QuestionAdded: QuestionAdded,
+        PlayerInitialized: PlayerInitialized,
         #[flat]
         AccessControlEvent: AccessControlComponent::Event,
         #[flat]
@@ -56,6 +58,13 @@ mod ScavengerHunt {
     pub struct QuestionAdded {
         pub question_id: u64,
         pub level: Levels,
+    }
+
+    #[derive(Drop, starknet::Event)]
+    pub struct PlayerInitialized {
+        pub player_address: ContractAddress,
+        pub level: felt252,
+        pub is_initialized: bool
     }
 
     #[constructor]
@@ -113,6 +122,39 @@ mod ScavengerHunt {
 
         fn get_question_per_level(self: @ContractState, amount: u8) -> u8 {
             self.question_per_level.read()
+        }
+
+        fn initialize_player_progress(ref self: ContractState, player_address: ContractAddress) {
+            let player_progress = self.player_progress.entry(player_address).read();
+
+            assert!(!player_progress.is_initialized, "Player already initialized");
+
+            // initialize player progess
+            self
+                .player_progress
+                .write(
+                    player_address,
+                    PlayerProgress {
+                        address: player_address, current_level: Levels::Easy, is_initialized: true
+                    }
+                );
+
+            // set player current level
+            self
+                .player_level_progress
+                .write(
+                    (player_address, Levels::Easy.into()),
+                    LevelProgress {
+                        player: player_address,
+                        level: Levels::Easy,
+                        last_question_index: 0,
+                        is_completed: false,
+                        attempts: 0,
+                        nft_minted: false
+                    }
+                );
+
+            self.emit(PlayerInitialized { player_address, level: 'EASY', is_initialized: true });
         }
 
         fn submit_answer(ref self: ContractState, question_id: u64, answer: ByteArray) -> bool {
