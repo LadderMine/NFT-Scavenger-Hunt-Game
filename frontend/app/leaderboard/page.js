@@ -113,6 +113,34 @@ const LeaderboardPage = () => {
             </Table>
           </div>
         </div>
+
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div className="backdrop-blur-lg bg-white/10 border border-white/20 rounded-lg p-6 text-center">
+            <Trophy className="w-12 h-12 text-yellow-400 mx-auto mb-4" />
+            <h2 className="text-xl font-bold text-white mb-2">Top Player</h2>
+            <p className="text-gray-300">{leaderboardData[0].name}</p>
+            <p className="text-lg font-bold text-purple-400 mt-2">
+              {leaderboardData[0].score} pts
+            </p>
+          </div>
+          <div className="backdrop-blur-lg bg-white/10 border border-white/20 rounded-lg p-6 text-center">
+            <Medal className="w-12 h-12 text-purple-400 mx-auto mb-4" />
+            <h2 className="text-xl font-bold text-white mb-2">Total Players</h2>
+            <p className="text-lg font-bold text-purple-400">
+              {leaderboardData.length}
+            </p>
+          </div>
+          <div className="backdrop-blur-lg bg-white/10 border border-white/20 rounded-lg p-6 text-center">
+            <Trophy className="w-12 h-12 text-green-400 mx-auto mb-4" />
+            <h2 className="text-xl font-bold text-white mb-2">NFTs Awarded</h2>
+            <p className="text-lg font-bold text-purple-400">
+              {leaderboardData.reduce(
+                (total, player) => total + player.nfts,
+                0
+              )}
+            </p>
+          </div>
+        </div>
       </div>
     </div>
   );
