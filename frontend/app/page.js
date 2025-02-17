@@ -4,6 +4,7 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Trophy, GamepadIcon } from "lucide-react";
 import ShareButton from "@/components/ShareButton";
+import TestComponent from "@/components/TestComponent";
 
 export default function Home() {
   return (
@@ -17,6 +18,7 @@ export default function Home() {
 
       {/* Content */}
       <div className="relative flex min-h-screen flex-col items-center justify-center p-6 sm:p-24">
+      <TestComponent />
         {/* Glass card container */}
         <div className="backdrop-blur-lg bg-white/10 p-8 sm:p-12 rounded-2xl shadow-2xl border border-white/20 max-w-3xl w-full text-center">
           {/* Grid effect */}
