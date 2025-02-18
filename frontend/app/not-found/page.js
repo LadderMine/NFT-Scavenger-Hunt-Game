@@ -3,16 +3,13 @@ import React from "react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Home, Gamepad2 } from "lucide-react";
+import AnimatedBlurBackground from "@/components/AnimatedBlurBackground";
 
 export default function NotFound() {
   return (
     <main className="relative min-h-screen w-full overflow-hidden bg-gradient-to-br from-black via-purple-900 to-black">
       {/* Animated background blur */}
-      <div className="absolute inset-0">
-        <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-purple-500 rounded-full mix-blend-multiply filter blur-xl opacity-50 animate-pulse" />
-        <div className="absolute top-1/2 right-1/4 w-96 h-96 bg-blue-500 rounded-full mix-blend-multiply filter blur-xl opacity-50 animate-pulse delay-700" />
-        <div className="absolute bottom-1/4 left-1/3 w-96 h-96 bg-pink-500 rounded-full mix-blend-multiply filter blur-xl opacity-50 animate-pulse delay-1000" />
-      </div>
+      <AnimatedBlurBackground />
 
       {/* Content */}
       <div className="relative flex min-h-screen flex-col items-center justify-center p-6">
