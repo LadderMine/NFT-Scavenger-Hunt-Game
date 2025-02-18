@@ -4,7 +4,7 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Menu, X, Gamepad, Trophy, Book, User } from "lucide-react";
 
-const NavbarHeader = () => {
+const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   return (
@@ -112,4 +112,4 @@ const NavbarHeader = () => {
   );
 };
 
-export default NavbarHeader;
+export default Navbar;

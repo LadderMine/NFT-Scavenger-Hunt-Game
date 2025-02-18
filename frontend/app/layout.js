@@ -3,7 +3,7 @@ import "./globals.css";
 
 import StoreProvider from "@/store/StoreProvider";
 import Providers from "@/lib/queryClient";
-import NavbarHeader from "@/components/Navbar";
+import Navbar from "@/components/Navbar";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -29,7 +29,7 @@ export default function RootLayout({ children }) {
       >
         <Providers>
           <StoreProvider>
-            <NavbarHeader />
+            <Navbar />
             {children}
           </StoreProvider>
         </Providers>
