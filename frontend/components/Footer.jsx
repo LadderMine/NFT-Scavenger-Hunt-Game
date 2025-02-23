@@ -12,32 +12,27 @@ const Footer = () => {
             <nav className="flex flex-col space-y-2">
               <Link
                 href="/about"
-                className="text-gray-300 hover:text-white transition-colors"
-              >
+                className="text-gray-300 hover:text-white transition-colors">
                 About
               </Link>
               <Link
                 href="/privacy"
-                className="text-gray-300 hover:text-white transition-colors"
-              >
+                className="text-gray-300 hover:text-white transition-colors">
                 Privacy Policy
               </Link>
               <Link
                 href="/terms"
-                className="text-gray-300 hover:text-white transition-colors"
-              >
+                className="text-gray-300 hover:text-white transition-colors">
                 Terms
               </Link>
               <Link
                 href="/faq"
-                className="text-gray-300 hover:text-white transition-colors"
-              >
+                className="text-gray-300 hover:text-white transition-colors">
                 FAQ
               </Link>
               <Link
                 href="/contact"
-                className="text-gray-300 hover:text-white transition-colors"
-              >
+                className="text-gray-300 hover:text-white transition-colors">
                 Contact Us
               </Link>
             </nav>
@@ -50,24 +45,21 @@ const Footer = () => {
                 href="https://twitter.com"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-gray-300 hover:text-white transition-colors"
-              >
+                className="text-gray-300 hover:text-white transition-colors">
                 <Twitter className="w-6 h-6" />
               </a>
               <a
                 href="https://Linkedin.com"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-gray-300 hover:text-white transition-colors"
-              >
+                className="text-gray-300 hover:text-white transition-colors">
                 <Linkedin className="w-6 h-6" />
               </a>
               <a
                 href="https://github.com"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-gray-300 hover:text-white transition-colors"
-              >
+                className="text-gray-300 hover:text-white transition-colors">
                 <Github className="w-6 h-6" />
               </a>
             </div>
@@ -80,24 +72,21 @@ const Footer = () => {
                 href="https://starknet.io"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex items-center gap-1 text-gray-300 hover:text-white transition-colors"
-              >
+                className="flex items-center gap-1 text-gray-300 hover:text-white transition-colors">
                 StarkNet <ExternalLink className="w-4 h-4" />
               </a>
               <a
                 href="https://nextjs.org"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex items-center gap-1 text-gray-300 hover:text-white transition-colors"
-              >
+                className="flex items-center gap-1 text-gray-300 hover:text-white transition-colors">
                 Next.js <ExternalLink className="w-4 h-4" />
               </a>
               <a
                 href="https://cairo-lang.org"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex items-center gap-1 text-gray-300 hover:text-white transition-colors"
-              >
+                className="flex items-center gap-1 text-gray-300 hover:text-white transition-colors">
                 Cairo <ExternalLink className="w-4 h-4" />
               </a>
             </div>
