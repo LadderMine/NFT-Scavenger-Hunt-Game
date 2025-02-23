@@ -18,6 +18,14 @@ pub trait IScavengerHunt<TContractState> {
         self: @TContractState, question_id: u64,
     ) -> ByteArray; // request hint for a question
     fn get_question_in_level(self: @TContractState, level: Levels, index: u8) -> ByteArray;
+    fn update_question(
+        ref self: TContractState,
+        question_id: u64,
+        question: ByteArray,
+        answer: ByteArray,
+        level: Levels,
+        hint: ByteArray,
+    );
 }
 
 #[derive(Drop, Serde, starknet::Store)]

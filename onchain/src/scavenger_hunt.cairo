@@ -47,6 +47,7 @@ mod ScavengerHunt {
     #[derive(Drop, starknet::Event)]
     pub enum Event {
         QuestionAdded: QuestionAdded,
+        QuestionUpdated: QuestionUpdated,
         PlayerInitialized: PlayerInitialized,
         #[flat]
         AccessControlEvent: AccessControlComponent::Event,
@@ -65,6 +66,12 @@ mod ScavengerHunt {
         pub player_address: ContractAddress,
         pub level: felt252,
         pub is_initialized: bool
+    }
+
+    #[derive(Drop, starknet::Event)]
+    pub struct QuestionUpdated {
+        pub question_id: u64,
+        pub level: Levels,
     }
 
     #[constructor]
@@ -201,6 +208,36 @@ mod ScavengerHunt {
             let question_id = self.questions_by_level.read((level.into(), index));
             let question_struct = self.questions.read(question_id);
             question_struct.question
+        }
+
+        fn update_question(
+            ref self: ContractState,
+            question_id: u64,
+            question: ByteArray,
+            answer: ByteArray,
+            level: Levels, // This would be updated in-time
+            hint: ByteArray,
+        ) {
+            self.accesscontrol.assert_only_role(ADMIN_ROLE);
+
+            // Check if the question exists
+            let mut existing_question = self.questions.read(question_id);
+            assert!(existing_question.question_id == question_id, "Question does not exist");
+
+            // Copying the original level to avoid partial moves
+            let original_level = existing_question.level;
+
+            // Update the question details
+            existing_question.question = question;
+            existing_question.answer = answer;
+            //TODO: support level update.
+            existing_question.hint = hint;
+
+            // Write the updated question back to storage
+            self.questions.write(question_id, existing_question);
+
+            // Emit an event
+            self.emit(QuestionUpdated { question_id, level: original_level });
         }
     }
 }
