@@ -3,11 +3,13 @@ import { AppModule } from './app.module';
 import { ValidationPipe } from '@nestjs/common';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { ConfigService } from '@nestjs/config';
+import { GlobalExceptionFilter } from './common/exceptions/global-exception.filter';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   app.useGlobalPipes(new ValidationPipe({ whitelist: true }));
   const configService = app.get(ConfigService);
+  app.useGlobalFilters(new GlobalExceptionFilter());
 
   // Enable CORS with config
   app.enableCors(configService.get('appConfig.cors'));
