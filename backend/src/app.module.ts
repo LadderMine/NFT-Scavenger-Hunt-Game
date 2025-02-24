@@ -20,8 +20,6 @@ import { AuthTokenGuard } from './auth/guard/auth-token/auth-token.guard';
 import { LevelModule } from './level/level.module';
 import { LeaderboardModule } from './leaderboard/leaderboard.module';
 import { Puzzles } from './puzzles/puzzles.entity';
-import { NFTs } from './nfts/nfts.entity';
-import { Hints } from './hints/hints.entity';
 
 @Module({
   imports: [
@@ -46,7 +44,6 @@ import { Hints } from './hints/hints.entity';
         blog: configService.get('database.blog'),
         synchronize: configService.get('database.synchronize'),
         autoLoadEntities: configService.get('database.autoload'),
-        entities: [Puzzles, NFTs, Hints],
       }),
     }),
     UsersModule,
