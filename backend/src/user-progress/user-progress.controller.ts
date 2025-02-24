@@ -1,31 +1,23 @@
-import { Controller, Get, Post, Body, UseGuards, Request } from "@nestjs/common"
+import { Controller, Get, Post, Body, Param, ParseIntPipe } from "@nestjs/common";
 import { UserProgressService } from "./user-progress.service";
+import { UserProgressDto } from "./dto/user-progress.dto";
 
 @Controller("user-progress")
 export class UserProgressController {
-  constructor(private readonly userprogressService: UserProgressService) {}
+  constructor(private readonly userProgressService: UserProgressService) {}
 
-  @Get()
-  async getUserProgress(@Request() req) {
-    return this.userprogressService.getUserProgress(req.user.id);
+  @Get(":userId")
+  async getUserProgress(@Param("userId", ParseIntPipe) userId: number) {
+    return this.userProgressService.getUserProgress(userId);
   }
 
   @Post("update")
-  async updateProgress(
-    @Request() req,
-    @Body() updateProgressDto: { puzzleId: number; hintId: number | null; completed: boolean },
-  ) {
-    return this.userprogressService.updateProgress(
-      req.user.id,
-      updateProgressDto.puzzleId,
-      updateProgressDto.hintId,
-      updateProgressDto.completed,
-    )
+  async updateProgress(@Body() userProgressDto: UserProgressDto) {
+    return this.userProgressService.updateProgress(userProgressDto);
   }
 
-  @Get('score')
-  async getUserScore(@Request() req) {
-    return this.userprogressService.getUserScore(req.user.id);
+  @Get("score/:userId")
+  async getUserScore(@Param("userId", ParseIntPipe) userId: number) {
+    return this.userProgressService.getUserScore(userId);
   }
 }
-

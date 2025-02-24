@@ -1,7 +1,7 @@
-import { Hints } from "../hints/hints.entity"
-import { Puzzles } from "../puzzles/puzzles.entity"
-import { User } from "../users/users.entity"
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, JoinColumn } from "typeorm"
+import { Hints } from "src/hints/hints.entity"
+import { Puzzles } from "src/puzzles/puzzles.entity"
+import { User } from "src/users/users.entity"
+import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, JoinColumn, Relation } from "typeorm"
 
 @Entity()
 export class UserProgress {
@@ -11,10 +11,9 @@ export class UserProgress {
   @ManyToOne(
     () => User,
     (user) => user.userProgress,
-    { onDelete: 'CASCADE' } // Adding cascade delete for data integrity.
   )
   @JoinColumn({ name: "userId" })
-  user: User // Changed from Relation<User> to User
+  user: Relation<User>
 
   @ManyToOne(
     () => Puzzles,
@@ -26,10 +25,8 @@ export class UserProgress {
   @ManyToOne(
     () => Hints,
     (hints) => hints.userProgress,
-    { onDelete: 'SET NULL' } // Adding appropriate deletion behavior
   )
-  @JoinColumn({ name: "hintId" }) // Added missing JoinColumn
-  hints: Hints // Changed from Relation<Hints> to Hints
+  hints: Relation<Hints>;
 
   @Column({ default: false })
   completed: boolean
@@ -40,3 +37,4 @@ export class UserProgress {
   @Column({ type: "timestamp", default: () => "CURRENT_TIMESTAMP" })
   lastUpdated: Date
 }
+
