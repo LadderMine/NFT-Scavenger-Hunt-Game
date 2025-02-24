@@ -7,12 +7,14 @@ import {
   UpdateDateColumn,
   OneToMany,
 } from 'typeorm';
-import { UserProgress } from './user-progress.entity'; // Ensure this is correctly imported
+import { UserProgress } from '../user-progress/UserProgress.entity'; // Ensure this is correctly imported
+// I changes the Path
+
 
 @Entity('users')
 export class User {
   @PrimaryGeneratedColumn()
-  id: number; 
+  id: number;
 
   @Column({ unique: true })
   username: string;
