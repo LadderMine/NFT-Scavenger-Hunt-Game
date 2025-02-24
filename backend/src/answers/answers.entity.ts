@@ -1,4 +1,17 @@
-import { Entity } from 'typeorm';
+import { Hints } from 'src/hints/hints.entity';
+import { Puzzles } from 'src/puzzles/puzzles.entity';
+import { Entity, JoinColumn, OneToMany, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity()
-export class Answers {}
+export class Answers {
+    @PrimaryGeneratedColumn()
+    id: number;
+  
+    
+  @OneToMany(() => Puzzles, (puzzles) => puzzles.answer)
+  puzzles: Puzzles[];
+
+  @OneToMany(() => Hints, (hints) => hints.answer)
+  hints: Hints[];
+  }
+
