@@ -1,6 +1,6 @@
 import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, OneToMany } from "typeorm"
-import { UserProgress } from "src/user-progress/userprogress.entity"
 import { Puzzles } from "src/puzzles/puzzles.entity"
+import { UserProgress } from "src/user-progress/UserProgress.entity"
 @Entity()
 export class Hints {
   @PrimaryGeneratedColumn()

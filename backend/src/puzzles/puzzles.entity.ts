@@ -1,7 +1,7 @@
 import { Hints } from "src/hints/hints.entity";
 import { Level } from "src/level/entities/level.entity";
 import { NFTs } from "src/nfts/nfts.entity";
-import { UserProgress } from "src/user-progress/userprogress.entity"
+import { UserProgress } from "src/user-progress/UserProgress.entity";
 import { Entity, PrimaryGeneratedColumn, Column, OneToMany, OneToOne, ManyToOne } from "typeorm"
 
 @Entity()
