@@ -1,44 +1,22 @@
 "use client";
 import React from "react";
 import Link from "next/link";
-// import { Button } from "@/components/ui/button";
-import { Trophy, GamepadIcon, Share2 } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Trophy, GamepadIcon } from "lucide-react";
+import ShareButton from "@/components/ShareButton";
+import TestComponent from "@/components/TestComponent";
+import AnimatedBlurBackground from "@/components/AnimatedBlurBackground";
+import NFTRewardSection from "@/components/NFTRewardSection";
 
 export default function Home() {
-  const handleShare = async () => {
-    const shareMessage =
-      "Join me on NFT Scavenger Hunt - solve puzzles and earn exclusive NFTs! 🎮✨";
-
-    if (navigator.share) {
-      try {
-        await navigator.share({
-          title: "NFT Scavenger Hunt",
-          text: shareMessage,
-          url: window.location.href,
-        });
-      } catch (err) {
-        navigator.clipboard.writeText(
-          `${shareMessage}\n${window.location.href}`
-        );
-        alert("Share link copied to clipboard!");
-      }
-    } else {
-      navigator.clipboard.writeText(`${shareMessage}\n${window.location.href}`);
-      alert("Share link copied to clipboard!");
-    }
-  };
-
   return (
     <main className="relative min-h-screen w-full overflow-hidden bg-gradient-to-br from-black via-purple-900 to-black">
       {/* Animated background blur */}
-      <div className="absolute inset-0">
-        <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-purple-500 rounded-full mix-blend-multiply filter blur-xl opacity-50 animate-pulse" />
-        <div className="absolute top-1/2 right-1/4 w-96 h-96 bg-blue-500 rounded-full mix-blend-multiply filter blur-xl opacity-50 animate-pulse delay-700" />
-        <div className="absolute bottom-1/4 left-1/3 w-96 h-96 bg-pink-500 rounded-full mix-blend-multiply filter blur-xl opacity-50 animate-pulse delay-1000" />
-      </div>
+      <AnimatedBlurBackground />
 
       {/* Content */}
       <div className="relative flex min-h-screen flex-col items-center justify-center p-6 sm:p-24">
+        <TestComponent />
         {/* Glass card container */}
         <div className="backdrop-blur-lg bg-white/10 p-8 sm:p-12 rounded-2xl shadow-2xl border border-white/20 max-w-3xl w-full text-center">
           {/* Grid effect */}
@@ -80,16 +58,8 @@ export default function Home() {
                 Leaderboard
               </Link>
             </Button>
-            <Button
-              onClick={handleShare}
-              variant="outline"
-              className="w-full sm:w-auto border-white/20 text-white hover:bg-white/10 hover:text-white bg-transparent font-bold py-4 px-8 rounded-lg transform transition-all hover:scale-105"
-            >
-              <span className="flex items-center gap-2">
-                <Share2 size={20} />
-                Share
-              </span>
-            </Button>
+
+            <ShareButton />
           </div>
 
           {/* Feature highlights */}
@@ -111,6 +81,8 @@ export default function Home() {
           </div>
         </div>
       </div>
+    {/* NFT REWARD SECTION */}
+    <NFTRewardSection/>
     </main>
   );
 }
