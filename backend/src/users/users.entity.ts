@@ -7,7 +7,7 @@ import {
   UpdateDateColumn,
   OneToMany,
 } from 'typeorm';
-import { UserProgress } from './user-progress.entity'; // Ensure this is correctly imported
+import { UserProgress } from '../user-progress/userprogress.entity'; // Ensure this is correctly imported
 
 @Entity('users')
 export class User {
