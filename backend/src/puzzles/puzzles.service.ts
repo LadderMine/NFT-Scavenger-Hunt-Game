@@ -1,21 +1,21 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Puzzles } from './puzzles.entity';
-import { Repository } from 'typeorm';
-
+import { Injectable, BadRequestException } from '@nestjs/common';
+import { LevelEnum } from 'src/enums/LevelEnum';
 @Injectable()
 export class PuzzlesService {
-    constructor(
-    @InjectRepository(Puzzles)
-    private readonly puzzleRepository: Repository<Puzzles>
-    ) {}
+  private puzzles: { id: number; level: LevelEnum }[] = [];
 
-
-async getAPuzzle(id: number): Promise<Puzzles> {
-    const puzzle = await this.puzzleRepository.findOne({ where: { id } });
-    if (!puzzle) {
-    throw new NotFoundException(`Puzzle not found`);
+  createPuzzle(id: number, level: LevelEnum) {
+    if (!Object.values(LevelEnum).includes(level)) {
+      throw new BadRequestException(`Invalid level: ${level}`);
     }
-    return puzzle;
-}
+    const newPuzzle = {
+      id: this.puzzles.length + 1,
+      level: level,
+    };
+    this.puzzles.push(newPuzzle);
+    return newPuzzle;
+  }
+  getAllPuzzles() {
+    return this.puzzles;
+  }
 }
