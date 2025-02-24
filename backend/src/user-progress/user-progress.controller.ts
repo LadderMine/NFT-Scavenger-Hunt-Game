@@ -36,6 +36,7 @@ export class UserProgressController {
     );
   }
 
+  //get user-score endpoint
   @Get('user-score')
   async getUserScore(
     @Query('userId') userId: number,
