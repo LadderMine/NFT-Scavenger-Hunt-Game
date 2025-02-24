@@ -1,4 +1,3 @@
-/* eslint-disable prettier/prettier */
 import {
   Entity,
   Column,
@@ -7,7 +6,8 @@ import {
   UpdateDateColumn,
   OneToMany,
 } from 'typeorm';
-import { UserProgress } from './user-progress.entity'; // Ensure this is correctly imported
+import { UserProgress } from 'src/user-progress/user-progress.entity'; 
+import { Scores } from 'src/scores/scores.entity'; // Import Scores
 
 @Entity('users')
 export class User {
@@ -31,4 +31,8 @@ export class User {
 
   @OneToMany(() => UserProgress, (userProgress) => userProgress.user)
   userProgress: UserProgress[];
+
+  // Add Scores relationship
+  @OneToMany(() => Scores, (score) => score.user)
+  scores: Scores[];
 }
