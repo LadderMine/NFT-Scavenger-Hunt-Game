@@ -14,19 +14,23 @@ export class Hints {
   )
   puzzles: Puzzles
 
-  // @OneToMany(
-  //   () => UserProgress,
-  //   (userProgress) => userProgress.hints,
-  // )
-  userProgress: UserProgress[]
+  @OneToMany(
+    () => UserProgress,
+    (userProgress) => userProgress.hints,
+  )
+  @OneToOne(() => Answers, (answer) => answer.hint, { onDelete: 'CASCADE' })
+  answer: Answers;
+  @ManyToOne(() => UserProgress, (userProgress) => userProgress.hints, { onDelete: 'CASCADE' })
+  userProgress: UserProgress;
+  userProgres: UserProgress[]
   @ManyToOne(() => User, (user) => user.hints)
   user: User;
 
   @ManyToOne(() => Puzzles, (puzzle) => puzzle.hints)
   puzzle: Puzzles;
 
-  @OneToOne(() => Answers, (answer) => answer.hints, { cascade: true })
-  answer: Answers;
+  // @OneToOne(() => Answers, (answer) => answer.hints, { cascade: true })
+  // answer: Answers;
   
 }
 

@@ -30,6 +30,10 @@ export class Puzzles {
 
   @ManyToOne(() => Answers, (answer) => answer.puzzles, { cascade: true })
   answer: Answers;
+  
+@OneToMany(() => UserProgress, (userProgress) => userProgress.puzzle)
+userProgresses: UserProgress[];
+
 
   // @ManyToMany(() => NFTs, (nft) => nft.puzzles, { cascade: true })
   // @JoinTable()

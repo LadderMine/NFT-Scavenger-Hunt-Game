@@ -11,9 +11,12 @@ export class NFTs {
   @ManyToOne(() => User, (user) => user.nfts, { onDelete: "CASCADE" })
   user: User;
 
+  @ManyToMany(() => Puzzles, (puzzle) => puzzle.nfts)
+  puzzles: Puzzles[];
+
   @ManyToMany(() => Puzzles, (puzzles) => puzzles.nfts, { cascade: true })
   @JoinTable()
-  puzzles: Puzzles[];
+  puzzle: Puzzles[];
   @OneToMany(() => Hints, (hint) => hint.userProgress, { cascade: true })
     hints: Hints[];
 }

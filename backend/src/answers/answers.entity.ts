@@ -6,12 +6,17 @@ import { Entity, JoinColumn, OneToMany, OneToOne, PrimaryGeneratedColumn } from 
 export class Answers {
     @PrimaryGeneratedColumn()
     id: number;
-  
+    @OneToOne(() => Hints, (hint) => hint.answer)
+    @JoinColumn()
+    hint: Hints;
     
   @OneToMany(() => Puzzles, (puzzles) => puzzles.answer)
   puzzles: Puzzles[];
 
-  @OneToMany(() => Hints, (hints) => hints.answer)
-  hints: Hints[];
+  @OneToOne(() => Hints, (hint) => hint.answer, { cascade: true })
+  hints: Hints;
+
+//   @OneToMany(() => Hints, (hints) => hints.answer)
+//   hints: Hints[];
   }
 
