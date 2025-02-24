@@ -1,4 +1,5 @@
 /* eslint-disable prettier/prettier */
+import { UserProgress } from 'src/user-progress/UserProgress.entity';
 import {
   Entity,
   Column,
@@ -7,7 +8,6 @@ import {
   UpdateDateColumn,
   OneToMany,
 } from 'typeorm';
-import { UserProgress } from './user-progress.entity'; // Ensure this is correctly imported
 
 @Entity('users')
 export class User {
