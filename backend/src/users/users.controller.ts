@@ -19,14 +19,10 @@ export class UsersController {
 
 
   @Patch(':id')
-  public async updateUsers(
+  public updateUsers(
     @Body()updateUserDto:UpdateUserDto, 
     @Param('id', ParseIntPipe)id:number){
-    const updateUser = await this.userService.findById(id, updateUserDto)
-
-    if(!updateUser){
-      throw new NotFoundException('User was not found')
-    }
-    return updateUser;
+    
+  return this.userService.updateUser(id, updateUserDto)
   }
 }

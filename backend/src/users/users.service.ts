@@ -30,17 +30,7 @@ export class UsersService {
     return await this.findByUsername.FindOneByUsername(username);
   }
   
-  // public async findById(id:number, updateUserDto){
-  //   const user = await this.userRepository.find({where:{id}})
-  //   if(!user){
-  //     throw new NotFoundException('User does not exist')
-  //   }
-  //   Object.assign(user, updateUserDto);
-
-  //   return this.userRepository.save(user);
-  // }
-
-  public async findById(id:number, updateUserDto:UpdateUserDto){
+  public async updateUser(id:number, updateUserDto:UpdateUserDto){
     const user = await this.userRepository.findOne({where:{id}})
     if(!user){
       throw new NotFoundException('No user was found')
