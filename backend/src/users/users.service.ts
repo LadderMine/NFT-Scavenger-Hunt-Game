@@ -1,11 +1,12 @@
 /* eslint-disable prettier/prettier */
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateUserProvider } from './providers/create-user-provider.provider';
 import { CreateUserDto } from './dtos/create-user-dto.dto';
 import { FindByUsername } from './providers/find-by-username.provider';
-import { InjectRepository } from '@nestjs/typeorm';
 import { User } from './users.entity';
+import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
+import { UpdateUserDto } from './dtos/update-user-dto';
 
 @Injectable()
 export class UsersService {
@@ -24,8 +25,13 @@ export class UsersService {
   public async FindByUsername(username: string) {
     return await this.findByUsername.FindOneByUsername(username);
   }
-
-  public async findOneById(id: number) {
-    return this.userRepository.findOneBy({id})
+  
+  public async updateUser(id:number, updateUserDto:UpdateUserDto){
+    const user = await this.userRepository.findOne({where:{id}})
+    if(!user){
+      throw new NotFoundException('No user was found')
+    }
+    Object.assign(user, updateUserDto)
+    return this.userRepository.save(user)
   }
 }
