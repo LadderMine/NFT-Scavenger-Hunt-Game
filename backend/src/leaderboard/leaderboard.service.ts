@@ -1,3 +1,4 @@
 import { Injectable } from '@nestjs/common';
+
 @Injectable()
-export class PuzzlesService {}
+export class LeaderboardService {}

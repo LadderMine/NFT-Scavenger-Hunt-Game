@@ -16,23 +16,29 @@ async function bootstrap() {
 
   //Swagger configuration
   const config = new DocumentBuilder()
-  .setTitle('NFT-Scavengers Hunt-Game API')
-  .setDescription("The NFT Scavengers Hunt game API provides endpoints for managing users, puzzles, NFTs, scores, answers, hints, and user progress. This API allows developers to build and integrate the game's functionality into their applications.")
-  .addServer('http://localhost:3000/scavengers-hunt-game')
-  .addTag('NFT-Scavengers Hunt-Game')
-  .setBasePath('/api')
-  .setTermsOfService('http://localhost:3000/terms-of-service')
-  .setLicense('Apache 2.0', 'http://www.apache.org/licenses/LICENSE-2.0.html')
-  .setContact('Yusuf Tomilola', 'http://localhost:3000/contact', 'scavengers_hunt@game.com')
-  .setVersion('1.0')
-  // Adding a JWT authentication scheme to the Swagger configuration
-  .addBearerAuth({
-    type: 'apiKey',
-    in: 'header',
-    name: 'Authorization',
-    description: 'Enter your JWT token in the format: "Bearer {your_token}"',
-  })
-  .build();
+    .setTitle('NFT-Scavengers Hunt-Game API')
+    .setDescription(
+      "The NFT Scavengers Hunt game API provides endpoints for managing users, puzzles, NFTs, scores, answers, hints, and user progress. This API allows developers to build and integrate the game's functionality into their applications.",
+    )
+    .addServer('http://localhost:3000/scavengers-hunt-game')
+    .addTag('NFT-Scavengers Hunt-Game')
+    .setBasePath('/api')
+    .setTermsOfService('http://localhost:3000/terms-of-service')
+    .setLicense('Apache 2.0', 'http://www.apache.org/licenses/LICENSE-2.0.html')
+    .setContact(
+      'Yusuf Tomilola',
+      'http://localhost:3000/contact',
+      'scavengers_hunt@game.com',
+    )
+    .setVersion('1.0')
+    // Adding a JWT authentication scheme to the Swagger configuration
+    .addBearerAuth({
+      type: 'apiKey',
+      in: 'header',
+      name: 'Authorization',
+      description: 'Enter your JWT token in the format: "Bearer {your_token}"',
+    })
+    .build();
   // Applying Swagger to the application
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('doc', app, document);
