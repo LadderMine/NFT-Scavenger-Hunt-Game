@@ -1,14 +1,17 @@
 import { Hints } from 'src/hints/hints.entity';
+import { Level } from 'src/level/entities/level.entity';
 import { NFTs } from 'src/nfts/nfts.entity';
-import { UserProgress } from 'src/user-progress/UserProgress.entity';
+import { UserProgress } from 'src/user-progress/user-progress.entity';
+import { Scores } from 'src/scores/scores.entity';
+import { Answer } from 'src/answers/answers.entity';
 import {
   Entity,
   PrimaryGeneratedColumn,
   Column,
   OneToMany,
   OneToOne,
+  ManyToOne,
 } from 'typeorm';
-import { LevelEnum } from 'src/enums/LevelEnum';
 
 @Entity()
 export class Puzzles {
@@ -17,9 +20,6 @@ export class Puzzles {
 
   @OneToMany(() => Hints, (hints) => hints.puzzles)
   hints: Hints[];
-
-  @Column({ type: 'enum', enum: LevelEnum })
-  level: LevelEnum;
 
   @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
   createdAt: Date;
@@ -37,6 +37,15 @@ export class Puzzles {
   @OneToMany(() => UserProgress, (userProgress) => userProgress.puzzles)
   userProgress: UserProgress[];
 
-  @OneToOne(() => NFTs, (nfts) => nfts.puzzles, { nullable: true })
+  @OneToOne(() => NFTs, (nfts) => nfts.puzzles)
   nfts: NFTs;
+
+  @ManyToOne(() => Level, (level) => level.puzzles)
+  level: Level;
+
+  // Add Scores relationship
+  @OneToMany(() => Scores, (score) => score.puzzleId)
+  scores: Scores[];
+  @OneToMany(() => Answer, (answer) => answer.puzzle)
+  answers: Answer[];
 }
