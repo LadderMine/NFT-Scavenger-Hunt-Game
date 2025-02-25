@@ -14,12 +14,8 @@ export class UsersService {
     private readonly createUserProvider: CreateUserProvider,
 
     private readonly findByUsername: FindByUsername,
-    
-     /*
-     * inject create user provider
-     */
     @InjectRepository(User)
-    private userRepository: Repository<User>,
+      private readonly userRepository: Repository<User>
   ) {}
 
   public async createUser(createUserDto: CreateUserDto) {
