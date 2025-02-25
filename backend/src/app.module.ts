@@ -10,8 +10,17 @@ import { AnswersModule } from './answers/answers.module';
 import { HintsModule } from './hints/hints.module';
 import { UserProgressModule } from './user-progress/user-progress.module';
 import { ConfigModule, ConfigService } from '@nestjs/config';
+import { AuthModule } from './auth/auth.module';
 import appConfig from 'config/app.config';
 import databaseConfig from 'config/database.config';
+import { JwtModule } from '@nestjs/jwt';
+import jwtConfig from './auth/config/jwt.config';
+import { APP_GUARD } from '@nestjs/core';
+import { AuthTokenGuard } from './auth/guard/auth-token/auth-token.guard';
+import { LevelModule } from './level/level.module';
+import { LeaderboardModule } from './leaderboard/leaderboard.module';
+import { Puzzles } from './puzzles/puzzles.entity';
+
 
 @Module({
   imports: [
@@ -19,9 +28,11 @@ import databaseConfig from 'config/database.config';
       isGlobal: true,
       envFilePath: ['.env'],
       load: [appConfig, databaseConfig],
-      cache: true
+      cache: true,
     }),
     TypeOrmModule.forRootAsync({
+      
+      //end
       imports: [ConfigModule],
       inject: [ConfigService],
       useFactory: (configService: ConfigService) => ({
@@ -33,7 +44,7 @@ import databaseConfig from 'config/database.config';
         database: configService.get('database.name'),
         blog: configService.get('database.blog'),
         synchronize: configService.get('database.synchronize'),
-        autoLoadEntities: configService.get('database.autoload')
+        autoLoadEntities: configService.get('database.autoload'),
       }),
     }),
     UsersModule,
@@ -43,8 +54,17 @@ import databaseConfig from 'config/database.config';
     AnswersModule,
     HintsModule,
     UserProgressModule,
+    AuthModule,
+    ConfigModule.forFeature(jwtConfig),
+      JwtModule.registerAsync(jwtConfig.asProvider()),
+      LevelModule,
+      LeaderboardModule,
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [AppService,
+  {
+    provide: APP_GUARD,
+    useClass:AuthTokenGuard,
+  }],
 })
 export class AppModule {}
