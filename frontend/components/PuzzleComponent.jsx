@@ -1,6 +1,14 @@
 "use client";
 import { useState } from "react";
-
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Button } from "./ui/button";
+import { Input } from "./ui/input";
 // puzzle data to simulate data coming in
 const puzzleData = {
   title: "Simple Math",
@@ -19,36 +27,36 @@ const PuzzleComponent = () => {
     setShowHint((prev) => !prev);
   };
   return (
-    <div className="">
-      <div className="backdrop-blur-lg bg-white/10 max-w-3xl mx-auto border-0 rounded-md px-3 py-4 flex flex-col gap-1">
-        <h3 className="text-lg text-[#BA7FF4] font-semibold">
+    <Card className="backdrop-blur-lg bg-white/10 border-white/20 text-white">
+      <CardHeader>
+        <CardTitle className="text-lg text-[#BA7FF4] font-semibold">
           {puzzleData.level} - Puzzle {puzzleData.puzzleNumber}:{" "}
           {puzzleData.title}
-        </h3>
-        <p className="text-xs md:text-sm">
+        </CardTitle>
+        <CardDescription className="text-xs md:text-sm text-gray-300">
           Level Reward: {puzzleData.levelReward}
-        </p>
-        <form className="mt-4 flex flex-col gap-3">
+        </CardDescription>
+      </CardHeader>
+      <CardContent>
+        <form className="space-y-6">
           <label htmlFor="puzzle">{puzzleData.puzzle}</label>
-          <input
-            id="puzzle"
-            name="puzzle"
-            className="bg-transparent rounded-md h-8 border-[#BA7FF4]/40 border-2"
-          />
-          <button
-            type="submit"
-            className="h-8 rounded-md bg-gradient-to-r from-[#A955F6] to-[#EB489A]"
-          >
-            {" "}
-            Submit
-          </button>
-          <button
-            type="button"
-            onClick={handleShowHint}
-            className="rounded-md h-8 border-[#BA7FF4]/40 border-2 "
-          >
-            Need a hint?
-          </button>
+          <div className="space-y-4">
+            <Input
+              type="text"
+              placeholder="Enter your answer"
+              className="bg-white/5 border-white/20 text-white"
+            />
+            <Button className="w-full bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600">
+              Submit Answer
+            </Button>
+            <Button
+              variant="outline"
+              className="w-full border-white/20 text-white bg-transparent hover:text-white hover:bg-white/10"
+              onClick={handleShowHint}
+            >
+              Need a Hint?
+            </Button>
+          </div>
 
           {showHint && (
             <p className="flex items-center mx-auto text-center">
@@ -56,8 +64,8 @@ const PuzzleComponent = () => {
             </p>
           )}
         </form>
-      </div>
-    </div>
+      </CardContent>
+    </Card>
   );
 };
 

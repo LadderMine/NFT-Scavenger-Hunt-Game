@@ -31,7 +31,7 @@ const ShareButton = () => {
     <Button
       onClick={handleShare}
       variant="outline"
-      className="w-full sm:w-auto border-white/20 text-white hover:bg-white/10 hover:text-white bg-transparent font-bold py-4 px-8 rounded-lg transform transition-all hover:scale-105"
+      className="w-fit  border-white/20 text-white hover:bg-white/10 hover:text-white bg-transparent font-bold py-4 px-8 rounded-lg transform transition-all hover:scale-105"
     >
       <span className="flex items-center gap-2">
         <Share2 size={20} />
