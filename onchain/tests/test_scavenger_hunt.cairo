@@ -197,3 +197,106 @@ fn test_get_question_in_level() {
         retrieved_question,
     );
 }
+
+#[test]
+fn test_update_question() {
+    let contract_address = deploy_contract();
+    let dispatcher = IScavengerHuntDispatcher { contract_address };
+
+    // Define initial test data
+    let level = Levels::Easy;
+    let question = "What is the capital of France?";
+    let answer = "Paris";
+    let hint = "It starts with 'P'";
+
+    // Add a question
+    start_cheat_caller_address(contract_address, ADMIN());
+    dispatcher.set_question_per_level(5);
+    dispatcher.add_question(level, question.clone(), answer.clone(), hint.clone());
+    stop_cheat_caller_address(contract_address);
+
+    // Define updated test data
+    let updated_question = "What is the capital of Germany?";
+    let updated_answer = "Berlin";
+    let updated_hint = "It starts with 'B'";
+
+    // Update the question
+    start_cheat_caller_address(contract_address, ADMIN());
+    dispatcher
+        .update_question(
+            1, updated_question.clone(), updated_answer.clone(), level, updated_hint.clone()
+        );
+    stop_cheat_caller_address(contract_address);
+
+    // Retrieve the updated question
+    let retrieved_question: Question = dispatcher.get_question(1);
+
+    // Assertions to verify the question was updated correctly
+    assert!(
+        retrieved_question.question == updated_question,
+        "Expected question '{}', got '{}'",
+        updated_question,
+        retrieved_question.question,
+    );
+    assert!(
+        retrieved_question.answer == updated_answer,
+        "Expected answer '{}', got '{}'",
+        updated_answer,
+        retrieved_question.answer,
+    );
+    assert!(
+        retrieved_question.hint == updated_hint,
+        "Expected hint '{}', got '{}'",
+        updated_hint,
+        retrieved_question.hint,
+    );
+}
+
+#[test]
+#[should_panic(expected: 'Caller is missing role')]
+fn test_update_question_should_panic_with_missing_role() {
+    let contract_address = deploy_contract();
+    let dispatcher = IScavengerHuntDispatcher { contract_address };
+
+    // Define initial test data
+    let level = Levels::Easy;
+    let question = "What is the capital of France?";
+    let answer = "Paris";
+    let hint = "It starts with 'P'";
+
+    // Add a question
+    start_cheat_caller_address(contract_address, ADMIN());
+    dispatcher.set_question_per_level(5);
+    dispatcher.add_question(level, question.clone(), answer.clone(), hint.clone());
+    stop_cheat_caller_address(contract_address);
+
+    // Define updated test data
+    let updated_question = "What is the capital of Germany?";
+    let updated_answer = "Berlin";
+    let updated_hint = "It starts with 'B'";
+
+    // Attempt to update the question without admin role
+    dispatcher
+        .update_question(
+            1, updated_question.clone(), updated_answer.clone(), level, updated_hint.clone()
+        );
+}
+
+#[test]
+#[should_panic(expected: "Question does not exist")]
+fn test_update_question_should_panic_if_question_does_not_exist() {
+    let contract_address = deploy_contract();
+    let dispatcher = IScavengerHuntDispatcher { contract_address };
+
+    // Define test data for updating a non-existent question
+    let invalid_question_id = 1; // This question ID does not exist yet
+    let question = "What is the capital of France?";
+    let answer = "Paris";
+    let level = Levels::Easy;
+    let hint = "It starts with 'P'";
+
+    // Attempt to update a non-existent question
+    start_cheat_caller_address(contract_address, ADMIN());
+    dispatcher.update_question(invalid_question_id, question, answer, level, hint);
+    stop_cheat_caller_address(contract_address);
+}
