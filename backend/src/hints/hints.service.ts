@@ -1,4 +1,4 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable,NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Hints } from './hints.entity';
 import { Repository } from 'typeorm';
@@ -12,7 +12,6 @@ export class HintsService {
     @InjectRepository(Hints)
     private readonly hintRepository: Repository<Hints>,
     private readonly puzzleService: PuzzlesService,
-    private hints: Hints[] = [];
 ) {}
 
 async createHint(dto: CreateHintDto): Promise<Hints> {
@@ -27,15 +26,17 @@ if (!puzzleId || !hintText.trim()) {
     return await this.hintRepository.save(hint);
 }
   
-  async findById(id: string): Promise<Hints | undefined> {
-        return this.hints.find((hint) => hint.id.toString() === id);
-    }
-  
-  async updateHint(id: string, updateHintDto: UpdateHintDto): Promise<Hints | null> {
-        const hint = await this.findById(id);
-        if (!hint) return null;
+async findById(id: string): Promise<Hints | null> {
+    return await this.hintRepository.findOne({ where: { id: parseInt(id) } });
+  }
 
-        Object.assign(hint, updateHintDto);
-        return hint;
+  async updateHint(id: string, updateHintDto: UpdateHintDto): Promise<Hints> {
+    const hint = await this.findById(id);
+    if (!hint) {
+      throw new NotFoundException('Hint not found');
     }
+
+    Object.assign(hint, updateHintDto);
+    return await this.hintRepository.save(hint);
+  }
 }
