@@ -7,13 +7,14 @@ import {
   UpdateDateColumn,
   OneToMany,
 } from 'typeorm';
-import { UserProgress } from 'src/user-progress/user-progress.entity'; 
+import { UserProgress } from 'src/user-progress/user-progress.entity';
 import { Scores } from 'src/scores/scores.entity'; // Import Scores
+import { Answer } from 'src/answers/answers.entity';
 
 @Entity('users')
 export class User {
   @PrimaryGeneratedColumn()
-  id: number; 
+  id: number;
 
   @Column({ unique: true })
   username: string;
@@ -36,4 +37,7 @@ export class User {
   // Add Scores relationship
   @OneToMany(() => Scores, (score) => score.user)
   scores: Scores[];
+
+  @OneToMany(() => Answer, (answer) => answer.user)
+  answers: Answer[];
 }
