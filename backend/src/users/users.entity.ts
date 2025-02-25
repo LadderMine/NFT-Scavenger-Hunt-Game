@@ -1,6 +1,5 @@
 /* eslint-disable prettier/prettier */
 import { Leaderboard } from 'src/leaderboard/entities/leaderboard.entity';
-import { UserProgress } from 'src/user-progress/userprogress.entity';
 import {
   Entity,
   Column,
