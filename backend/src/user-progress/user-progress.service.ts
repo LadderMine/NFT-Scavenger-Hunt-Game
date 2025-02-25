@@ -2,12 +2,26 @@ import { Injectable } from "@nestjs/common"
 import { InjectRepository } from "@nestjs/typeorm"
 import type { Repository } from "typeorm"
 import type { Hints } from "../hints/hints.entity"
-import { UserProgress } from "./UserProgress.entity"
+import { UserProgress } from "./user-progress.entity"
+import { UsersService } from "src/users/users.service"
+import { PuzzlesService } from "src/puzzles/puzzles.service"
+import { HintsService } from "src/hints/hints.service"
+
 @Injectable()
 export class UserProgressService {
   constructor(
     @InjectRepository(UserProgress)
     private userProgressRepository: Repository<UserProgress>,
+
+    //define dependency injection for user service
+    private readonly userservice: UsersService,
+
+    //define dependency injection for puzzle service
+    private readonly puzzleservice: PuzzlesService,
+
+    //define dependency injection for hint service
+    private readonly hintservice: HintsService,
+
   ) {}
 
   async getUserProgress(userId: number): Promise<UserProgress[]> {

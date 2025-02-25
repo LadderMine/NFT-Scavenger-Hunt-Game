@@ -1,6 +1,6 @@
 import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, OneToMany } from "typeorm"
 import { Puzzles } from "src/puzzles/puzzles.entity"
-import { UserProgress } from "src/user-progress/UserProgress.entity"
+import { UserProgress } from "src/user-progress/user-progress.entity"
 
 export enum DifficultyLevel {
   EASY = 'easy',
@@ -20,7 +20,7 @@ export class Hints {
 
   @OneToMany(
     () => UserProgress,
-    (userProgress) => userProgress.hints,
+    (userProgress) => userProgress.hints
   )
   userProgress: UserProgress[]
 

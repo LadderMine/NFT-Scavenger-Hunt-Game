@@ -8,8 +8,11 @@ import { PuzzlesService } from 'src/puzzles/puzzles.service';
 @Injectable()
 export class HintsService {
     constructor(
+    // Repository injection of hint entity
     @InjectRepository(Hints)
     private readonly hintRepository: Repository<Hints>,
+
+     // Dependecy injection of puzzle service
     private readonly puzzleService: PuzzlesService
 ) {}
 

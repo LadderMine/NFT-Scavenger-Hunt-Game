@@ -1,13 +1,27 @@
-import { Injectable } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from 'src/users/users.entity';
 import { Repository } from 'typeorm';
+import { Scores } from './scores.entity';
+import { PuzzlesService } from 'src/puzzles/puzzles.service';
 
 @Injectable()
 export class ScoresService {
   constructor(
+
+    //deine repository injection for scores entity
+    @InjectRepository(Scores)
+    private  scoresRepository: Repository<Scores>,
+
+       //deine repository injection for user entity
     @InjectRepository(User)
-    private readonly userRepository: Repository<User>,
+    private  userRepository: Repository<User>,
+
+    //define dependency injection for Scores Service
+    private readonly scoresService: ScoresService,
+
+    //define dependency injection for puzzle Service
+    private readonly puzzleService: PuzzlesService,
   ) {}
   //fetch leaderboard with pagination
   async getLeaderboard(page: number = 1, limit: number = 10) {

@@ -3,6 +3,7 @@ import { Puzzles } from "src/puzzles/puzzles.entity"
 import { User } from "src/users/users.entity"
 import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, JoinColumn, Relation } from "typeorm"
 
+
 @Entity()
 export class UserProgress {
   @PrimaryGeneratedColumn()
@@ -20,7 +21,7 @@ export class UserProgress {
     (puzzles) => puzzles.userProgress,
   )
   @JoinColumn({ name: "puzzleId" })
-  puzzles: Puzzles
+  puzzles: Puzzles[]
 
   @ManyToOne(
     () => Hints,
