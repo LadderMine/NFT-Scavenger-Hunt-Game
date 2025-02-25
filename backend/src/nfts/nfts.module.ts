@@ -1,9 +1,9 @@
 import { Module } from '@nestjs/common';
-import { NftsController } from './nfts.controller';
-import { NftsService } from './nfts.service';
+import { NFTsController } from './nfts.controller';
+import { NFTsService } from './nfts.service';
 
 @Module({
-  controllers: [NftsController],
-  providers: [NftsService]
+  controllers: [NFTsController],
+  providers: [NFTsService],
 })
 export class NftsModule {}
