@@ -19,6 +19,7 @@ import { APP_GUARD } from '@nestjs/core';
 import { AuthTokenGuard } from './auth/guard/auth-token/auth-token.guard';
 import { LevelModule } from './level/level.module';
 import { LeaderboardModule } from './leaderboard/leaderboard.module';
+import { Puzzles } from './puzzles/puzzles.entity';
 
 @Module({
   imports: [

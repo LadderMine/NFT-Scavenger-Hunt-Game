@@ -2,8 +2,7 @@ import { Injectable } from "@nestjs/common"
 import { InjectRepository } from "@nestjs/typeorm"
 import type { Repository } from "typeorm"
 import type { Hints } from "../hints/hints.entity"
-import { UserProgress } from "./userprogress.entity"
-
+import { UserProgress } from "./UserProgress.entity"
 @Injectable()
 export class UserProgressService {
   constructor(

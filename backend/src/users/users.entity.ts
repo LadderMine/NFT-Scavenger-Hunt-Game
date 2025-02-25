@@ -10,6 +10,8 @@ import {
   OneToMany,
 } from 'typeorm';
  // Ensure this is correctly imported
+import { UserProgress } from 'src/user-progress/user-progress.entity'; 
+import { Scores } from 'src/scores/scores.entity'; // Import Scores
 
 @Entity('users')
 export class User {
@@ -36,4 +38,8 @@ export class User {
 
   @OneToMany(() => Leaderboard, (leaderboard) => leaderboard.user)
 leaderboardEntries: Leaderboard[];
+  // Add Scores relationship
+  @OneToMany(() => Scores, (score) => score.user)
+  scores: Scores[];
+
 }
