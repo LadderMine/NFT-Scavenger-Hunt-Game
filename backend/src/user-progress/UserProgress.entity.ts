@@ -11,7 +11,7 @@ export class UserProgress {
   @ManyToOne(
     () => User,
     (user) => user.userProgress,
-    { onDelete: 'CASCADE' } // Adding cascade delete for data integrity
+    { onDelete: 'CASCADE' } // Adding cascade delete for data integrity.
   )
   @JoinColumn({ name: "userId" })
   user: User // Changed from Relation<User> to User
