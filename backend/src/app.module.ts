@@ -18,10 +18,9 @@ import jwtConfig from './auth/config/jwt.config';
 import { APP_GUARD } from '@nestjs/core';
 import { AuthTokenGuard } from './auth/guard/auth-token/auth-token.guard';
 import { LevelModule } from './level/level.module';
-<<<<<<< HEAD
-=======
 import { LeaderboardModule } from './leaderboard/leaderboard.module';
->>>>>>> ec4156f40489c84ff62cd9ac500f01cbaa42cf79
+import { Puzzles } from './puzzles/puzzles.entity';
+
 
 @Module({
   imports: [
@@ -59,10 +58,7 @@ import { LeaderboardModule } from './leaderboard/leaderboard.module';
     ConfigModule.forFeature(jwtConfig),
       JwtModule.registerAsync(jwtConfig.asProvider()),
       LevelModule,
-<<<<<<< HEAD
-=======
       LeaderboardModule,
->>>>>>> ec4156f40489c84ff62cd9ac500f01cbaa42cf79
   ],
   controllers: [AppController],
   providers: [AppService,
