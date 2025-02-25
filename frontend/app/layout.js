@@ -4,7 +4,6 @@ import "./globals.css";
 // import StoreProvider from "@/store/StoreProvider";
 import Providers from "@/lib/queryClient";
 import Navbar from "@/components/Navbar";
-import Footer from "@/components/Footer";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -32,7 +31,6 @@ export default function RootLayout({ children }) {
           {/* <StoreProvider> */}
           <Navbar />
           {children}
-          <Footer />
           {/* </StoreProvider> */}
         </Providers>
       </body>
