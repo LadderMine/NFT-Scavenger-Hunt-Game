@@ -1,5 +1,5 @@
-import { Entity, PrimaryGeneratedColumn, Column, OneToMany, CreateDateColumn, UpdateDateColumn } from "typeorm";
-import { Puzzles } from "src/puzzles/puzzles.entity";
+import { Puzzles } from 'src/puzzles/puzzles.entity';
+import { Entity, PrimaryGeneratedColumn, Column, OneToMany, CreateDateColumn, UpdateDateColumn } from 'typeorm';
 
 @Entity()
 export class Level {
@@ -12,21 +12,30 @@ export class Level {
   @Column()
   description: string;
 
-  @Column()
-  difficulty: string;
+  @Column({ default: 0 })
+  easy: number;
 
-  @Column({ type: "int", default: 0 })
-  requiredScore: number;
+  @Column({ default: 0 })
+  medium: number;
 
-  @Column({ default: false })
-  isLocked: boolean;
+  @Column({ default: 0 })
+  difficult: number;
+
+  @Column({ default: 0 })
+  advanced: number;
+
+  @CreateDateColumn({
+    type: 'timestamptz',
+    default: () => 'CURRENT_TIMESTAMP',
+  })
+  createdAt: Date;
+
+  @UpdateDateColumn({
+    type: 'timestamptz',
+    default: () => 'CURRENT_TIMESTAMP',
+  })
+  updatedAt: Date;
 
   @OneToMany(() => Puzzles, (puzzle) => puzzle.level)
   puzzles: Puzzles[];
-
-  @CreateDateColumn()
-  createdAt: Date;
-
-  @UpdateDateColumn()
-  updatedAt: Date;
 }
