@@ -4,9 +4,8 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Trophy, GamepadIcon } from "lucide-react";
 import ShareButton from "@/components/ShareButton";
-import TestComponent from "@/components/TestComponent";
-import AnimatedBlurBackground from "@/components/AnimatedBlurBackground";
-import NFTRewardSection from "@/components/NFTRewardSection";
+import NFTRewardsShowcase from "@/components/NFTRewardSection";
+import Footer from "@/components/Footer";
 
 export default function Home() {
   return (
@@ -81,8 +80,9 @@ export default function Home() {
           </div>
         </div>
       </div>
-    {/* NFT REWARD SECTION */}
-    <NFTRewardSection/>
+
+      <NFTRewardsShowcase />
+      <Footer />
     </main>
   );
 }
