@@ -31,7 +31,6 @@ import { Puzzles } from './puzzles/puzzles.entity';
       cache: true,
     }),
     TypeOrmModule.forRootAsync({
-      
       //end
       imports: [ConfigModule],
       inject: [ConfigService],
@@ -56,15 +55,17 @@ import { Puzzles } from './puzzles/puzzles.entity';
     UserProgressModule,
     AuthModule,
     ConfigModule.forFeature(jwtConfig),
-      JwtModule.registerAsync(jwtConfig.asProvider()),
-      LevelModule,
-      LeaderboardModule,
+    JwtModule.registerAsync(jwtConfig.asProvider()),
+    LevelModule,
+    LeaderboardModule,
   ],
   controllers: [AppController],
-  providers: [AppService,
-  {
-    provide: APP_GUARD,
-    useClass:AuthTokenGuard,
-  }],
+  providers: [
+    AppService,
+    {
+      provide: APP_GUARD,
+      useClass: AuthTokenGuard,
+    },
+  ],
 })
 export class AppModule {}
