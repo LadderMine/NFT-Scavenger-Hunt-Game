@@ -17,7 +17,7 @@ export class UsersController {
     return this.userService.createUser(createUserDto);
   }
 
-
+/**update method */
   @Patch(':id')
   public updateUsers(
     @Body()updateUserDto:UpdateUserDto, 
