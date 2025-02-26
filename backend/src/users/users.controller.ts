@@ -6,30 +6,48 @@ import {
   Get,
   Delete,
   Param,
+  Patch,
+  NotFoundException,
+  ParseIntPipe,
+  UseGuards,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dtos/create-user-dto.dto';
-
-// Guard Removed
+import { UpdateUserDto } from './dtos/update-user-dto';
+import { AuthTokenGuard } from '../auth/guard/auth-token/auth-token.guard';
+import { Auth } from '../auth/decorators/auth-decorator';
+import { AuthType } from '../auth/enums/auth-type.enum';
+import { Public } from 'src/auth/decorators/public.decorator';
 
 @Controller('users')
 export class UsersController {
-  constructor(private readonly userService: UsersService) { }
+  constructor(private readonly userService: UsersService) {}
 
   @Post()
+  @Auth(AuthType.None)
+  @Public()
   public createUsers(@Body() createUserDto: CreateUserDto) {
     return this.userService.createUser(createUserDto);
   }
 
-  // Fetch all users (Now publicly accessible)
+  // Fetch all users (Publicly accessible)
   @Get()
   public findAllUsers() {
     return this.userService.findAllUsers();
   }
 
-  // Delete a user by ID (Now publicly accessible)
+  // Update user by ID
+  @Patch(':id')
+  public updateUsers(
+    @Body() updateUserDto: UpdateUserDto,
+    @Param('id', ParseIntPipe) id: number,
+  ) {
+    return this.userService.updateUser(id, updateUserDto);
+  }
+
+  // Delete a user by ID (Publicly accessible)
   @Delete(':id')
-  public async deleteUser(@Param('id') id: number) {
+  public async deleteUser(@Param('id', ParseIntPipe) id: number) {
     return this.userService.deleteUser(id);
   }
 }
