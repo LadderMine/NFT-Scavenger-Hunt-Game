@@ -82,6 +82,69 @@ const ProfilePage = () => {
           </CardContent>
         </Card>
 
+        <Card className="backdrop-blur-lg bg-white/10 border-white/20 text-white">
+          <CardHeader>
+            <CardTitle className="text-2xl text-purple-400">
+              NFT Collection
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            {nfts.length > 0 ? (
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                {nfts.map((nft, index) => (
+                  <Card key={index} className="bg-white/5 border-white/10">
+                    <CardContent className="p-4">
+                      <img
+                        src={`/placeholder.svg?height=100&width=100`}
+                        alt={`NFT ${index + 1}`}
+                        className="w-full h-auto mb-2"
+                      />
+                      <p className="text-sm text-center">
+                        {nft.name || `NFT #${index + 1}`}
+                      </p>
+                    </CardContent>
+                  </Card>
+                ))}
+              </div>
+            ) : (
+              <p className="text-center text-gray-300">
+                No NFTs collected yet. Keep solving puzzles to earn NFTs!
+              </p>
+            )}
+          </CardContent>
+        </Card>
+
+        <Card className="backdrop-blur-lg bg-white/10 border-white/20 text-white">
+          <CardHeader>
+            <CardTitle className="text-2xl text-purple-400">
+              NFT Collection
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            {nfts.length > 0 ? (
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                {nfts.map((nft, index) => (
+                  <Card key={index} className="bg-white/5 border-white/10">
+                    <CardContent className="p-4">
+                      <img
+                        src={`/placeholder.svg?height=100&width=100`}
+                        alt={`NFT ${index + 1}`}
+                        className="w-full h-auto mb-2"
+                      />
+                      <p className="text-sm text-center">
+                        {nft.name || `NFT #${index + 1}`}
+                      </p>
+                    </CardContent>
+                  </Card>
+                ))}
+              </div>
+            ) : (
+              <p className="text-center text-gray-300">
+                No NFTs collected yet. Keep solving puzzles to earn NFTs!
+              </p>
+            )}
+          </CardContent>
+        </Card>
         
       </div>
     </div>
