@@ -11,7 +11,9 @@ import {
   OneToMany,
   OneToOne,
   ManyToOne,
+  BeforeInsert,
 } from 'typeorm';
+import { LevelEnum } from 'src/enums/LevelEnum';
 
 @Entity()
 export class Puzzles {
@@ -56,4 +58,20 @@ export class Puzzles {
   scores: Scores[];
   @OneToMany(() => Answer, (answer) => answer.puzzle)
   answers: Answer[];
+
+  @Column({
+    type: 'enum',
+    enum: LevelEnum,
+  })
+  level: LevelEnum;
+
+  @BeforeInsert()
+  async updateLevelCount() {
+    await Level.incrementCount(this.level);
+  }
+
+  @BeforeRemove()
+  async decreaseLevelCount() {
+    await Level.decrementCount(this.level);
+  }
 }
