@@ -1,6 +1,6 @@
 /* eslint-disable prettier/prettier */
 import { Leaderboard } from "src/leaderboard/entities/leaderboard.entity";
-import { UserProgress } from "src/user-progress/user-progress.entity";
+import { UserProgress } from "src/user-progress/user-progress.entity"; // Unified import path
 import { Scores } from "src/scores/scores.entity";
 import { Answer } from "src/answers/answers.entity";
 import { Puzzles } from "src/puzzles/puzzles.entity";
