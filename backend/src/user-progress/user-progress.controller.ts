@@ -21,3 +21,4 @@ export class UserProgressController {
     return this.userProgressService.getUserScore(userId);
   }
 }
+
