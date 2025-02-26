@@ -8,6 +8,7 @@ import {
 } from 'typeorm';
 import { User } from '../users/users.entity';
 import { Puzzles } from '../puzzles/puzzles.entity';
+import { UserProgress } from 'src/user-progress/user-progress.entity';
 
 @Entity()
 export class Scores {
@@ -23,6 +24,12 @@ export class Scores {
 
     @ManyToOne(() => Puzzles, (puzzle) => puzzle.scores, { onDelete: 'CASCADE' }) // Relationship with Puzzle
     puzzleId: Puzzles;
+    
+    @ManyToOne(() => Puzzles, (puzzles) => puzzles.scores, { onDelete: "CASCADE" })
+    puzzles: Puzzles;
+  
+    @ManyToOne(() => UserProgress, (userProgress) => userProgress.scores, { cascade: true })
+    userProgress: UserProgress;
 
     @CreateDateColumn()
     createdAt: Date;
