@@ -6,6 +6,13 @@ import { Trophy, GamepadIcon } from "lucide-react";
 import ShareButton from "@/components/ShareButton";
 import Footer from "@/components/Footer";
 import AnimatedBlurBackground from "@/components/AnimatedBlurBackground";
+import HowItWorks from "@/components/homepage/HowItWork";
+import FeaturedChallenges from "@/components/homepage/FeaturedChallenges";
+import NFTRewardsShowcase from "@/components/homepage/NFTRewardSection";
+import WhyJoinSection from "@/components/homepage/WhyJoinUsSection";
+import LeaderboardSection from "@/components/homepage/LeaderboardSection";
+import TestimonialsSection from "@/components/homepage/TestimonialSection";
+import GetStartedCTA from "@/components/homepage/GetStartedCTA";
 
 export default function Home() {
   return (
@@ -81,7 +88,13 @@ export default function Home() {
       </div>
 
       {/* HOMEPAGE COMPONENTS */}
-
+      <HowItWorks />
+      <FeaturedChallenges />
+      <NFTRewardsShowcase />
+      <WhyJoinSection />
+      <LeaderboardSection />
+      <TestimonialsSection />
+      <GetStartedCTA />
       <Footer />
     </main>
   );

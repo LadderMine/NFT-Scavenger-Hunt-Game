@@ -1,6 +1,5 @@
 /* eslint-disable prettier/prettier */
 import { Leaderboard } from 'src/leaderboard/entities/leaderboard.entity';
-import { UserProgress } from 'src/user-progress/userprogress.entity';
 import {
   Entity,
   Column,
@@ -8,13 +7,12 @@ import {
   CreateDateColumn,
   UpdateDateColumn,
   OneToMany,
+  OneToOne,
 } from 'typeorm';
-
- // Ensure this is correctly imported
-import { UserProgress } from 'src/user-progress/user-progress.entity'; 
-
 import { Scores } from 'src/scores/scores.entity'; // Import Scores
 import { Answer } from 'src/answers/answers.entity';
+import { Rank } from 'src/rank/entities/rank.entity';
+import { UserProgress } from 'src/user-progress/user-progress.entity';
 
 @Entity('users')
 export class User {
@@ -36,17 +34,18 @@ export class User {
   @UpdateDateColumn()
   updatedAt: Date;
 
+  @OneToOne(() => Rank, (rank) => rank.userId, { eager: true, cascade: true })
+  rank: Rank;
+
   @OneToMany(() => UserProgress, (userProgress) => userProgress.user)
   userProgress: UserProgress[];
 
   @OneToMany(() => Leaderboard, (leaderboard) => leaderboard.user)
-leaderboardEntries: Leaderboard[];
+  leaderboardEntries: Leaderboard[];
   // Add Scores relationship
   @OneToMany(() => Scores, (score) => score.user)
   scores: Scores[];
 
-
   @OneToMany(() => Answer, (answer) => answer.user)
   answers: Answer[];
-
 }
