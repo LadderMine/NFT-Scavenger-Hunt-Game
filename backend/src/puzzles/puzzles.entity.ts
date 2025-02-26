@@ -11,7 +11,9 @@ import {
   OneToMany,
   OneToOne,
   ManyToOne,
+  BeforeInsert,
 } from 'typeorm';
+import { LevelEnum } from 'src/enums/LevelEnum';
 
 @Entity()
 export class Puzzles {
@@ -50,11 +52,17 @@ export class Puzzles {
   nfts: NFTs;
 
   @ManyToOne(() => Level, (level) => level.puzzles)
-  level: Level;
+  @Column({ type: 'enum', enum: LevelEnum })
+    level: LevelEnum;
 
   // Add Scores relationship
   @OneToMany(() => Scores, (score) => score.puzzleId)
   scores: Scores[];
   @OneToMany(() => Answer, (answer) => answer.puzzle)
   answers: Answer[];
+
+  @BeforeInsert()
+  async updateLevelCount() {
+    await Level.incrementCount(this.level);
+  }
 }

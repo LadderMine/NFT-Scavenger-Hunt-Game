@@ -6,6 +6,8 @@ use snforge_std::{
 };
 
 use onchain::interface::{IScavengerHuntDispatcher, IScavengerHuntDispatcherTrait, Question, Levels};
+use onchain::utils::hash_byte_array;
+
 
 fn ADMIN() -> ContractAddress {
     contract_address_const::<'ADMIN'>()
@@ -14,6 +16,7 @@ fn ADMIN() -> ContractAddress {
 fn USER() -> ContractAddress {
     contract_address_const::<'USER'>()
 }
+
 
 fn deploy_contract() -> ContractAddress {
     let contract = declare("ScavengerHunt").unwrap().contract_class();
@@ -60,6 +63,7 @@ fn test_add_and_get_question() {
     let answer = "Paris"; // ByteArray
     let hint = "It starts with 'P'"; // ByteArray
 
+    let hashed_answer = hash_byte_array(answer.clone());
     // Add a question
     start_cheat_caller_address(contract_address, ADMIN());
     dispatcher.set_question_per_level(5);
@@ -84,10 +88,10 @@ fn test_add_and_get_question() {
         retrieved_question.question,
     );
     assert!(
-        retrieved_question.answer == answer,
+        retrieved_question.hashed_answer == hashed_answer,
         "Expected answer '{}', got '{}'",
-        answer,
-        retrieved_question.answer,
+        hashed_answer,
+        retrieved_question.hashed_answer,
     );
     assert!(
         retrieved_question.hint == hint,
@@ -220,6 +224,8 @@ fn test_update_question() {
     let updated_answer = "Berlin";
     let updated_hint = "It starts with 'B'";
 
+    let hashed_updated_answer = hash_byte_array(updated_answer.clone());
+
     // Update the question
     start_cheat_caller_address(contract_address, ADMIN());
     dispatcher
@@ -239,10 +245,10 @@ fn test_update_question() {
         retrieved_question.question,
     );
     assert!(
-        retrieved_question.answer == updated_answer,
+        retrieved_question.hashed_answer == hashed_updated_answer,
         "Expected answer '{}', got '{}'",
-        updated_answer,
-        retrieved_question.answer,
+        hashed_updated_answer,
+        retrieved_question.hashed_answer,
     );
     assert!(
         retrieved_question.hint == updated_hint,
