@@ -163,7 +163,6 @@ const FAQPage = () => {
             </div>
           </CardContent>
         </Card>
-        
       </div>
     </main>
   );
