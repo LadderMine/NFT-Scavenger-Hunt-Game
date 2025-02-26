@@ -22,6 +22,9 @@ import { LeaderboardModule } from './leaderboard/leaderboard.module';
 import appConfig from 'config/app.config';
 import databaseConfig from 'config/database.config';
 import jwtConfig from './auth/config/jwt.config';
+import { AuthTokenGuard } from './auth/guard/auth-token/auth-token.guard';
+import { RankModule } from './rank/rank.module';
+
 
 // Global authentication guard
 import { AuthTokenGuard } from './auth/guard/auth-token/auth-token.guard';
@@ -60,6 +63,8 @@ import { AuthTokenGuard } from './auth/guard/auth-token/auth-token.guard';
     AuthModule,
     LevelModule,
     LeaderboardModule,
+    RankModule,
+
     // JWT configuration
     ConfigModule.forFeature(jwtConfig),
     JwtModule.registerAsync(jwtConfig.asProvider()),
