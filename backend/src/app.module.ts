@@ -1,7 +1,12 @@
 import { Module } from '@nestjs/common';
+import { APP_GUARD } from '@nestjs/core';
+import { ConfigModule, ConfigService } from '@nestjs/config';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { JwtModule } from '@nestjs/jwt';
+
+// Application modules
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { TypeOrmModule } from '@nestjs/typeorm';
 import { UsersModule } from './users/users.module';
 import { PuzzlesModule } from './puzzles/puzzles.module';
 import { NftsModule } from './nfts/nfts.module';
@@ -9,18 +14,17 @@ import { ScoresModule } from './scores/scores.module';
 import { AnswersModule } from './answers/answers.module';
 import { HintsModule } from './hints/hints.module';
 import { UserProgressModule } from './user-progress/user-progress.module';
-import { ConfigModule, ConfigService } from '@nestjs/config';
 import { AuthModule } from './auth/auth.module';
-import appConfig from 'config/app.config';
-import databaseConfig from 'config/database.config';
-import { JwtModule } from '@nestjs/jwt';
-import jwtConfig from './auth/config/jwt.config';
-import { APP_GUARD } from '@nestjs/core';
-import { AuthTokenGuard } from './auth/guard/auth-token/auth-token.guard';
 import { LevelModule } from './level/level.module';
 import { LeaderboardModule } from './leaderboard/leaderboard.module';
-import { Puzzles } from './puzzles/puzzles.entity';
 
+// Config and JWT configuration
+import appConfig from 'config/app.config';
+import databaseConfig from 'config/database.config';
+import jwtConfig from './auth/config/jwt.config';
+
+// Global authentication guard
+import { AuthTokenGuard } from './auth/guard/auth-token/auth-token.guard';
 
 @Module({
   imports: [
@@ -30,8 +34,8 @@ import { Puzzles } from './puzzles/puzzles.entity';
       load: [appConfig, databaseConfig],
       cache: true,
     }),
+    // Database connection (using TypeORM)
     TypeOrmModule.forRootAsync({
-      //end
       imports: [ConfigModule],
       inject: [ConfigService],
       useFactory: (configService: ConfigService) => ({
@@ -41,11 +45,11 @@ import { Puzzles } from './puzzles/puzzles.entity';
         username: configService.get('database.user'),
         password: configService.get('database.password'),
         database: configService.get('database.name'),
-        blog: configService.get('database.blog'),
         synchronize: configService.get('database.synchronize'),
         autoLoadEntities: configService.get('database.autoload'),
       }),
     }),
+    // Application feature modules
     UsersModule,
     PuzzlesModule,
     NftsModule,
@@ -54,14 +58,16 @@ import { Puzzles } from './puzzles/puzzles.entity';
     HintsModule,
     UserProgressModule,
     AuthModule,
-    ConfigModule.forFeature(jwtConfig),
-    JwtModule.registerAsync(jwtConfig.asProvider()),
     LevelModule,
     LeaderboardModule,
+    // JWT configuration
+    ConfigModule.forFeature(jwtConfig),
+    JwtModule.registerAsync(jwtConfig.asProvider()),
   ],
   controllers: [AppController],
   providers: [
     AppService,
+    // Apply the AuthTokenGuard globally so all routes require authentication unless marked with @Public()
     {
       provide: APP_GUARD,
       useClass: AuthTokenGuard,
