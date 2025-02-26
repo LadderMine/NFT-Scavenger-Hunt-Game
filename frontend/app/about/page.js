@@ -42,74 +42,13 @@ const AboutPage = () => {
         </Card>
 
         {/* Key Features Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-16">
-          <FeatureCard
-            icon={<Brain className="w-8 h-8 text-purple-400" />}
-            title="Educational Puzzles"
-            description="Challenge yourself with carefully crafted puzzles that teach blockchain concepts while you play."
-          />
-          <FeatureCard
-            icon={<Trophy className="w-8 h-8 text-purple-400" />}
-            title="NFT Rewards"
-            description="Earn unique, collectible NFTs as you complete challenges and demonstrate your knowledge."
-          />
-          <FeatureCard
-            icon={<Users className="w-8 h-8 text-purple-400" />}
-            title="Community Driven"
-            description="Join a global community of learners and enthusiasts sharing knowledge and achievements."
-          />
-          <FeatureCard
-            icon={<Blocks className="w-8 h-8 text-purple-400" />}
-            title="StarkNet Powered"
-            description="Built on StarkNet's cutting-edge technology for a seamless and efficient gaming experience."
-          />
-          <FeatureCard
-            icon={<Lightbulb className="w-8 h-8 text-purple-400" />}
-            title="Learn by Doing"
-            description="Gain practical blockchain knowledge through interactive challenges and real-world applications."
-          />
-          <FeatureCard
-            icon={<Award className="w-8 h-8 text-purple-400" />}
-            title="Achievement System"
-            description="Track your progress and earn badges as you master different aspects of blockchain technology."
-          />
-        </div>
+       
 
         {/* Technology Stack */}
-        <Card className="backdrop-blur-lg bg-white/10 border-white/20 text-white mb-16">
-          <CardContent className="p-8">
-            <h2 className="text-2xl font-bold mb-6 text-center">
-              Built with Modern Technology
-            </h2>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 text-center">
-              <TechCard
-                title="StarkNet"
-                description="Scalable Layer 2 blockchain solution providing fast and secure transactions"
-              />
-              <TechCard
-                title="Next.js"
-                description="React framework enabling smooth and responsive user experiences"
-              />
-              <TechCard
-                title="Cairo"
-                description="Secure smart contract programming language powering our NFT rewards"
-              />
-            </div>
-          </CardContent>
-        </Card>
+        
 
         {/* CTA Section */}
-        <div className="text-center">
-          <h2 className="text-2xl font-bold text-white mb-6">
-            Ready to Start Your Adventure?
-          </h2>
-          <Button
-            asChild
-            className="bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white font-bold py-6 px-8 rounded-lg transform transition-all hover:scale-105"
-          >
-            <Link href="/game">Start Playing Now</Link>
-          </Button>
-        </div>
+        
       </div>
 
       <Footer />
