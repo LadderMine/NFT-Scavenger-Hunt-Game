@@ -13,4 +13,3 @@ export class NFTs {
   @JoinColumn()
   puzzles: Puzzles
 }
-
