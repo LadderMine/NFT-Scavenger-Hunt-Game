@@ -46,7 +46,7 @@ export class LogInProvider {
     //GenerateToken/Get generated token from the provider if user has been successfully found
     const accessToken = await this.generateTokenProvider.LogInToken(
       user.id,
-      user.username,
+      user.email,
     );
     // console.table([user, accessToken]);
 

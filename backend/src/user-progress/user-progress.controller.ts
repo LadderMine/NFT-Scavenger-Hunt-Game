@@ -1,18 +1,11 @@
-import {
-  Controller,
-  Get,
-  Post,
-  Body,
-  Request,
-  Query,
-  BadRequestException,
-} from '@nestjs/common';
 import { UserProgressService } from './user-progress.service';
+import { Controller, Get, Post, Body, Param, ParseIntPipe, Request, Query, BadRequestException } from "@nestjs/common";
+import { UserProgressDto } from "./dto/user-progress.dto";
 
 @Controller('user-progress')
 export class UserProgressController {
   constructor(private readonly userProgressService: UserProgressService) {}
-
+  
   @Get()
   async getUserProgress(@Request() req) {
     return this.userProgressService.getUserProgress(req.user.id);
