@@ -32,7 +32,7 @@ pub trait IScavengerHunt<TContractState> {
 pub struct Question {
     pub question_id: u64,
     pub question: ByteArray,
-    pub answer: ByteArray, // TODO: Store hashed answer
+    pub hashed_answer: felt252,
     pub level: Levels,
     pub hint: ByteArray,
 }
