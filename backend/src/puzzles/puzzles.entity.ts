@@ -51,7 +51,8 @@ export class Puzzles {
   nfts: NFTs;
 
   @ManyToOne(() => Level, (level) => level.puzzles)
-  level: Level;
+  @Column({ type: 'enum', enum: LevelEnum })
+    level: LevelEnum;
 
   // Add Scores relationship
   @OneToMany(() => Scores, (score) => score.puzzleId)
@@ -59,19 +60,8 @@ export class Puzzles {
   @OneToMany(() => Answer, (answer) => answer.puzzle)
   answers: Answer[];
 
-  @Column({
-    type: 'enum',
-    enum: LevelEnum,
-  })
-  level: LevelEnum;
-
   @BeforeInsert()
   async updateLevelCount() {
     await Level.incrementCount(this.level);
-  }
-
-  @BeforeRemove()
-  async decreaseLevelCount() {
-    await Level.decrementCount(this.level);
   }
 }

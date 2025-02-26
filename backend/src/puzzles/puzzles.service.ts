@@ -12,12 +12,13 @@ export class PuzzlesService {
         private readonly puzzleRepository: Repository<Puzzles>
     ) {}
 
-  static async createPuzzle(level: LevelEnum) {
-    const puzzleRepository = Puzzles;
-    const newPuzzle = puzzleRepository.create({ level });
+  public async createPuzzle(level: LevelEnum) {
+    // const newPuzzle = await puzzleRepository.create({ level });
+    const newPuzzle = this.puzzleRepository.create({ level });
 
-    await puzzleRepository.save(newPuzzle);
-    return newPuzzle;
+
+    await this.puzzleRepository.save(newPuzzle);
+        return newPuzzle;
   }
 }
 

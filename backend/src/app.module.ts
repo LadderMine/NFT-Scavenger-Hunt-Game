@@ -20,6 +20,7 @@ import { AuthTokenGuard } from './auth/guard/auth-token/auth-token.guard';
 import { LevelModule } from './level/level.module';
 import { LeaderboardModule } from './leaderboard/leaderboard.module';
 import { Puzzles } from './puzzles/puzzles.entity';
+import { PuzzleSubscriber } from './level/decorators/subscriber-decorator';
 
 
 @Module({
@@ -61,6 +62,7 @@ import { Puzzles } from './puzzles/puzzles.entity';
   ],
   controllers: [AppController],
   providers: [
+    PuzzleSubscriber,
     AppService,
     {
       provide: APP_GUARD,
