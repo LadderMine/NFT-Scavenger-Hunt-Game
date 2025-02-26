@@ -11,6 +11,8 @@ import {
   ArrowRight,
   Quote,
 } from "lucide-react";
+import Image from "next/image";
+import Link from "next/link";
 
 const SocialButton = ({ platform, icon: Icon, href, members }) => (
   <Button
@@ -18,7 +20,7 @@ const SocialButton = ({ platform, icon: Icon, href, members }) => (
     variant="outline"
     className="flex-1 bg-white/5 border-white/10 hover:bg-white/10 hover:border-white/20"
   >
-    <a
+    <Link
       href={href}
       target="_blank"
       rel="noopener noreferrer"
@@ -27,7 +29,7 @@ const SocialButton = ({ platform, icon: Icon, href, members }) => (
       <Icon className="w-6 h-6 text-white" />
       <span className="text-sm font-medium text-white">{platform}</span>
       <span className="text-xs text-gray-400">{members} members</span>
-    </a>
+    </Link>
   </Button>
 );
 
@@ -45,9 +47,11 @@ const TestimonialCard = ({ testimonial }) => (
         {/* Avatar */}
         <div className="flex-shrink-0">
           <div className="w-12 h-12 rounded-full bg-gradient-to-r from-purple-500 to-pink-500 flex items-center justify-center">
-            <img
+            <Image
               src={testimonial.avatar}
               alt={testimonial.name}
+              width={44}
+              height={44}
               className="w-11 h-11 rounded-full border-2 border-black"
             />
           </div>
@@ -120,15 +124,38 @@ const TestimonialsSection = () => {
     },
   ];
 
-  const nextSlide = () => {
-    setCurrentSlide((prev) => (prev + 1) % Math.ceil(testimonials.length / 2));
-  };
+  const communityStats = [
+    { value: "25K+", label: "Active Players" },
+    { value: "150K+", label: "Facebook Members" },
+    { value: "80K+", label: "Twitter Followers" },
+    { value: "45K+", label: "Linkedin Members" },
+  ];
 
-  const prevSlide = () => {
-    setCurrentSlide((prev) =>
-      prev === 0 ? Math.ceil(testimonials.length / 2) - 1 : prev - 1
-    );
-  };
+  const socialLinks = [
+    {
+      platform: "Facebook",
+      icon: Facebook,
+      href: "https://Facebook.gg/nfthunt",
+      members: "150K+",
+    },
+    {
+      platform: "Twitter",
+      icon: Twitter,
+      href: "https://twitter.com/nfthunt",
+      members: "80K+",
+    },
+    {
+      platform: "Linkedin",
+      icon: Linkedin,
+      href: "https://t.me/nfthunt",
+      members: "45K+",
+    },
+  ];
+
+  const navigationButtons = [
+    { icon: ArrowLeft, onClick: () => setCurrentSlide((prev) => (prev === 0 ? Math.ceil(testimonials.length / 2) - 1 : prev - 1)) },
+    { icon: ArrowRight, onClick: () => setCurrentSlide((prev) => (prev + 1) % Math.ceil(testimonials.length / 2)) },
+  ];
 
   return (
     <div className="w-full max-w-6xl mx-auto my-24 px-6">
@@ -144,22 +171,12 @@ const TestimonialsSection = () => {
 
       {/* Community Stats */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-12">
-        <div className="p-4 bg-white/5 rounded-lg backdrop-blur-sm text-center">
-          <div className="text-2xl font-bold text-white mb-1">25K+</div>
-          <div className="text-sm text-gray-400">Active Players</div>
-        </div>
-        <div className="p-4 bg-white/5 rounded-lg backdrop-blur-sm text-center">
-          <div className="text-2xl font-bold text-white mb-1">150K+</div>
-          <div className="text-sm text-gray-400">Facebook Members</div>
-        </div>
-        <div className="p-4 bg-white/5 rounded-lg backdrop-blur-sm text-center">
-          <div className="text-2xl font-bold text-white mb-1">80K+</div>
-          <div className="text-sm text-gray-400">Twitter Followers</div>
-        </div>
-        <div className="p-4 bg-white/5 rounded-lg backdrop-blur-sm text-center">
-          <div className="text-2xl font-bold text-white mb-1">45K+</div>
-          <div className="text-sm text-gray-400">Linkedin Members</div>
-        </div>
+        {communityStats.map((stat, index) => (
+          <div key={index} className="p-4 bg-white/5 rounded-lg backdrop-blur-sm text-center">
+            <div className="text-2xl font-bold text-white mb-1">{stat.value}</div>
+            <div className="text-sm text-gray-400">{stat.label}</div>
+          </div>
+        ))}
       </div>
 
       {/* Testimonials Carousel */}
@@ -174,22 +191,17 @@ const TestimonialsSection = () => {
 
         {/* Navigation buttons */}
         <div className="flex justify-center mt-6 gap-4">
-          <Button
-            variant="outline"
-            size="icon"
-            onClick={prevSlide}
-            className="bg-white/5 border-white/10 hover:bg-white/10"
-          >
-            <ArrowLeft className="w-4 h-4" />
-          </Button>
-          <Button
-            variant="outline"
-            size="icon"
-            onClick={nextSlide}
-            className="bg-white/5 border-white/10 hover:bg-white/10"
-          >
-            <ArrowRight className="w-4 h-4" />
-          </Button>
+          {navigationButtons.map((button, index) => (
+            <Button
+              key={index}
+              variant="outline"
+              size="icon"
+              onClick={button.onClick}
+              className="bg-white/5 border-white/10 hover:bg-white/10"
+            >
+              <button.icon className="w-4 h-4" />
+            </Button>
+          ))}
         </div>
       </div>
 
@@ -199,24 +211,9 @@ const TestimonialsSection = () => {
           Join Our Community
         </h3>
         <div className="flex flex-col sm:flex-row gap-4">
-          <SocialButton
-            platform="Facebook"
-            icon={Facebook}
-            href="https://Facebook.gg/nfthunt"
-            members="150K+"
-          />
-          <SocialButton
-            platform="Twitter"
-            icon={Twitter}
-            href="https://twitter.com/nfthunt"
-            members="80K+"
-          />
-          <SocialButton
-            platform="Linkedin"
-            icon={Linkedin}
-            href="https://t.me/nfthunt"
-            members="45K+"
-          />
+          {socialLinks.map((link, index) => (
+            <SocialButton key={index} {...link} />
+          ))}
         </div>
       </div>
     </div>
