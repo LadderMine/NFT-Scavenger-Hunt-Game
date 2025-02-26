@@ -1,7 +1,8 @@
-
 /* eslint-disable prettier/prettier */
 import { Leaderboard } from "src/leaderboard/entities/leaderboard.entity";
 import { UserProgress } from "src/user-progress/userprogress.entity";
+import { Scores } from "src/scores/scores.entity";
+import { Answer } from "src/answers/answers.entity";
 import {
   Entity,
   Column,
@@ -10,10 +11,6 @@ import {
   UpdateDateColumn,
   OneToMany,
 } from "typeorm";
-
-// Ensure this is correctly imported
-import { Scores } from "src/scores/scores.entity"; // Import Scores
-import { Answer } from "src/answers/answers.entity";
 
 @Entity("users")
 export class User {
@@ -40,7 +37,7 @@ export class User {
 
   @OneToMany(() => Leaderboard, (leaderboard) => leaderboard.user)
   leaderboardEntries: Leaderboard[];
-  // Add Scores relationship
+
   @OneToMany(() => Scores, (score) => score.user)
   scores: Scores[];
 
