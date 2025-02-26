@@ -82,6 +82,57 @@ const ProfilePage = () => {
           </CardContent>
         </Card>
 
+        <Card className="backdrop-blur-lg bg-white/10 border-white/20 text-white mb-8">
+          <CardHeader>
+            <CardTitle className="text-2xl text-purple-400">
+              Progress by Difficulty
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              {Object.entries(gameLevels).map(([difficulty, level]) => (
+                <Card key={difficulty} className="bg-white/5 border-white/10">
+                  <CardHeader>
+                    <CardTitle className="text-lg text-[#cdcdcd]">
+                      {level.name}
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="flex items-center justify-between">
+                      <div className="flex gap-1">
+                        {level.puzzles.map((puzzle, index) => (
+                          <Star
+                            key={index}
+                            size={16}
+                            className={
+                              completedPuzzles.includes(puzzle.id)
+                                ? "text-yellow-400"
+                                : "text-gray-600"
+                            }
+                            fill={
+                              completedPuzzles.includes(puzzle.id)
+                                ? "currentColor"
+                                : "none"
+                            }
+                          />
+                        ))}
+                      </div>
+                      <p className="text-sm text-gray-300">
+                        {
+                          completedPuzzles.filter((id) =>
+                            id.startsWith(difficulty)
+                          ).length
+                        }{" "}
+                        / {level.puzzles.length} completed
+                      </p>
+                    </div>
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
+          </CardContent>
+        </Card>
+  
         <Card className="backdrop-blur-lg bg-white/10 border-white/20 text-white">
           <CardHeader>
             <CardTitle className="text-2xl text-purple-400">
