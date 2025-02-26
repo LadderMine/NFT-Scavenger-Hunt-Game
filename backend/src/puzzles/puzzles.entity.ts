@@ -9,30 +9,27 @@ import { Entity, PrimaryGeneratedColumn, Column, OneToMany, ManyToOne, ManyToMan
 
 @Entity()
 export class Puzzles {
-  @PrimaryGeneratedColumn()
-  id: number
+    @PrimaryGeneratedColumn()
+    id: number
 
 
-  @ManyToOne(() => User, (user) => user.puzzles, { onDelete: "CASCADE" })
-  user: User;
-  @OneToMany(() => UserProgress, (userProgress) => userProgress.puzzle)
-  userProgress: UserProgress[];
+    @ManyToOne(() => User, (user) => user.puzzles, { onDelete: "CASCADE" })
+    user: User;
+    @OneToMany(() => UserProgress, (userProgress) => userProgress.puzzle)
+    userProgress: UserProgress[];
 
-  @OneToMany(() => Scores, (scores) => scores.puzzles, { cascade: true })
-  scores: Scores[];
+    @OneToMany(() => Scores, (scores) => scores.puzzles, { cascade: true })
+    scores: Scores[];
 
-  @OneToMany(() => Hints, (hints) => hints.puzzles, { eager: true })
-  hints: Hints[];
+    @OneToMany(() => Hints, (hints) => hints.puzzles, { eager: true })
+    hints: Hints[];
 
-  @ManyToMany(() => NFTs, (nfts) => nfts.puzzles, { cascade: true })
-  @JoinTable()
-  nfts: NFTs[];
+    @ManyToMany(() => NFTs, (nfts) => nfts.puzzles, { cascade: true })
+    @JoinTable()
+    nfts: NFTs[];
 
-  @ManyToOne(() => Answers, (answer) => answer.puzzles, { cascade: true })
-  answer: Answers;
-  
-@OneToMany(() => UserProgress, (userProgress) => userProgress.puzzle)
-userProgresses: UserProgress[];
+    @ManyToOne(() => Answers, (answer) => answer.puzzles, { cascade: true })
+    answer: Answers;
 
 
   // @ManyToMany(() => NFTs, (nft) => nft.puzzles, { cascade: true })
