@@ -15,6 +15,7 @@ export class Puzzles {
 
     @ManyToOne(() => User, (user) => user.puzzles, { onDelete: "CASCADE" })
     user: User;
+
     @OneToMany(() => UserProgress, (userProgress) => userProgress.puzzle)
     userProgress: UserProgress[];
 
@@ -31,24 +32,18 @@ export class Puzzles {
     @ManyToOne(() => Answers, (answer) => answer.puzzles, { cascade: true })
     answer: Answers;
 
+    @Column({ type: "timestamp", default: () => "CURRENT_TIMESTAMP" })
+    createdAt: Date
 
-  // @ManyToMany(() => NFTs, (nft) => nft.puzzles, { cascade: true })
-  // @JoinTable()
-  // nfts: NFTs[];
-
-
-  @Column({ type: "timestamp", default: () => "CURRENT_TIMESTAMP" })
-  createdAt: Date
-
-  @Column({ type: "timestamp", default: () => "CURRENT_TIMESTAMP", onUpdate: "CURRENT_TIMESTAMP" })
-  updatedAt: Date
+    @Column({ type: "timestamp", default: () => "CURRENT_TIMESTAMP", onUpdate: "CURRENT_TIMESTAMP" })
+    updatedAt: Date
 
 
-  @Column({ type: "int" })
-  pointValue: number;
+    @Column({ type: "int" })
+    pointValue: number;
 
 
-  @ManyToOne(() => Level, (level) => level.puzzles)
-  level: Level;
-}
+    @ManyToOne(() => Level, (level) => level.puzzles)
+    level: Level;
+  }
 
