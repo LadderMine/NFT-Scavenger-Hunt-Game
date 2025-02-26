@@ -2,7 +2,6 @@ import { Answers } from "src/answers/answers.entity";
 import { Hints } from 'src/hints/hints.entity';
 import { Level } from 'src/level/entities/level.entity';
 import { NFTs } from 'src/nfts/nfts.entity';
-import { Scores } from "src/scores/scores.entity";
 import { UserProgress } from 'src/user-progress/User-Progress.entity';;
 import { User } from "src/users/users.entity";
 import { Scores } from 'src/scores/scores.entity';
@@ -14,6 +13,7 @@ import {
   OneToMany,
   ManyToOne,
   ManyToMany, JoinTable,
+  OneToOne,
 } from 'typeorm';
 
 @Entity()
@@ -45,8 +45,8 @@ export class Puzzles {
   @Column({ type: 'int' })
   pointValue: number;
 
-  @OneToMany(() => UserProgress, (userProgress) => userProgress.puzzles)
-  userProgress: UserProgress[];
+  // @OneToMany(() => UserProgress, (userProgress) => userProgress.puzzles)
+  // userProgress: UserProgress[];
 
   @OneToOne(() => NFTs, (nfts) => nfts.puzzles, { nullable: true })
   nfts: NFTs;

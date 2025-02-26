@@ -3,7 +3,7 @@ import {
   PrimaryGeneratedColumn,
   Column,
   ManyToOne,
-  OneToMany, OneToOne,
+  OneToMany,
 } from 'typeorm';
 import { Puzzles } from 'src/puzzles/puzzles.entity';
 import { UserProgress } from '../user-progress/user-progress.entity';
@@ -14,8 +14,6 @@ export enum DifficultyLevel {
   MEDIUM = 'medium',
   HARD = 'hard',
 }
-import { User } from "src/users/users.entity"
-import { Answers } from "src/answers/answers.entity"
 @Entity()
 export class Hints {
   @PrimaryGeneratedColumn()
