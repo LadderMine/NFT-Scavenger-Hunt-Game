@@ -18,6 +18,9 @@ import jwtConfig from './auth/config/jwt.config';
 import { APP_GUARD } from '@nestjs/core';
 import { AuthTokenGuard } from './auth/guard/auth-token/auth-token.guard';
 import { LevelModule } from './level/level.module';
+import { LeaderboardModule } from './leaderboard/leaderboard.module';
+import { Puzzles } from './puzzles/puzzles.entity';
+
 
 @Module({
   imports: [
@@ -28,7 +31,6 @@ import { LevelModule } from './level/level.module';
       cache: true,
     }),
     TypeOrmModule.forRootAsync({
-      
       //end
       imports: [ConfigModule],
       inject: [ConfigService],
@@ -53,14 +55,17 @@ import { LevelModule } from './level/level.module';
     UserProgressModule,
     AuthModule,
     ConfigModule.forFeature(jwtConfig),
-      JwtModule.registerAsync(jwtConfig.asProvider()),
-      LevelModule,
+    JwtModule.registerAsync(jwtConfig.asProvider()),
+    LevelModule,
+    LeaderboardModule,
   ],
   controllers: [AppController],
-  providers: [AppService,
-  {
-    provide: APP_GUARD,
-    useClass:AuthTokenGuard,
-  }],
+  providers: [
+    AppService,
+    {
+      provide: APP_GUARD,
+      useClass: AuthTokenGuard,
+    },
+  ],
 })
 export class AppModule {}
