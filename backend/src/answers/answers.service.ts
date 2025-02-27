@@ -124,4 +124,32 @@ export class AnswersService {
       if (!answer) throw new NotFoundException(`Answer with ID ${id} not found`);
       return answer;
     } catch (error) {
-      throw new InternalServerErrorException(error.mes
+      throw new InternalServerErrorException(error.mes);
+    }
+  };
+
+  async findOneBy(field: string, value: any): Promise<Answer> {
+    try {
+    const answer = await this.answerRepository.findOne({
+      where: { [field]: value },
+      relations: ['user', 'puzzle', 'hint'],
+    });
+
+    if (!answer) {
+      throw new NotFoundException(`Answer with ${field} ${value} not found`);
+    }
+
+    return answer;
+  } catch (error) {
+    
+    throw new BadRequestException({
+      message: 'Error retriving record',
+      details: JSON.stringify({
+        message: error.message,
+        stack: error.stack,
+        details: error.response || error,
+      }),
+    });
+  }
+  }
+}
