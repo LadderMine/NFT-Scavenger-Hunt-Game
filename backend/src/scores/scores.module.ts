@@ -11,7 +11,7 @@ import { Scores } from './scores.entity';
 @Module({
   imports:[TypeOrmModule.forFeature([User, Puzzles, Scores])],
   controllers: [ScoresController],
-  providers: [ScoresService, UsersService, PuzzlesService],
+  providers: [ScoresService],
   exports: [ScoresService]
 })
 export class ScoresModule {}

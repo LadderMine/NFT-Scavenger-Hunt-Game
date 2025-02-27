@@ -12,7 +12,7 @@ import { NftsService } from "src/nfts/nfts.service"
 
 @Module({
   imports: [TypeOrmModule.forFeature([Puzzles, Scores, Level, NFTs])],
-  providers: [PuzzlesService, LevelService, ScoresService, NftsService],
+  providers: [PuzzlesService],
   controllers: [PuzzlesController],
   exports: [PuzzlesService],
 })

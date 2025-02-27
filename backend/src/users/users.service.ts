@@ -21,16 +21,10 @@ export class UsersService {
     @InjectRepository(User)
     private readonly usersRepository: Repository<User>, //dependency injection of user entity
 
-    @InjectRepository(Scores)
-    private readonly  scoresRepository: Repository<Scores>,
-
     private readonly createUserProvider: CreateUserProvider, //dependency injection of create user provider
 
     private readonly findByUsername: FindByUsername, //dependency injection of find find User 
 
-    private readonly scoreService: ScoresService, //dependency injection of Scores Service
-
-    private readonly userProgressService: UserProgressService, //dependency injection of user progress
   ) {}
 
   public async createUser(createUserDto: CreateUserDto) {

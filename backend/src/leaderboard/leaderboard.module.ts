@@ -1,11 +1,13 @@
 import { Module } from '@nestjs/common';
 import { LeaderboardController } from './leaderboard.controller';
 import { LeaderboardService } from './providers/leaderboard.service';
-import { ScoresService } from 'src/scores/scores.service';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { ScoresModule } from 'src/scores/scores.module';
 
 @Module({
+  imports: [TypeOrmModule.forFeature([ScoresModule])],
   controllers: [LeaderboardController],
-  providers: [LeaderboardService, ScoresService], //provide intra-module dependency
+  providers: [LeaderboardService],
   exports: [LeaderboardService],
 })
 export class LeaderboardModule {}

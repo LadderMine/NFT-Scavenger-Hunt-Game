@@ -5,7 +5,7 @@ import { PuzzlesService } from 'src/puzzles/puzzles.service';
 
 @Module({
   controllers: [NftsController],
-  providers: [NftsService, PuzzlesService],
+  providers: [NftsService],
   exports: [NftsService],
 })
 export class NftsModule {}

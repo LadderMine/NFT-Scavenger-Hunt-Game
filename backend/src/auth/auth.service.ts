@@ -17,13 +17,7 @@ export class AuthService {
      //dependency injection of logInProvider service
     private readonly logInProvider: LogInProvider,  
     
-    //dependency injection of bcryptProvider service
-    private readonly bcryptProvider: BcryptProvider,
-
-    //dependency injection of generateTokenProvider service
-    private readonly generateTokenProvider: GenerateTokenProvider,
   ) {}
-
 
   public async LogIn(logInDto: LogInDto) {
     return this.logInProvider.LogInToken(logInDto);

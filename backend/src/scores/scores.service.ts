@@ -17,9 +17,6 @@ export class ScoresService {
     @InjectRepository(User)
     private  userRepository: Repository<User>,
 
-    //define dependency injection for Scores Service
-    private readonly scoresService: ScoresService,
-
     //define dependency injection for puzzle Service
     private readonly puzzleService: PuzzlesService,
   ) {}

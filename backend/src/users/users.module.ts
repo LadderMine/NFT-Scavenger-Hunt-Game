@@ -15,11 +15,11 @@ import { ScoresService } from 'src/scores/scores.service';
 @Module({
   imports: [
     forwardRef(() => AuthModule),
-    TypeOrmModule.forFeature([User, CreateUserProvider, FindByUsername, ScoresService, UserProgress]),
+    TypeOrmModule.forFeature([User, UserProgress]), // Removed services/providers from here
     ConfigModule.forFeature(databaseConfig),
   ],
   controllers: [UsersController],
-  providers: [UsersService, CreateUserProvider, FindByUsername],
+  providers: [UsersService, CreateUserProvider, FindByUsername, ScoresService], // Moved services/providers here
   exports: [UsersService],
 })
 export class UsersModule {}

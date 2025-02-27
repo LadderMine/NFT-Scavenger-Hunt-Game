@@ -12,7 +12,7 @@ import { UsersService } from "src/users/users.service"
 
 @Module({
   imports: [TypeOrmModule.forFeature([UserProgress, User, Hints, Puzzles])],
-  providers: [UserProgressService, PuzzlesService, HintsService, UsersService],
+  providers: [UserProgressService],
   controllers: [UserProgressController],
   exports: [UserProgressService],
 })
