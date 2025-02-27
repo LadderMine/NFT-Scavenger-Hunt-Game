@@ -8,6 +8,7 @@ import { Hints } from "../hints/hints.entity";
 import { UserProgress } from "./userprogress.entity";
 import { UserProgressDto } from "./dto/user-progress.dto";
 import { LevelProgressService } from './level-progress.service';
+import { Puzzles } from 'src/puzzles/puzzles.entity';
 
 @Injectable()
 export class UserProgressService {
@@ -71,12 +72,11 @@ export class UserProgressService {
     return score.scoreValue;
   }
 
-  async getSolvedPuzzlesInLevel(userId: number, levelId: string): Promise<number> {
+  async getSolvedPuzzlesInLevel(userId: number, levelId: string): Promise<{ puzzles: Puzzles[], count: number }> {
     return this.levelProgressService.getPuzzlesSolvedPerLevel(userId, levelId);
   }
 
   async getLevelProgress(userId: number, levelId: string): Promise<{ progress: number; solved: number; total: number }> {
     return this.levelProgressService.calculateLevelCompletion(userId, levelId);
   }
-
 }

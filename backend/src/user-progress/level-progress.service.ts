@@ -41,7 +41,7 @@ export class LevelProgressService {
     };
   }
 
-  async getPuzzlesSolvedPerLevel(userId: number, levelId: number): Promise<{ puzzles: Puzzles[], count: number }> {
+  async getPuzzlesSolvedPerLevel(userId: number, levelId: string): Promise<{ puzzles: Puzzles[], count: number }> {
   // First, verify the level exists
   const level = await this.levelRepository.findOne({
     where: { id: levelId },
