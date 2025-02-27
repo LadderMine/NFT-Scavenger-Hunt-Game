@@ -11,7 +11,7 @@ pub trait IScavengerHunt<TContractState> {
     );
     fn get_question(self: @TContractState, question_id: u64) -> Question;
     fn set_question_per_level(ref self: TContractState, amount: u8);
-    fn get_question_per_level(self: @TContractState, amount: u8) -> u8;
+    fn get_question_per_level(self: @TContractState, count: u8) -> u8;
     fn initialize_player_progress(ref self: TContractState, player_address: ContractAddress);
     fn submit_answer(ref self: TContractState, question_id: u64, answer: ByteArray) -> bool;
     fn request_hint(
@@ -81,6 +81,34 @@ impl Felt252TryIntoLevels of TryInto<felt252, Levels> {
         } else if self == 'MEDIUM' {
             Option::Some(Levels::Medium)
         } else if self == 'HARD' {
+            Option::Some(Levels::Hard)
+        } else if self == 'MASTER' {
+            Option::Some(Levels::Master)
+        } else {
+            Option::None
+        }
+    }
+}
+
+
+impl LevelsIntoTokenIDs of Into<Levels, u256> {
+    fn into(self: Levels) -> u256 {
+        match self {
+            Levels::Easy => 1,
+            Levels::Medium => 2,
+            Levels::Hard => 3,
+            Levels::Master => 4,
+        }
+    }
+}
+
+impl TokenIDsTryIntoLevels of TryInto<u256, Levels> {
+    fn try_into(self: u256) -> Option<Levels> {
+        if self == 1 {
+            Option::Some(Levels::Easy)
+        } else if self == 2 {
+            Option::Some(Levels::Medium)
+        } else if self == 3 {
             Option::Some(Levels::Hard)
         } else if self == 'MASTER' {
             Option::Some(Levels::Master)

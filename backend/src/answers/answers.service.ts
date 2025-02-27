@@ -1,14 +1,18 @@
+/* eslint-disable prettier/prettier */
 import {
   BadRequestException,
   Injectable,
   NotFoundException,
+  InternalServerErrorException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { Answer, Answers } from './answers.entity';
+import { Answer } from './answers.entity';
 import { Puzzles } from '../puzzles/puzzles.entity';
 import { User } from '../users/users.entity';
+import { Hints } from '../hints/hints.entity';
 import { CheckAnswerDto } from './dto/check-answer.dto';
+import { CreateAnswerDto, UpdateAnswerDto } from './answers.dto';
 import { validate } from 'class-validator';
 import { HintsService } from 'src/hints/hints.service';
 
@@ -16,14 +20,17 @@ import { HintsService } from 'src/hints/hints.service';
 export class AnswersService {
   constructor(
     @InjectRepository(Answer)
-    private answerRepository: Repository<Answer>,
+    private readonly answerRepository: Repository<Answer>,
+
     @InjectRepository(Puzzles)
-    private puzzlesRepository: Repository<Puzzles>,
+    private readonly puzzleRepository: Repository<Puzzles>,
+
     @InjectRepository(User)
-    private usersRepository: Repository<User>,
-    @InjectRepository(Answers)
-    private answersRepository: Repository<Answers>,
-    
+    private readonly userRepository: Repository<User>,
+
+    @InjectRepository(Hints)
+    private readonly hintRepository: Repository<Hints>,
+
     private readonly hintsService: HintsService
   ) {}
 
@@ -35,7 +42,7 @@ export class AnswersService {
     const { puzzleId, userId, answer } = checkAnswerDto;
 
     // Find the puzzle
-    const puzzle = await this.puzzlesRepository.findOne({
+    const puzzle = await this.puzzleRepository.findOne({
       where: { id: parseInt(puzzleId) },
     });
     if (!puzzle) {
@@ -43,7 +50,7 @@ export class AnswersService {
     }
 
     // Find the user
-    const user = await this.usersRepository.findOne({
+    const user = await this.userRepository.findOne({
       where: { id: parseInt(userId) },
     });
     if (!user) {
@@ -53,17 +60,68 @@ export class AnswersService {
     // Store the submitted answer for the puzzle
     const newAnswer = this.answerRepository.create({
       text: answer,
-      user: user,
-      puzzle: puzzle,
+      user,
+      puzzle,
     });
-    await this.answersRepository.save(newAnswer);
+    await this.answerRepository.save(newAnswer);
 
     return this.validateAnswer(puzzle, answer);
   }
 
   private validateAnswer(puzzle: Puzzles, answer: string): boolean {
-    return (
-      answer.toLowerCase().trim() === puzzle.correctAnswer.toLowerCase().trim()
-    );
+    return answer.toLowerCase().trim() === puzzle.correctAnswer.toLowerCase().trim();
   }
-}
+
+  async create(createAnswerDto: CreateAnswerDto): Promise<Answer> {
+    try {
+      const { userId, puzzleId, text, hintId } = createAnswerDto;
+
+      const user = await this.userRepository.findOne({ where: { id: userId } });
+      if (!user) throw new NotFoundException(`User with ID ${userId} not found`);
+
+      const puzzle = await this.puzzleRepository.findOne({ where: { id: puzzleId } });
+      if (!puzzle) throw new NotFoundException(`Puzzle with ID ${puzzleId} not found`);
+
+      let hint: Hints | undefined;
+      if (hintId) {
+        hint = await this.hintRepository.findOne({ where: { id: hintId } });
+        if (!hint) throw new NotFoundException(`Hint with ID ${hintId} not found`);
+      }
+
+      const newAnswer = this.answerRepository.create({ text, user, puzzle, hint });
+      return await this.answerRepository.save(newAnswer);
+    } catch (error) {
+      throw new InternalServerErrorException(error.message);
+    }
+  }
+
+  async findAll(page = 1, limit = 10) {
+    try {
+      const [answers, total] = await this.answerRepository.findAndCount({
+        relations: ['user', 'puzzle', 'hint'],
+        skip: (page - 1) * limit,
+        take: limit,
+      });
+
+      return {
+        totalItems: total,
+        totalPages: Math.ceil(total / limit),
+        currentPage: page,
+        data: answers,
+      };
+    } catch (error) {
+      throw new InternalServerErrorException('Failed to fetch answers');
+    }
+  }
+
+  async findOne(id: number): Promise<Answer> {
+    try {
+      const answer = await this.answerRepository.findOne({
+        where: { id },
+        relations: ['user', 'puzzle', 'hint'],
+      });
+
+      if (!answer) throw new NotFoundException(`Answer with ID ${id} not found`);
+      return answer;
+    } catch (error) {
+      throw new InternalServerErrorException(error.mes
