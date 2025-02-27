@@ -135,7 +135,34 @@ const FAQPage = () => {
         </div>
 
         {/* Still Need Help Section */}
-        
+        <Card className="mt-12 backdrop-blur-lg bg-white/10 border-white/20 text-white">
+          <CardContent className="p-8 text-center">
+            <HelpCircle className="w-12 h-12 mx-auto mb-4 text-purple-400" />
+            <h2 className="text-2xl font-bold mb-4">Still Have Questions?</h2>
+            <p className="text-gray-300 mb-6">
+              Can&#39;t find what you&#39;re looking for? We&#39;re here to
+              help!
+            </p>
+            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+              <Button
+                asChild
+                className="bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600"
+              >
+                <Link href="/contact">
+                  <Mail className="w-4 h-4 mr-2" />
+                  Contact Support
+                </Link>
+              </Button>
+              <Button
+                asChild
+                variant="outline"
+                className="border-white/20 text-white hover:bg-white/10"
+              >
+                <Link href="https://discord.com">Join Discord Community</Link>
+              </Button>
+            </div>
+          </CardContent>
+        </Card>
       </div>
     </main>
   );
