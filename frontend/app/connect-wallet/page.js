@@ -417,6 +417,113 @@ export default function ConnectWallet() {
             )}
 
             {/* Help section */}
+            <div className="mt-8">
+              <Dialog>
+                <DialogTrigger asChild>
+                  <Button
+                    variant="ghost"
+                    className="w-full border border-white/10 text-purple-300 hover:bg-white/5 hover:text-purple-200"
+                  >
+                    <Shield size={16} className="mr-2" />
+                    New to StarkNet wallets?
+                  </Button>
+                </DialogTrigger>
+                <DialogContent className="bg-black/90 border border-purple-900/50 text-white">
+                  <DialogHeader>
+                    <DialogTitle className="text-xl text-purple-300">
+                      Getting Started with StarkNet Wallets
+                    </DialogTitle>
+                    <DialogDescription className="text-gray-300">
+                      First time using StarkNet? Here's how to get set up.
+                    </DialogDescription>
+                  </DialogHeader>
+                  <div className="space-y-4 py-4">
+                    <div className="bg-white/5 p-4 rounded-lg">
+                      <h4 className="font-bold mb-2 flex items-center">
+                        <span className="w-6 h-6 rounded-full bg-purple-500 text-white flex items-center justify-center mr-2 text-xs">
+                          1
+                        </span>
+                        Install a StarkNet Wallet
+                      </h4>
+                      <p className="text-sm text-gray-300 mb-2">
+                        We recommend Argent X or Braavos for the best
+                        experience.
+                      </p>
+                      <div className="flex gap-2">
+                        <a
+                          href="https://www.argent.xyz/argent-x/"
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="text-xs bg-purple-800 hover:bg-purple-700 px-3 py-1 rounded-full flex items-center"
+                        >
+                          Argent X
+                          <ExternalLink size={12} className="ml-1" />
+                        </a>
+                        <a
+                          href="https://braavos.app/"
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="text-xs bg-purple-800 hover:bg-purple-700 px-3 py-1 rounded-full flex items-center"
+                        >
+                          Braavos
+                          <ExternalLink size={12} className="ml-1" />
+                        </a>
+                      </div>
+                    </div>
+
+                    <div className="bg-white/5 p-4 rounded-lg">
+                      <h4 className="font-bold mb-2 flex items-center">
+                        <span className="w-6 h-6 rounded-full bg-purple-500 text-white flex items-center justify-center mr-2 text-xs">
+                          2
+                        </span>
+                        Create or Import a Wallet
+                      </h4>
+                      <p className="text-sm text-gray-300">
+                        Follow the wallet's instructions to set up your account
+                        and secure your recovery phrase.
+                      </p>
+                    </div>
+
+                    <div className="bg-white/5 p-4 rounded-lg">
+                      <h4 className="font-bold mb-2 flex items-center">
+                        <span className="w-6 h-6 rounded-full bg-purple-500 text-white flex items-center justify-center mr-2 text-xs">
+                          3
+                        </span>
+                        Fund Your Wallet
+                      </h4>
+                      <p className="text-sm text-gray-300">
+                        Add ETH to your StarkNet wallet through a bridge or
+                        exchange that supports StarkNet.
+                      </p>
+                    </div>
+                  </div>
+                  <DialogFooter>
+                    <Button className="w-full bg-gradient-to-r from-purple-500 to-pink-500">
+                      Got it!
+                    </Button>
+                  </DialogFooter>
+                </DialogContent>
+              </Dialog>
+            </div>
+
+            <div className="mt-8 text-center">
+              <p className="text-xs text-gray-400">
+                By connecting your wallet, you agree to our{" "}
+                <Link
+                  href="/terms"
+                  className="text-purple-400 hover:text-purple-300 underline"
+                >
+                  Terms of Service
+                </Link>{" "}
+                and{" "}
+                <Link
+                  href="/privacy"
+                  className="text-purple-400 hover:text-purple-300 underline"
+                >
+                  Privacy Policy
+                </Link>
+              </p>
+            </div>
           </div>
         </div>
       </div>

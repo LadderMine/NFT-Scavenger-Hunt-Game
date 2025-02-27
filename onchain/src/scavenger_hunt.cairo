@@ -10,6 +10,9 @@ mod ScavengerHunt {
     use openzeppelin::access::accesscontrol::AccessControlComponent;
     use AccessControlComponent::InternalTrait;
     use onchain::interface::{IScavengerHunt, Question, Levels, PlayerProgress, LevelProgress};
+    use core::array::{ArrayTrait};
+    use core::felt252;
+    use onchain::utils::hash_byte_array;
 
     const ADMIN_ROLE: felt252 = selector!("ADMIN_ROLE");
 
@@ -97,7 +100,10 @@ mod ScavengerHunt {
 
             self.question_count.write(question_id); // Update the question count
 
-            let new_question = Question { question_id, question, answer, level, hint };
+            // Hash the answer ByteArray
+            let hashed_answer = hash_byte_array(answer.clone()); // Clone to avoid ownership issues
+
+            let new_question = Question { question_id, question, hashed_answer, level, hint };
 
             // Store the new question in the `questions` map
             self.questions.write(question_id, new_question);
@@ -175,7 +181,10 @@ mod ScavengerHunt {
             // Increment attempts regardless of correctness
             level_progress.attempts += 1;
 
-            if question_data.answer == answer {
+            // Hash the answer ByteArray
+            let hashed_answer = hash_byte_array(answer.clone()); // Clone to avoid ownership issues
+
+            if question_data.hashed_answer == hashed_answer {
                 // Correct answer
                 level_progress.last_question_index += 1;
 
@@ -224,12 +233,14 @@ mod ScavengerHunt {
             let mut existing_question = self.questions.read(question_id);
             assert!(existing_question.question_id == question_id, "Question does not exist");
 
+            // Hash the answer ByteArray
+            let hashed_answer = hash_byte_array(answer.clone()); // Clone to avoid ownership issues
             // Copying the original level to avoid partial moves
             let original_level = existing_question.level;
 
             // Update the question details
             existing_question.question = question;
-            existing_question.answer = answer;
+            existing_question.hashed_answer = hashed_answer;
             //TODO: support level update.
             existing_question.hint = hint;
 
