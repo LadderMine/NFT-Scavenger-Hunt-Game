@@ -1,27 +1,76 @@
-import { Injectable, NotFoundException, BadRequestException, InternalServerErrorException } from '@nestjs/common';
+/* eslint-disable prettier/prettier */
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+  InternalServerErrorException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { CreateAnswerDto, UpdateAnswerDto } from './answers.dto';
 import { Answer } from './answers.entity';
-import { User } from '../users/users.entity';
 import { Puzzles } from '../puzzles/puzzles.entity';
+import { User } from '../users/users.entity';
 import { Hints } from '../hints/hints.entity';
+import { CheckAnswerDto } from './dto/check-answer.dto';
+import { CreateAnswerDto, UpdateAnswerDto } from './answers.dto';
+import { validate } from 'class-validator';
+import { HintsService } from 'src/hints/hints.service';
 
 @Injectable()
 export class AnswersService {
   constructor(
     @InjectRepository(Answer)
-    private answerRepository: Repository<Answer>,
-
-    @InjectRepository(User)
-    private userRepository: Repository<User>,
+    private readonly answerRepository: Repository<Answer>,
 
     @InjectRepository(Puzzles)
-    private puzzleRepository: Repository<Puzzles>,
+    private readonly puzzleRepository: Repository<Puzzles>,
+
+    @InjectRepository(User)
+    private readonly userRepository: Repository<User>,
 
     @InjectRepository(Hints)
-    private hintRepository: Repository<Hints>,
+    private readonly hintRepository: Repository<Hints>,
+
+    private readonly hintsService: HintsService
   ) {}
+
+  async checkAnswer(checkAnswerDto: CheckAnswerDto): Promise<boolean> {
+    const errors = await validate(checkAnswerDto);
+    if (errors.length > 0) {
+      throw new BadRequestException(errors);
+    }
+    const { puzzleId, userId, answer } = checkAnswerDto;
+
+    // Find the puzzle
+    const puzzle = await this.puzzleRepository.findOne({
+      where: { id: parseInt(puzzleId) },
+    });
+    if (!puzzle) {
+      throw new NotFoundException(`Puzzle with ID ${puzzleId} not found`);
+    }
+
+    // Find the user
+    const user = await this.userRepository.findOne({
+      where: { id: parseInt(userId) },
+    });
+    if (!user) {
+      throw new NotFoundException(`User with ID ${userId} not found`);
+    }
+
+    // Store the submitted answer for the puzzle
+    const newAnswer = this.answerRepository.create({
+      text: answer,
+      user,
+      puzzle,
+    });
+    await this.answerRepository.save(newAnswer);
+
+    return this.validateAnswer(puzzle, answer);
+  }
+
+  private validateAnswer(puzzle: Puzzles, answer: string): boolean {
+    return answer.toLowerCase().trim() === puzzle.correctAnswer.toLowerCase().trim();
+  }
 
   async create(createAnswerDto: CreateAnswerDto): Promise<Answer> {
     try {
@@ -75,41 +124,4 @@ export class AnswersService {
       if (!answer) throw new NotFoundException(`Answer with ID ${id} not found`);
       return answer;
     } catch (error) {
-      throw new InternalServerErrorException(error.message);
-    }
-  }
-
-  async update(id: number, updateAnswerDto: UpdateAnswerDto): Promise<Answer> {
-    try {
-      const answer = await this.findOne(id);
-      Object.assign(answer, updateAnswerDto);
-
-      if (updateAnswerDto.userId) {
-        answer.user = await this.userRepository.findOne({ where: { id: updateAnswerDto.userId } });
-      }
-
-      if (updateAnswerDto.puzzleId) {
-        answer.puzzle = await this.puzzleRepository.findOne({ where: { id: updateAnswerDto.puzzleId } });
-      }
-
-      if (updateAnswerDto.hintId) {
-        answer.hint = await this.hintRepository.findOne({ where: { id: updateAnswerDto.hintId } });
-      }
-
-      return await this.answerRepository.save(answer);
-    } catch (error) {
-      throw new InternalServerErrorException(error.message);
-    }
-  }
-
-  async delete(id: number): Promise<void> {
-    try {
-      const result = await this.answerRepository.delete(id);
-      if (result.affected === 0) {
-        throw new NotFoundException(`Answer with ID ${id} not found`);
-      }
-    } catch (error) {
-      throw new InternalServerErrorException(error.message);
-    }
-  }
-}
+      throw new InternalServerErrorException(error.mes
