@@ -7,12 +7,15 @@ import { Repository } from "typeorm";
 import { Hints } from "../hints/hints.entity";
 import { UserProgress } from "./userprogress.entity";
 import { UserProgressDto } from "./dto/user-progress.dto";
+import { LevelProgressService } from './level-progress.service';
 
 @Injectable()
 export class UserProgressService {
   constructor(
     @InjectRepository(UserProgress)
     private userProgressRepository: Repository<UserProgress>,
+        private levelProgressService: LevelProgressService,
+
   ) {}
 
   async getUserProgress(userId: number): Promise<UserProgress[]> {
@@ -67,4 +70,13 @@ export class UserProgressService {
 
     return score.scoreValue;
   }
+
+  async getSolvedPuzzlesInLevel(userId: number, levelId: string): Promise<number> {
+    return this.levelProgressService.getPuzzlesSolvedPerLevel(userId, levelId);
+  }
+
+  async getLevelProgress(userId: number, levelId: string): Promise<{ progress: number; solved: number; total: number }> {
+    return this.levelProgressService.calculateLevelCompletion(userId, levelId);
+  }
+
 }

@@ -41,5 +41,21 @@ export class UserProgressController {
 
     return this.userProgressService.getUserScore(userId, puzzleId);
   }
+
+  @Get(':userId/level/:levelId')
+  async getLevelProgress(
+    @Query('userId', ParseIntPipe) userId: number,
+    @Query('levelId', ParseIntPipe) levelId: string
+  ) {
+    return this.userProgressService.getLevelProgress(userId, levelId);
+  }
+
+   @Get(':userId/level/:levelId/solved')
+  async getSolvedPuzzlesInLevel(
+    @Query('userId', ParseIntPipe) userId: number,
+    @Query('levelId', ParseIntPipe) levelId: string
+  ): Promise<number> {
+    return this.userProgressService.getSolvedPuzzlesInLevel(userId, levelId);
+  }
 }
 
