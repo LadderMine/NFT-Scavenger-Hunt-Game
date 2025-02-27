@@ -20,7 +20,7 @@ async createHint(dto: CreateHintDto): Promise<Hints> {
 if (!puzzleId || !hintText.trim()) {
     throw new BadRequestException('puzzleId and hintText are required');
     }
-    const puzzles = await this.puzzleService.getAPuzzle(puzzleId);
+    const puzzles = await this.puzzleService.getAPuzzle(String(puzzleId));
 
     const hint = this.hintRepository.create({ puzzles, hintText, difficultyLevel });
     return await this.hintRepository.save(hint);
@@ -39,4 +39,21 @@ async findById(id: string): Promise<Hints | null> {
     Object.assign(hint, updateHintDto);
     return await this.hintRepository.save(hint);
   }
+
+  async getHintForPuzzle(puzzleId: string): Promise<Hints | null> {
+    const puzzle = await this.puzzleService.getAPuzzle(puzzleId);
+    if (!puzzle) {
+        throw new NotFoundException('Puzzle not found');
+    }
+
+    const hints = await this.hintRepository.find({
+        where: { puzzles: puzzle },
+    });
+
+    if (hints.length === 0) {
+        return null; // Will trigger 204 response in the controller
+    }
+
+    return hints[Math.floor(Math.random() * hints.length)]; // Randomly pick one hint
+}
 }

@@ -27,4 +27,12 @@ export class PuzzlesService {
     Object.assign(puzzle, updatePuzzleDto);
     return this.puzzleRepository.save(puzzle);
   }
+
+  public async getAPuzzle(id: string): Promise<Puzzles | null> {
+    const puzzle = await this.puzzleRepository.findOne({ where: { id: parseInt(id) } });
+    if (!puzzle) {
+      throw new NotFoundException(`Puzzle with ID ${id} not found`);
+    }
+    return puzzle;
+  }
 }
