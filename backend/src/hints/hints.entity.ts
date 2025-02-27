@@ -14,6 +14,7 @@ export enum DifficultyLevel {
   MEDIUM = 'medium',
   HARD = 'hard',
 }
+
 @Entity()
 export class Hints {
   @PrimaryGeneratedColumn()
@@ -25,7 +26,7 @@ export class Hints {
   @OneToMany(() => UserProgress, (userProgress) => userProgress.hints)
   userProgress: UserProgress[];
 
-  @Column()
+  @Column({ type: 'text' }) // this will ensures hintText can store long text
   hintText: string;
 
   @Column({ type: 'enum', enum: DifficultyLevel, nullable: true })
