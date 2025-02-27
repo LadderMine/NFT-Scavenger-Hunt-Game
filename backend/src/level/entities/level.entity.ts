@@ -1,8 +1,14 @@
-import { Entity, PrimaryGeneratedColumn, Column, OneToMany, CreateDateColumn, UpdateDateColumn } from "typeorm";
-import { Puzzles } from "src/puzzles/puzzles.entity";
+import { InjectRepository } from '@nestjs/typeorm';
+import { LevelEnum } from 'src/enums/LevelEnum';
+import { Puzzles } from 'src/puzzles/puzzles.entity';
+import { Entity, PrimaryGeneratedColumn, Column, OneToMany, CreateDateColumn, UpdateDateColumn, Repository } from 'typeorm';
 
 @Entity()
 export class Level {
+  constructor(
+    @InjectRepository(Level)
+    private readonly levelRepository: Repository<Level>
+  ) {}
   @PrimaryGeneratedColumn()
   id: number;
 
@@ -12,21 +18,61 @@ export class Level {
   @Column()
   description: string;
 
-  @Column()
-  difficulty: string;
+  @Column({ default: 0 })
+  easy: number;
 
-  @Column({ type: "int", default: 0 })
-  requiredScore: number;
+  @Column({ default: 0 })
+  medium: number;
 
-  @Column({ default: false })
-  isLocked: boolean;
+  @Column({ default: 0 })
+  difficult: number;
+
+  @Column({ default: 0 })
+  advanced: number;
+
+  @CreateDateColumn({
+    type: 'timestamptz',
+    default: () => 'CURRENT_TIMESTAMP',
+  })
+  createdAt: Date;
+
+  @UpdateDateColumn({
+    type: 'timestamptz',
+    default: () => 'CURRENT_TIMESTAMP',
+  })
+  updatedAt: Date;
 
   @OneToMany(() => Puzzles, (puzzle) => puzzle.level)
   puzzles: Puzzles[];
 
-  @CreateDateColumn()
-  createdAt: Date;
+  @Column({ type: 'int', default: 0 })
+  count: number;
 
-  @UpdateDateColumn()
-  updatedAt: Date;
+  @Column({
+    type: 'enum',
+    enum: LevelEnum,
+    unique: true,
+  })
+  level: LevelEnum;
+
+  public async incrementCount(level: LevelEnum) {
+    let levelRecord = await this.levelRepository.findOne({ where: { level } });
+this.levelRepository
+    if (!levelRecord) {
+      levelRecord = this.levelRepository.create({ level, count: 1 });
+    } else {
+      levelRecord.count += 1;
+    }
+
+    await this.levelRepository.save(levelRecord);
+  }
+
+  public async decrementCount(level: LevelEnum) {
+    const levelRecord = await this.levelRepository.findOne({ where: { level } });
+
+    if (levelRecord) {
+      levelRecord.count = Math.max(0, levelRecord.count - 1);
+      await this.levelRepository.save(levelRecord);
+    }
+  }
 }

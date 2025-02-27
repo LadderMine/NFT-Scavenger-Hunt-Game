@@ -1,4 +1,11 @@
 /* eslint-disable prettier/prettier */
+import { Leaderboard } from "src/leaderboard/entities/leaderboard.entity";
+import { UserProgress } from "src/user-progress/user-progress.entity"; // Unified import path
+import { Scores } from "src/scores/scores.entity";
+import { Answer } from "src/answers/answers.entity";
+import { Puzzles } from "src/puzzles/puzzles.entity";
+import { NFTs } from "src/nfts/nfts.entity";
+import { Hints } from "src/hints/hints.entity";
 import {
   Entity,
   Column,
@@ -6,14 +13,12 @@ import {
   CreateDateColumn,
   UpdateDateColumn,
   OneToMany,
-} from 'typeorm';
-import { UserProgress } from 'src/user-progress/user-progress.entity'; 
-import { Scores } from 'src/scores/scores.entity'; // Import Scores
+} from "typeorm";
 
-@Entity('users')
+@Entity("users")
 export class User {
   @PrimaryGeneratedColumn()
-  id: number; 
+  id: number;
 
   @Column({ unique: true })
   username: string;
@@ -30,10 +35,27 @@ export class User {
   @UpdateDateColumn()
   updatedAt: Date;
 
-  @OneToMany(() => UserProgress, (userProgress) => userProgress.user)
+  @OneToMany(() => UserProgress, (userProgress) => userProgress.user, {
+    cascade: true,
+    eager: true,
+  })
   userProgress: UserProgress[];
 
-  // Add Scores relationship
+  @OneToMany(() => Leaderboard, (leaderboard) => leaderboard.user)
+  leaderboardEntries: Leaderboard[];
+
   @OneToMany(() => Scores, (score) => score.user)
   scores: Scores[];
+
+  @OneToMany(() => Answer, (answer) => answer.user)
+  answers: Answer[];
+
+  @OneToMany(() => Puzzles, (puzzle) => puzzle.answers, { cascade: true })
+  puzzles: Puzzles[];
+
+  @OneToMany(() => NFTs, (nft) => nft.user, { cascade: true })
+  nfts: NFTs[];
+
+  @OneToMany(() => Hints, (hint) => hint.answers, { cascade: true })
+  hints: Hints[];
 }

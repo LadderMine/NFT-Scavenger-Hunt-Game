@@ -20,6 +20,8 @@ import { AuthTokenGuard } from './auth/guard/auth-token/auth-token.guard';
 import { LevelModule } from './level/level.module';
 import { LeaderboardModule } from './leaderboard/leaderboard.module';
 import { Puzzles } from './puzzles/puzzles.entity';
+import { PuzzleSubscriber } from './level/decorators/subscriber-decorator';
+
 
 @Module({
   imports: [
@@ -30,7 +32,6 @@ import { Puzzles } from './puzzles/puzzles.entity';
       cache: true,
     }),
     TypeOrmModule.forRootAsync({
-      
       //end
       imports: [ConfigModule],
       inject: [ConfigService],
@@ -55,15 +56,18 @@ import { Puzzles } from './puzzles/puzzles.entity';
     UserProgressModule,
     AuthModule,
     ConfigModule.forFeature(jwtConfig),
-      JwtModule.registerAsync(jwtConfig.asProvider()),
-      LevelModule,
-      LeaderboardModule,
+    JwtModule.registerAsync(jwtConfig.asProvider()),
+    LevelModule,
+    LeaderboardModule,
   ],
   controllers: [AppController],
-  providers: [AppService,
-  {
-    provide: APP_GUARD,
-    useClass:AuthTokenGuard,
-  }],
+  providers: [
+    PuzzleSubscriber,
+    AppService,
+    {
+      provide: APP_GUARD,
+      useClass: AuthTokenGuard,
+    },
+  ],
 })
 export class AppModule {}
