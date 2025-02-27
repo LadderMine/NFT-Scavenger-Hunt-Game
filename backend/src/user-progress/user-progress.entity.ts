@@ -1,41 +1,41 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, JoinColumn, OneToMany } from 'typeorm';
-import { Puzzles } from 'src/puzzles/puzzles.entity';
-import { Scores } from 'src/scores/scores.entity';
-import { User } from 'src/users/users.entity';
-import { Hints } from 'src/hints/hints.entity';
+import { Hints } from "src/hints/hints.entity"
+import { Puzzles } from "src/puzzles/puzzles.entity"
+import { User } from "src/users/users.entity"
+import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, JoinColumn, Relation } from "typeorm"
+
 
 @Entity()
 export class UserProgress {
   @PrimaryGeneratedColumn()
-  id: number;
+  id: number
 
-  @ManyToOne(() => User, (user) => user.userProgress, { onDelete: 'CASCADE', eager: true })
-  @JoinColumn({ name: 'userId' })
-  user: User;
+  @ManyToOne(
+    () => User,
+    (user) => user.userProgress,
+  )
+  @JoinColumn({ name: "userId" })
+  user: Relation<User>
 
-  @OneToMany(() => Scores, (score) => score.userProgress)
-  scores: Scores[];
-  @ManyToOne(() => Puzzles, (puzzle) => puzzle.userProgress, { onDelete: 'CASCADE', eager: true })
-  @JoinColumn({ name: 'puzzleId' })
-  puzzle: Puzzles;
-  @ManyToOne(() => UserProgress, (userProgress) => userProgress.hints, { onDelete: 'CASCADE' })
-  userProgress: UserProgress;
+  @ManyToOne(
+    () => Puzzles,
+    (puzzles) => puzzles.userProgress,
+  )
+  @JoinColumn({ name: "puzzleId" })
+  puzzles: Puzzles[]
 
-  @OneToMany(() => Scores, (score) => score.userProgress)
-  score: Scores[];
-  @OneToMany(() => Hints, (hint) => hint.userProgress)
-  hints: Hints[];
-
-  // @ManyToOne(() => Scores, (score) => score.userProgress, { cascade: true, eager: true })
-  // @JoinColumn({ name: 'scoreId' })
-  // scores: Scores;
+  @ManyToOne(
+    () => Hints,
+    (hints) => hints.userProgress,
+  )
+  hints: Relation<Hints>;
 
   @Column({ default: false })
-  completed: boolean;
+  completed: boolean
 
   @Column({ default: 0 })
-  hintsUsed: number;
+  hintsUsed: number
 
-  @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
-  lastUpdated: Date;
+  @Column({ type: "timestamp", default: () => "CURRENT_TIMESTAMP" })
+  lastUpdated: Date
 }
+
