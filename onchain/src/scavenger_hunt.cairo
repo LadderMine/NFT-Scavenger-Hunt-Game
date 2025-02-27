@@ -3,7 +3,7 @@ mod ScavengerHunt {
     use starknet::event::EventEmitter;
     use starknet::storage::{
         StoragePointerReadAccess, StoragePointerWriteAccess, StoragePathEntry, Map,
-        StorageMapReadAccess, StorageMapWriteAccess
+        StorageMapReadAccess, StorageMapWriteAccess,
     };
     use starknet::{ContractAddress, get_caller_address};
     use openzeppelin::introspection::src5::SRC5Component;
@@ -68,7 +68,7 @@ mod ScavengerHunt {
     pub struct PlayerInitialized {
         pub player_address: ContractAddress,
         pub level: felt252,
-        pub is_initialized: bool
+        pub is_initialized: bool,
     }
 
     #[derive(Drop, starknet::Event)]
@@ -133,7 +133,7 @@ mod ScavengerHunt {
             self.question_per_level.write(amount);
         }
 
-        fn get_question_per_level(self: @ContractState, amount: u8) -> u8 {
+        fn get_question_per_level(self: @ContractState, count: u8) -> u8 {
             self.question_per_level.read()
         }
 
@@ -148,8 +148,8 @@ mod ScavengerHunt {
                 .write(
                     player_address,
                     PlayerProgress {
-                        address: player_address, current_level: Levels::Easy, is_initialized: true
-                    }
+                        address: player_address, current_level: Levels::Easy, is_initialized: true,
+                    },
                 );
 
             // set player current level
@@ -163,8 +163,8 @@ mod ScavengerHunt {
                         last_question_index: 0,
                         is_completed: false,
                         attempts: 0,
-                        nft_minted: false
-                    }
+                        nft_minted: false,
+                    },
                 );
 
             self.emit(PlayerInitialized { player_address, level: 'EASY', is_initialized: true });
