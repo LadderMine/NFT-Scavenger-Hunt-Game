@@ -3,8 +3,9 @@ import { IsInt, IsOptional, IsDate, ValidateNested } from "class-validator";
 import { Type } from "class-transformer";
 import { Hints } from "src/hints/hints.entity";
 import { NFTs } from "src/nfts/nfts.entity";
-import { UserProgress } from "src/user-progress/userprogress.entity";
+// import { UserProgress } from "src/user-progress/userprogress.entity";
 import { Level } from "src/level/entities/level.entity";
+import { UserProgress } from "src/user-progress/user-progress.entity";
 
 export class PuzzleDto {
   @IsOptional()

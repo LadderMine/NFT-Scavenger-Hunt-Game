@@ -4,11 +4,12 @@ import {
   forwardRef,
   Inject,
   Injectable,
+  NotFoundException,
   RequestTimeoutException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from '../users.entity';
-import { Repository } from 'typeorm';
+import { DeepPartial, Repository } from 'typeorm';
 import { HashingProvider } from 'src/auth/providers/hashing.provider';
 import { CreateUserDto } from '../dtos/create-user-dto.dto';
 
@@ -31,14 +32,16 @@ export class CreateUserProvider {
         {
           description: 'Error connecting to your database',
           cause: 'The user is using Glo network',
-        },
+        }
       );
     }
 
+  
     if (existingUser) {
+      throw new RequestTimeoutException('User already exists')
     }
 
-    let newUser = this.userRepository.create({
+    let newUser: DeepPartial<User> = this.userRepository.create({
       ...createUserDto,
       password: await this.hashingProvider.hashPassword(createUserDto.password),
     });
@@ -46,8 +49,9 @@ export class CreateUserProvider {
     try {
       newUser = await this.userRepository.save(newUser);
     } catch (error) {
-      throw new RequestTimeoutException('user already exists');
+      throw new RequestTimeoutException('Unable to save the new user');
     }
     return [newUser];
   }
+
 }

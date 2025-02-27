@@ -1,19 +1,30 @@
 /* eslint-disable prettier/prettier */
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { forwardRef, Inject, Injectable } from '@nestjs/common';
 import { CreateUserProvider } from './providers/create-user-provider.provider';
 import { CreateUserDto } from './dtos/create-user-dto.dto';
 import { FindByUsername } from './providers/find-by-username.provider';
+import { AuthService } from '../auth/auth.service';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { User } from './users.entity';
-import { UpdateUserDto } from './dtos/update-user-dto';
+import { UserProgress } from 'src/user-progress/user-progress.entity';
+import { ScoresService } from 'src/scores/scores.service';
+import { UserProgressService } from 'src/user-progress/user-progress.service';
+import { Scores } from 'src/scores/scores.entity';
 
 @Injectable()
-export class UsersService {
+export class UsersService {  
   constructor(
-    private readonly createUserProvider: CreateUserProvider,
-    private readonly findByUsername: FindByUsername,
-    @InjectRepository(User) private readonly userRepository: Repository<User>,
+    @Inject(forwardRef(() => AuthService))
+    private readonly authService: AuthService, // circular dependency injection of auth service
+
+    @InjectRepository(User)
+    private readonly usersRepository: Repository<User>, //dependency injection of user entity
+
+    private readonly createUserProvider: CreateUserProvider, //dependency injection of create user provider
+
+    private readonly findByUsername: FindByUsername, //dependency injection of find find User 
+
   ) {}
 
   public async createUser(createUserDto: CreateUserDto) {
@@ -23,33 +34,5 @@ export class UsersService {
   public async FindByUsername(username: string) {
     return await this.findByUsername.FindOneByUsername(username);
   }
-
-  // Fetch all users
-  public async findAllUsers(): Promise<User[]> {
-    return await this.userRepository.find();
-  }
-
-  // Update user by ID
-  public async updateUser(id: number, updateUserDto: UpdateUserDto) {
-    const user = await this.userRepository.findOne({ where: { id } });
-
-    if (!user) {
-      throw new NotFoundException(`User with ID ${id} not found.`);
-    }
-
-    Object.assign(user, updateUserDto);
-    return this.userRepository.save(user);
-  }
-
-  // Delete user by ID
-  public async deleteUser(id: number): Promise<string> {
-    const user = await this.userRepository.findOneBy({ id });
-
-    if (!user) {
-      throw new NotFoundException(`User with ID ${id} not found.`);
-    }
-
-    await this.userRepository.delete(id);
-    return `User with ID ${id} deleted successfully.`;
-  }
 }
+
