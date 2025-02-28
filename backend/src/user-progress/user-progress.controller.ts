@@ -51,13 +51,11 @@ export class UserProgressController {
     return this.userProgressService.getUserScore(userId);
   }
 
-  // New endpoint: Mark puzzle as completed
   @Post('puzzle-completed')
   async puzzleCompleted(@Request() req, @Body() body: { puzzleId: number }) {
     return this.userProgressService.puzzleCompleted(req.user.id, body.puzzleId);
   }
 
-  // New endpoint: Mark level as completed
   @Post('level-completed')
   async levelCompleted(@Request() req, @Body() body: { levelId: number }) {
     return this.userProgressService.levelCompleted(req.user.id, body.levelId);

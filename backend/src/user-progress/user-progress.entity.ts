@@ -35,11 +35,9 @@ export class UserProgress {
   @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
   lastUpdated: Date;
 
-  // New: List of completed level IDs stored as a comma-separated string
   @Column('simple-array', { nullable: true })
   completedLevels: number[];
 
-  // New: Overall progress percentage
   @Column({ type: 'int', default: 0 })
   progressPercentage: number;
 }
