@@ -10,7 +10,7 @@ import {
   Zap,
 } from "lucide-react";
 
-import {ValueCard} from "@/components/homepage/ValueCard";
+import ValueCard from "@/components/homepage/ValueCard";
 
 // Define ValueCard component
 
