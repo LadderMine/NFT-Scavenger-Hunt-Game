@@ -61,3 +61,4 @@ export class LeaderboardController {
     return this.leaderboardService.getLeaderboardStats();
   }
 }
+

@@ -8,19 +8,25 @@ import { CalculateRanks } from './CalculateRanks.service';
 export class UpdateLeaderboardRanks {
   constructor(
     private readonly calculateRanks: CalculateRanks,
-
     @InjectRepository(Leaderboard)
     private readonly leaderboardRepository: Repository<Leaderboard>,
   ) {}
 
   public async updateLeaderboardRanks() {
-    const rankedPlayers = await this.calculateRanks.calculateRanks(); // Fetch calculated ranks
+    // Fetch recalculated ranks for all players
+    const rankedPlayers = await this.calculateRanks.calculateRanks();
 
     for (const { userId, rank } of rankedPlayers) {
-      await this.leaderboardRepository.update(
-        { user: { id: userId } },
-        { rank },
-      ); // Update leaderboard with new ranks
+      // Fetch the current leaderboard entry for this user
+      const leaderboardEntry = await this.leaderboardRepository.findOne({ where: { user: { id: userId } } });
+
+      // Only update if the leaderboard rank has changed
+      if (!leaderboardEntry || leaderboardEntry.rank !== rank) {
+        await this.leaderboardRepository.update(
+          { user: { id: userId } },
+          { rank },
+        );
+      }
     }
   }
 }

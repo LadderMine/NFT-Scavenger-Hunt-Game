@@ -34,13 +34,16 @@ export class Answer {
     onDelete: 'SET NULL',
   })
   hint?: Hints;
+  length: number;
 }
+
 export class Answers {
-    @PrimaryGeneratedColumn()
-    id: number;
-    @OneToOne(() => Hints, (hint) => hint.answers)
-    @JoinColumn()
-    hint: Hints;
+  @PrimaryGeneratedColumn()
+  id: number;
+    
+  @OneToOne(() => Hints, (hint) => hint.answers)
+  @JoinColumn()
+  hint: Hints;
     
   @OneToMany(() => Puzzles, (puzzles) => puzzles.answers)
   puzzles: Puzzles[];

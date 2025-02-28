@@ -5,6 +5,7 @@ import { Leaderboard } from '../entities/leaderboard.entity';
 import { CreateLeaderboardDto } from '../dto/create-leaderboard.dto';
 import { UpdateLeaderboardDto } from '../dto/update-leaderboard.dto';
 
+
 @Injectable()
 export class LeaderboardService {
   constructor(
