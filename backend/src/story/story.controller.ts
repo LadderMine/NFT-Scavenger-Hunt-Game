@@ -1,4 +1,4 @@
-import { Controller, Get, Param } from '@nestjs/common';
+import { Controller, Get, Param, UseGuards } from '@nestjs/common';
 import type { StoryService } from './story.service';
 import { ChapterResponseDto } from './dto/chapter-response.dto';
 import {
@@ -8,6 +8,9 @@ import {
   ApiBearerAuth,
   ApiParam,
 } from '@nestjs/swagger';
+import { RolesGuard } from 'src/auth/guard/roles.guard';
+import { Roles } from 'src/auth/decorators/roles.decorator';
+import { Role } from 'src/auth/enums/roles.enum';
 
 @ApiTags('story')
 @Controller('story')
@@ -22,6 +25,8 @@ export class StoryController {
     description: 'Returns a list of available story chapters',
     type: [ChapterResponseDto],
   })
+  @Roles(Role.ADMIN)
+  @UseGuards(RolesGuard)
   async getChapters(userId: string): Promise<ChapterResponseDto[]> {
     return this.storyService.findAllChapters(userId);
   }
@@ -39,6 +44,8 @@ export class StoryController {
     type: ChapterResponseDto,
   })
   @ApiResponse({ status: 404, description: 'Chapter not found' })
+  @Roles(Role.ADMIN)
+  @UseGuards(RolesGuard)
   async getChapterDetails(
     @Param('chapterId') chapterId: string,
   ): Promise<ChapterResponseDto> {
