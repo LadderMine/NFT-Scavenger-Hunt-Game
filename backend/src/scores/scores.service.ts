@@ -40,20 +40,33 @@ export class ScoresService {
   }
 
   // Update or insert user score
-  async updateScore(username: string, score: number) {
-    let user = await this.userRepository.findOne({ where: { username } });
-    if (user) {
-      user.score = score;
-      // update score if user exists
+  async updateScore(username: string, newScore: number) {
+  let user = await this.userRepository.findOne({ where: { username } });
+  
+  if (user) {
+    // Only update if the new score is greater than the current score
+    if (newScore > user.score) {
+      user.score = newScore;
     } else {
-      user = this.userRepository.create({ username, score });
-      //create a new user if not found
+      // Option 1: Throw an error to indicate validation failure
+      throw new Error("New score must be higher than the current score.");
+      
+      // Option 2: Alternatively, you could simply return or handle this case gracefully
+      // return user; // No update, return existing user
     }
-
-    // broadcast updated leaderboard via WebSockets
-    const leaderboard = await this.getLeaderboard(1, 10);
-    this.leaderboardGateway.sendLeaderboardUpdate(leaderboard);
-
-    return this.userRepository.save(user);
+  } else {
+    // Create a new user with the new score if the user doesn't exist
+    user = this.userRepository.create({ username, score: newScore });
   }
+
+  // Save the updated or new user
+  const savedUser = await this.userRepository.save(user);
+
+  // Broadcast the updated leaderboard via WebSockets
+  const leaderboard = await this.getLeaderboard(1, 10);
+  this.leaderboardGateway.sendLeaderboardUpdate(leaderboard);
+
+  return savedUser;
+}
+
 }
