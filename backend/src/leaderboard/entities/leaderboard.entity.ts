@@ -18,6 +18,9 @@ export class Leaderboard {
   user: User;
 
   @Column()
+  userId: number;
+
+  @Column()
   username: string;
 
   @Column({ nullable: true })

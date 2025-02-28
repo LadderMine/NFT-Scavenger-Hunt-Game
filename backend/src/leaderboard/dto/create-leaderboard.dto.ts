@@ -1,8 +1,9 @@
 import { IsNotEmpty, IsOptional, IsString, IsInt } from 'class-validator';
 
 export class CreateLeaderboardDto {
+  @IsInt()
   @IsNotEmpty()
-  userId: number;
+  userId: number; 
 
   @IsString()
   @IsNotEmpty()

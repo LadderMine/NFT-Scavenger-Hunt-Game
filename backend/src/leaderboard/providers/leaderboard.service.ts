@@ -1,41 +1,83 @@
 import { Injectable } from '@nestjs/common';
-import { CreateLeaderboardDto } from '../dto/create-leaderboard.dto';
-import { UpdateAuthDto } from 'src/auth/dto/update-auth.dto';
-import { UpdateLeaderboardDto } from '../dto/update-leaderboard.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Leaderboard } from '../entities/leaderboard.entity';
-import { Scores } from 'src/scores/scores.entity';
-import { ScoresService } from 'src/scores/scores.service';
+import { CreateLeaderboardDto } from '../dto/create-leaderboard.dto';
+import { UpdateLeaderboardDto } from '../dto/update-leaderboard.dto';
 
 @Injectable()
 export class LeaderboardService {
-
   constructor(
-    // Repository injection for leaderboard entity
     @InjectRepository(Leaderboard)
-    private leaderBoardRepository: Repository<Leaderboard>,
+    private readonly leaderboardRepository: Repository<Leaderboard>,
+  ) {}
 
-    //dependenc innnjection for scores service
-    private readonly scoresService: ScoresService
-  ){}
-  create(createLeaderboardDto: CreateLeaderboardDto) {
-    return 'This action adds a new leaderboard';
+  async addUserToLeaderboard(
+    createLeaderboardDto: CreateLeaderboardDto,
+  ): Promise<Leaderboard> {
+    const leaderboard = this.leaderboardRepository.create(createLeaderboardDto);
+    return await this.leaderboardRepository.save(leaderboard);
   }
 
-  findAll() {
-    return `This action returns all leaderboard`;
+  async getLeaderboard(): Promise<Leaderboard[]> {
+    return this.leaderboardRepository.find();
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} leaderboard`;
+  async getLeaderboardEntry(id: number): Promise<Leaderboard> {
+    return this.leaderboardRepository.findOne({
+      where: { id },
+    });
   }
 
-  update(id: number, updateLeaderboardDto: UpdateLeaderboardDto) {
-    return `This action updates a #${id} leaderboard`;
+  async updateLeaderboardEntry(
+    id: number,
+    updateLeaderboardDto: UpdateLeaderboardDto,
+  ): Promise<Leaderboard> {
+    const leaderboard = await this.getLeaderboardEntry(id);
+    if (!leaderboard) {
+      throw new Error('Leaderboard entry not found');
+    }
+    Object.assign(leaderboard, updateLeaderboardDto);
+    return this.leaderboardRepository.save(leaderboard);
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} leaderboard`;
+  async deleteLeaderboardEntry(id: number): Promise<void> {
+    const leaderboardEntry = await this.getLeaderboardEntry(id);
+    if (!leaderboardEntry) {
+      throw new Error('Leaderboard entry not found');
+    }
+    await this.leaderboardRepository.remove(leaderboardEntry);
   }
+
+  async getUserLeaderboardStats(username: string) {
+    const leaderboardEntry = await this.leaderboardRepository.findOne({
+      where: { username },
+      select: ['rank', 'total_points', 'nfts_collected', 'challenges_completed'],
+    });
+  
+    if (!leaderboardEntry) {
+      throw new Error('Leaderboard entry not found for user');
+    }
+  
+    return leaderboardEntry;
+  }
+  
+  async getUserRank(username: string): Promise<{ rank: number }> {
+    const leaderboard = await this.leaderboardRepository.find({
+      order: { total_points: 'DESC' }, 
+    });
+    const rank = leaderboard.findIndex((entry) => entry.user.username === username) + 1;
+    if (rank === 0) {
+      throw new Error('User not found in leaderboard');
+    }
+    return { rank };
+  }
+  
+  async getLeaderboardStats(): Promise<{ totalPlayers: number; totalPoints: number }> {
+    const leaderboardEntries = await this.leaderboardRepository.find();
+    const totalPlayers = leaderboardEntries.length;
+    const totalPoints = leaderboardEntries.reduce((acc, entry) => acc + entry.total_points, 0);
+    return { totalPlayers, totalPoints };
+  }
+
 }
