@@ -1,13 +1,16 @@
 import {
-  Controller,
   Get,
   Post,
   Body,
-  Patch,
   Param,
+  Patch,
   Delete,
+  Controller,
+  ParseIntPipe,
 } from '@nestjs/common';
+
 import { LeaderboardService } from './leaderboard.service';
+import { Leaderboard } from './entities/leaderboard.entity';
 import { CreateLeaderboardDto } from './dto/create-leaderboard.dto';
 import { UpdateLeaderboardDto } from './dto/update-leaderboard.dto';
 
@@ -16,30 +19,30 @@ export class LeaderboardController {
   constructor(private readonly leaderboardService: LeaderboardService) {}
 
   @Post()
-  create(@Body() createLeaderboardDto: CreateLeaderboardDto) {
-    return this.leaderboardService.create(createLeaderboardDto);
+  async addUserToLeaderboard(@Body() createLeaderboardDto: CreateLeaderboardDto): Promise<Leaderboard> {
+    return this.leaderboardService.addUserToLeaderboard(createLeaderboardDto);
   }
 
   @Get()
-  findAll() {
-    return this.leaderboardService.findAll();
+  async getLeaderboard(): Promise<Leaderboard[]> {
+    return this.leaderboardService.getLeaderboard();
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.leaderboardService.findOne(+id);
+  async getLeaderboardEntry(@Param('id', ParseIntPipe) id: number): Promise<Leaderboard> {
+    return this.leaderboardService.getLeaderboardEntry(id);
   }
 
   @Patch(':id')
-  update(
-    @Param('id') id: string,
+  async updateLeaderboardEntry(
+    @Param('id', ParseIntPipe) id: number,
     @Body() updateLeaderboardDto: UpdateLeaderboardDto,
-  ) {
-    return this.leaderboardService.update(+id, updateLeaderboardDto);
+  ): Promise<Leaderboard> {
+    return this.leaderboardService.updateLeaderboardEntry(id, updateLeaderboardDto);
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.leaderboardService.remove(+id);
+  async deleteLeaderboardEntry(@Param('id', ParseIntPipe) id: number): Promise<void> {
+    return this.leaderboardService.deleteLeaderboardEntry(id);
   }
 }
