@@ -92,11 +92,144 @@ const PrivacyPolicyPage = () => {
           </CardContent>
         </Card>
 
-        {/* fourth issue continuation */}
-        {/* privacy card */}
-
-
         {/* Policy Content */}
+        <Card className="backdrop-blur-lg bg-white/10 border-white/20">
+          <CardContent className="p-6 space-y-8 text-gray-300">
+            <section id="introduction">
+              <h2 className="text-2xl text-white font-semibold mb-4">
+                1. Introduction
+              </h2>
+              <p>
+                Welcome to NFT Scavenger Hunt. This Privacy Policy explains how
+                we collect, use, disclose, and safeguard your information when
+                you use our game and related services. Please read this privacy
+                policy carefully. If you do not agree with the terms of this
+                privacy policy, please do not access the application.
+              </p>
+            </section>
+
+            <section id="information-collection">
+              <h2 className="text-2xl text-white font-semibold mb-4">
+                2. Information We Collect
+              </h2>
+              <div className="space-y-4">
+                <h3 className="text-xl text-white">Personal Information</h3>
+                <ul className="list-disc pl-6 space-y-2">
+                  <li>Wallet addresses</li>
+                  <li>Email address (if provided)</li>
+                  <li>Username and profile information</li>
+                  <li>Game progress and achievement data</li>
+                </ul>
+
+                <h3 className="text-xl text-white">Technical Information</h3>
+                <ul className="list-disc pl-6 space-y-2">
+                  <li>Device information</li>
+                  <li>IP address</li>
+                  <li>Browser type and version</li>
+                  <li>Operating system</li>
+                </ul>
+              </div>
+            </section>
+
+            <section id="use-of-information">
+              <h2 className="text-2xl text-white font-semibold mb-4">
+                3. How We Use Your Information
+              </h2>
+              <p>We use the collected information for:</p>
+              <ul className="list-disc pl-6 space-y-2 mt-2">
+                <li>Providing and maintaining the game service</li>
+                <li>Processing NFT rewards and transactions</li>
+                <li>Verifying puzzle completion and achievements</li>
+                <li>Communicating with you about updates and changes</li>
+                <li>Improving game features and user experience</li>
+                <li>Preventing fraud and ensuring security</li>
+              </ul>
+            </section>
+
+            <section id="data-sharing">
+              <h2 className="text-2xl text-white font-semibold mb-4">
+                4. Data Sharing and Disclosure
+              </h2>
+              <p>
+                We share your information with third parties only in the ways
+                described in this privacy policy, including:
+              </p>
+              <ul className="list-disc pl-6 space-y-2 mt-2">
+                <li>StarkNet blockchain for NFT transactions</li>
+                <li>Service providers who assist in game operations</li>
+                <li>Legal requirements and law enforcement</li>
+                <li>Protection of rights and safety</li>
+              </ul>
+            </section>
+
+            <section id="data-security">
+              <h2 className="text-2xl text-white font-semibold mb-4">
+                5. Data Security
+              </h2>
+              <p>
+                We implement appropriate technical and organizational security
+                measures to protect your information. However, please note that
+                no method of transmission over the internet or electronic
+                storage is 100% secure.
+              </p>
+            </section>
+
+            <section id="user-rights">
+              <h2 className="text-2xl text-white font-semibold mb-4">
+                6. Your Rights and Choices
+              </h2>
+              <p>You have the right to:</p>
+              <ul className="list-disc pl-6 space-y-2 mt-2">
+                <li>Access your personal information</li>
+                <li>Correct inaccurate data</li>
+                <li>Request deletion of your data</li>
+                <li>Object to data processing</li>
+                <li>Data portability</li>
+              </ul>
+            </section>
+
+            <section id="cookies">
+              <h2 className="text-2xl text-white font-semibold mb-4">
+                7. Cookies and Tracking
+              </h2>
+              <p>
+                We use cookies and similar tracking technologies to track
+                activity on our game and hold certain information. You can
+                instruct your browser to refuse all cookies or to indicate when
+                a cookie is being sent.
+              </p>
+            </section>
+
+            <section id="changes">
+              <h2 className="text-2xl text-white font-semibold mb-4">
+                8. Changes to This Policy
+              </h2>
+              <p>
+                We may update our Privacy Policy from time to time. We will
+                notify you of any changes by posting the new Privacy Policy on
+                this page and updating the &#39;Last Updated&#39; date.
+              </p>
+            </section>
+
+            <section id="contact">
+              <h2 className="text-2xl text-white font-semibold mb-4">
+                9. Contact Us
+              </h2>
+              <p>
+                If you have any questions about this Privacy Policy, please
+                contact us at:
+              </p>
+              <div className="mt-4">
+                <Link
+                  href="/contact"
+                  className="text-purple-400 hover:text-purple-300 transition-colors"
+                >
+                  Contact Page
+                </Link>
+              </div>
+            </section>
+          </CardContent>
+        </Card>
         
 
         {/* Scroll to Top Button */}
