@@ -17,7 +17,7 @@ export class Scores {
     id: number;
 
     @ManyToOne(() => User, (user) => user.scores, { onDelete: 'CASCADE' }) // Relationship with User
-    user: User[]
+    user: User[] // should it be a single entity?
     
     @Column({ type: 'int', default: 0 })
     score: Scores[];
