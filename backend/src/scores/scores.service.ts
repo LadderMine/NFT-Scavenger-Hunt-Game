@@ -1,4 +1,4 @@
-import { Inject, Injectable } from '@nestjs/common';
+import { Inject, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from 'src/users/users.entity';
 import { Repository } from 'typeorm';
@@ -37,6 +37,15 @@ export class ScoresService {
       totalPages: Math.ceil(total / limit),
       totalItems: total,
     };
+  }
+
+  public async findOneById(id: number): Promise<Scores> {
+    const scores = await this.scoresRepository.findOne({ where: { id } });
+
+    if (!scores) {
+      throw new NotFoundException(`User with ID ${id} not found`);
+    }
+    return ( scores);
   }
 
   // Update or insert user score
