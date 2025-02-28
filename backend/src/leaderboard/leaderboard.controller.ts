@@ -1,13 +1,4 @@
-import {
-  Get,
-  Post,
-  Body,
-  Param,
-  Patch,
-  Delete,
-  Controller,
-  ParseIntPipe,
-} from '@nestjs/common';
+import {Get,Post,Body,Param,Patch,Delete,Controller,ParseIntPipe,} from '@nestjs/common';
 import { LeaderboardService } from './providers/leaderboard.service';
 import { Leaderboard } from './entities/leaderboard.entity';
 import { CreateLeaderboardDto } from './dto/create-leaderboard.dto';
