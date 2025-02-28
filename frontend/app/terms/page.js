@@ -45,6 +45,7 @@ export default function TermsAndConditions() {
           </div>
         </div>
 
+        {/* second issues code */}
         {/* Main content */}
         
 
