@@ -16,10 +16,13 @@ import { UpdateLeaderboardDto } from './dto/update-leaderboard.dto';
 import { Roles } from 'src/auth/decorators/roles.decorator';
 import { Role } from 'src/auth/enums/roles.enum';
 import { RolesGuard } from 'src/auth/guard/roles.guard';
+import { RankService } from './rank/providers/rank.service';
 
 @Controller('leaderboard')
 export class LeaderboardController {
-  constructor(private readonly leaderboardService: LeaderboardService) {}
+  constructor(private readonly leaderboardService: LeaderboardService,
+    private readonly rankService: RankService,
+  ) {}
 
   @Post()
   @Roles(Role.ADMIN)
@@ -89,4 +92,14 @@ export class LeaderboardController {
   async getLeaderboardStats(): Promise<{ totalPlayers: number; totalPoints: number }> {
     return this.leaderboardService.getLeaderboardStats();
   }
+
+  @Patch(':userId/score')
+  async updateScore(
+    @Param('userId') userId: number,
+    @Body('newPoints') newPoints: number,
+  ) {
+    await this.rankService.updatePlayerScore(userId, newPoints);
+    return { message: 'Score updated successfully' };
+  }
+
 }

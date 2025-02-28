@@ -21,6 +21,8 @@ import { LevelModule } from './level/level.module';
 import { LeaderboardModule } from './leaderboard/leaderboard.module';
 import { Puzzles } from './puzzles/puzzles.entity';
 import { PuzzleSubscriber } from './level/decorators/subscriber-decorator';
+import { RankService } from './rank/providers/rank.service';
+import { RankJob } from './rank/providers/rank.job';
 
 
 @Module({
@@ -64,6 +66,8 @@ import { PuzzleSubscriber } from './level/decorators/subscriber-decorator';
   providers: [
     PuzzleSubscriber,
     AppService,
+    RankService,
+    RankJob,
     {
       provide: APP_GUARD,
       useClass: AuthTokenGuard,
