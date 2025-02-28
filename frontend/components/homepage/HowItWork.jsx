@@ -57,10 +57,11 @@ const HowItWorks = () => {
         How It Works
       </h2>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-        {HowItWorksStep.map(() => (
+        {howItWorksSteps.map(() => (
           <HowItWorksStep
             icon={howItWorksSteps.icon}
             key={howItWorksSteps.step}
+            step={howItWorksSteps.step}
             title={howItWorksSteps.title}
             description={howItWorksSteps.description}
             delay={howItWorksSteps.delay}
