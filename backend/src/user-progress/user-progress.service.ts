@@ -1,8 +1,11 @@
-import {
-  Injectable,
-  NotFoundException,
-  BadRequestException,
-} from '@nestjs/common';
+import { Injectable, NotFoundException,  BadRequestException } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import type { Repository } from 'typeorm';
+import type { Hints } from '../hints/hints.entity';
+import { UserProgress } from './user-progress.entity';
+import { UsersService } from 'src/users/users.service';
+import { PuzzlesService } from 'src/puzzles/puzzles.service';
+import { HintsService } from 'src/hints/hints.service';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { UserProgress } from './user-progress.entity';
@@ -18,13 +21,19 @@ import { Level } from 'src/level/entities/level.entity';
 export class UserProgressService {
   constructor(
     @InjectRepository(UserProgress)
-    private readonly userProgressRepository: Repository<UserProgress>,
+    private userProgressRepository: Repository<UserProgress>,
+<<<<<<< HEAD
+
+=======
     @InjectRepository(Level)
     private readonly levelRepository: Repository<Level>,
-    private readonly levelProgressService: LevelProgressService,
-    private readonly usersService: UsersService,
-    private readonly puzzlesService: PuzzlesService,
-    private readonly hintsService: HintsService,
+    // Dependency injection for user service
+>>>>>>> bc428868e0877915a9049acaa4e6974eed31b733
+    private readonly userservice: UsersService,
+
+    private readonly puzzleservice: PuzzlesService,
+
+    private readonly hintservice: HintsService,
   ) {}
 
   async getUserProgress(userId: number): Promise<UserProgress[]> {
@@ -43,6 +52,18 @@ export class UserProgressService {
   async updateProgress(
     userId: number,
     puzzleId: number,
+    hintId: number | null,
+    completed: boolean,
+  ): Promise<UserProgress> {
+    let progress = await this.userProgressRepository.findOne({
+      where: { user: { id: userId }, puzzles: { id: puzzleId } },
+    });
+
+    if (!progress) {
+      progress = this.userProgressRepository.create({
+        user: { id: userId },
+        puzzles: { id: puzzleId },
+      });
     levelId: string,
     hintId: number | null = null,
   ): Promise<{
@@ -83,6 +104,8 @@ export class UserProgressService {
 
     // 2. Update hint usage if a hint was used
     if (hintId) {
+      progress.hints = { id: hintId } as Hints;
+      progress.hintsUsed += 1;
       // Verify hint exists and belongs to the puzzle
       const hint = await this.hintsService.findById(String(hintId));
       if (!hint) {
@@ -140,84 +163,68 @@ export class UserProgressService {
         0,
       );
 
-      // Calculate completion metrics
-      const completionMetrics = {
-        userId,
-        levelId,
-        completedPuzzles,
-        hintsUsed,
-        completionDate: new Date(),
-        // Add more metrics as needed
-      };
+    progress.completed = completed;
+    progress.lastUpdated = new Date();
 
-      // Log completion metrics
-      console.log('Level completion metrics:', completionMetrics);
-
-      // Here you could:
-      // 1. Emit an event for level completion
-      // 2. Update user achievements
-      // 3. Grant rewards
-      // 4. Update leaderboard
-      // 5. Send notifications
-    } catch (error) {
-      console.error(
-        `Error handling level completion for user ${userId} level ${levelId}:`,
-        error,
-      );
-    }
+    return this.userProgressRepository.save(progress);
   }
 
   async getUserScore(userId: number): Promise<number> {
-    try {
-      const progress = await this.userProgressRepository.find({
-        where: { user: { id: userId }, completed: true },
-        relations: ['puzzles'],
-      });
+    const progress = await this.userProgressRepository.find({
+      where: { user: { id: userId }, completed: true },
+      relations: ['puzzle'],
+    });
 
-      if (!progress.length) {
-        return 0;
-      }
-
-      return progress.reduce(
-        (total, p) => total + (p.puzzles[0]?.pointValue || 0),
-        0,
-      );
-    } catch (error) {
-      throw new BadRequestException(
-        `Failed to calculate user score: ${error.message}`,
-      );
-    }
+    return progress.reduce((total, p) => total + p.puzzles.pointValue, 0);
   }
 
-  async getSolvedPuzzlesInLevel(
+  async puzzleCompleted(
     userId: number,
-    levelId: string,
-  ): Promise<{ puzzles: Puzzles[]; count: number }> {
-    try {
-      return await this.levelProgressService.getPuzzlesSolvedPerLevel(
-        userId,
-        levelId,
-      );
-    } catch (error) {
-      throw new NotFoundException(
-        `Failed to get solved puzzles: ${error.message}`,
-      );
-    }
+    puzzleId: number,
+  ): Promise<UserProgress> {
+
+    const progress = await this.updateProgress(userId, puzzleId, null, true);
+    
+    await this.recalcOverallProgress(progress);
+    return this.userProgressRepository.save(progress);
   }
 
-  async getLevelProgress(
-    userId: number,
-    levelId: string,
-  ): Promise<{ progress: number; solved: number; total: number }> {
-    try {
-      return await this.levelProgressService.calculateLevelCompletion(
-        userId,
-        levelId,
-      );
-    } catch (error) {
-      throw new NotFoundException(
-        `Failed to get level progress: ${error.message}`,
-      );
+  async levelCompleted(userId: number, levelId: number): Promise<UserProgress> {
+  
+    let progress = await this.userProgressRepository.findOne({
+      where: { user: { id: userId } },
+    });
+    if (!progress) {
+      progress = this.userProgressRepository.create({ user: { id: userId } });
     }
+    if (!progress.completedLevels) {
+      progress.completedLevels = [];
+    }
+    if (!progress.completedLevels.includes(levelId)) {
+      progress.completedLevels.push(levelId);
+    }
+
+    await this.recalcOverallProgress(progress);
+    progress.lastUpdated = new Date();
+    return this.userProgressRepository.save(progress);
+  }
+
+  private async recalcOverallProgress(progress: UserProgress): Promise<void> {
+    const totalPuzzles = await this.puzzleservice.getTotalPuzzles();
+    const totalLevels = await this.puzzleservice.getTotalLevels();
+
+    const puzzleProgress = progress.completed ? 100 : 0;
+
+    const levelProgress =
+      totalLevels && progress.completedLevels
+        ? (progress.completedLevels.length / totalLevels) * 100
+        : 0;
+
+    
+
+    progress.progressPercentage = Math.round(
+      (puzzleProgress + levelProgress) / 2,
+
+    ); 
   }
 }

@@ -19,7 +19,7 @@ export class PuzzlesService {
     private readonly nftService: NftsService,
 
     // Dependency injection for ScoresService
-    private readonly scoresService: ScoresService
+    private readonly scoresService: ScoresService,
   ) {}
 
   // Fetch a puzzle by ID
@@ -32,7 +32,10 @@ export class PuzzlesService {
   }
 
   // Update a puzzle by ID
-  public async updatePuzzle(id: number, updatePuzzleDto: Partial<Puzzles>): Promise<Puzzles> {
+  public async updatePuzzle(
+    id: number,
+    updatePuzzleDto: Partial<Puzzles>,
+  ): Promise<Puzzles> {
     const puzzle = await this.puzzleRepository.findOne({ where: { id } });
     if (!puzzle) {
       throw new NotFoundException(`Puzzle with ID ${id} not found`);
@@ -42,4 +45,22 @@ export class PuzzlesService {
     Object.assign(puzzle, updatePuzzleDto);
     return this.puzzleRepository.save(puzzle);
   }
+
+
+
+  public async createPuzzle(puzzleData: Partial<Puzzles>): Promise<Puzzles> {
+    // Create a new puzzle instance
+    const puzzle = this.puzzleRepository.create(puzzleData);
+  
+    // Save the puzzle to the database
+    await this.puzzleRepository.save(puzzle);
+  
+    // Increment level count if levelEnum is provided
+    if (puzzle.levelEnum) {
+      await this.levelService.incrementCount(puzzle.levelEnum);
+    }
+  
+    return puzzle;
+  }
 }
+
