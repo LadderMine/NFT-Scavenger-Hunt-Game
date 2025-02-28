@@ -10,90 +10,7 @@ import {
   Star,
 } from "lucide-react";
 import Link from "next/link";
-
-const RankBadge = ({ rank }) => {
-  const getBadgeStyle = (rank) => {
-    switch (rank) {
-      case 1:
-        return {
-          icon: Crown,
-          class: "bg-gradient-to-r from-yellow-400 to-amber-600",
-          size: "w-12 h-12",
-        };
-      case 2:
-        return {
-          icon: Medal,
-          class: "bg-gradient-to-r from-slate-300 to-slate-500",
-          size: "w-10 h-10",
-        };
-      case 3:
-        return {
-          icon: Medal,
-          class: "bg-gradient-to-r from-amber-700 to-amber-900",
-          size: "w-10 h-10",
-        };
-      default:
-        return {
-          icon: Star,
-          class: "bg-gradient-to-r from-purple-500 to-pink-500",
-          size: "w-8 h-8",
-        };
-    }
-  };
-
-  const style = getBadgeStyle(rank);
-  const Icon = style.icon;
-
-  return (
-    <div
-      className={`${style.size} rounded-full ${style.class} flex items-center justify-center`}
-    >
-      <Icon className="w-5 h-5 text-white" />
-    </div>
-  );
-};
-
-const PlayerCard = ({ player, rank }) => {
-  return (
-    <div className="relative group">
-      {/* Animated background on hover */}
-      <div className="absolute inset-0 bg-gradient-to-r from-purple-500/0 via-purple-500/10 to-pink-500/0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-lg" />
-
-      <div className="relative flex items-center gap-4 p-4 backdrop-blur-sm bg-white/5 border border-white/10 rounded-lg">
-        {/* Rank and Badge */}
-        <div className="flex items-center gap-3">
-          <RankBadge rank={rank} />
-          <span className="text-2xl font-bold text-white/80">#{rank}</span>
-        </div>
-
-        {/* Player Info */}
-        <div className="flex-grow">
-          <div className="flex items-center gap-2">
-            <h3 className="text-lg font-bold text-white">{player.name}</h3>
-            {player.streak > 0 && (
-              <div className="flex items-center text-orange-400 text-sm">
-                <Flame className="w-4 h-4 mr-1" />
-                {player.streak} day streak
-              </div>
-            )}
-          </div>
-          <div className="flex items-center gap-4 text-sm text-gray-400">
-            <span>{player.challenges} challenges</span>
-            <span>{player.nfts} NFTs</span>
-          </div>
-        </div>
-
-        {/* Score */}
-        <div className="text-right">
-          <div className="text-xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-pink-400">
-            {player.score.toLocaleString()} pts
-          </div>
-          <div className="text-sm text-gray-400">Level {player.level}</div>
-        </div>
-      </div>
-    </div>
-  );
-};
+import PlayerCard from '@/components/leaderboard/PlayerCard';
 
 const LeaderboardSection = () => {
   const topPlayers = [
@@ -136,6 +53,39 @@ const LeaderboardSection = () => {
       challenges: 108,
       nfts: 14,
       streak: 5,
+    },
+  ];
+  
+  const rankings = [
+    {
+      position: "1st Place",
+      reward: "5,000 STARK + Legendary NFT",
+      status: "Top Global Ranking",
+      icon: <Crown className="w-8 h-8 text-yellow-400 mb-4" />,
+      bgFrom: "from-yellow-500/10",
+      bgTo: "to-amber-500/10",
+      border: "border-yellow-500/20",
+      textColor: "text-yellow-400",
+    },
+    {
+      position: "2nd Place",
+      reward: "3,000 STARK + Epic NFT",
+      status: "Elite Hunter Status",
+      icon: <Medal className="w-8 h-8 text-slate-400 mb-4" />,
+      bgFrom: "from-slate-500/10",
+      bgTo: "to-slate-400/10",
+      border: "border-slate-400/20",
+      textColor: "text-slate-400",
+    },
+    {
+      position: "3rd Place",
+      reward: "2,000 STARK + Rare NFT",
+      status: "Master Hunter Badge",
+      icon: <Medal className="w-8 h-8 text-amber-700 mb-4" />,
+      bgFrom: "from-amber-900/10",
+      bgTo: "to-amber-700/10",
+      border: "border-amber-700/20",
+      textColor: "text-amber-700",
     },
   ];
 
@@ -202,24 +152,17 @@ const LeaderboardSection = () => {
 
       {/* Rank Rewards */}
       <div className="mt-12 grid grid-cols-1 sm:grid-cols-3 gap-6">
-        <div className="p-6 rounded-xl bg-gradient-to-r from-yellow-500/10 to-amber-500/10 border border-yellow-500/20">
-          <Crown className="w-8 h-8 text-yellow-400 mb-4" />
-          <h3 className="text-lg font-bold text-white mb-2">1st Place</h3>
-          <p className="text-gray-400 mb-4">5,000 STARK + Legendary NFT</p>
-          <div className="text-sm text-yellow-400">Top Global Ranking</div>
+      {rankings.map((rank, index) => (
+        <div
+          key={index}
+          className={`p-6 rounded-xl bg-gradient-to-r ${rank.bgFrom} ${rank.bgTo} border ${rank.border}`}
+        >
+          {rank.icon}
+          <h3 className="text-lg font-bold text-white mb-2">{rank.position}</h3>
+          <p className="text-gray-400 mb-4">{rank.reward}</p>
+          <div className={`text-sm ${rank.textColor}`}>{rank.status}</div>
         </div>
-        <div className="p-6 rounded-xl bg-gradient-to-r from-slate-500/10 to-slate-400/10 border border-slate-400/20">
-          <Medal className="w-8 h-8 text-slate-400 mb-4" />
-          <h3 className="text-lg font-bold text-white mb-2">2nd Place</h3>
-          <p className="text-gray-400 mb-4">3,000 STARK + Epic NFT</p>
-          <div className="text-sm text-slate-400">Elite Hunter Status</div>
-        </div>
-        <div className="p-6 rounded-xl bg-gradient-to-r from-amber-900/10 to-amber-700/10 border border-amber-700/20">
-          <Medal className="w-8 h-8 text-amber-700 mb-4" />
-          <h3 className="text-lg font-bold text-white mb-2">3rd Place</h3>
-          <p className="text-gray-400 mb-4">2,000 STARK + Rare NFT</p>
-          <div className="text-sm text-amber-700">Master Hunter Badge</div>
-        </div>
+      ))}
       </div>
     </div>
   );
