@@ -1,32 +1,29 @@
-import { Inject, Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { User } from 'src/users/users.entity';
 import { Repository } from 'typeorm';
 import { Scores } from './scores.entity';
+import { User } from 'src/users/users.entity';
 import { PuzzlesService } from 'src/puzzles/puzzles.service';
 import { LeaderboardGateway } from 'src/leaderboard/leaderboard.gateway';
+import { Puzzles } from 'src/puzzles/puzzles.entity';
 
 @Injectable()
 export class ScoresService {
   constructor(
-    //deine repository injection for scores entity
     @InjectRepository(Scores)
     private scoresRepository: Repository<Scores>,
 
-    //deine repository injection for user entity
     @InjectRepository(User)
     private userRepository: Repository<User>,
 
-    //define dependency injection for puzzle Service
     private readonly puzzleService: PuzzlesService,
-
-    //define dependency injection for leaderboard Service
     private readonly leaderboardGateway: LeaderboardGateway,
   ) {}
-  //fetch leaderboard with pagination
+
+  // Fetch leaderboard with pagination
   async getLeaderboard(page: number = 1, limit: number = 10) {
     const [users, total] = await this.userRepository.findAndCount({
-      order: { scores: 'DESC', update_at: 'ASC' },
+      order: { scores: 'DESC', updatedAt: 'ASC' },
       skip: (page - 1) * limit,
       take: limit,
     });
@@ -39,21 +36,54 @@ export class ScoresService {
     };
   }
 
-  // Update or insert user score
-  async updateScore(username: string, score: number) {
-    let user = await this.userRepository.findOne({ where: { username } });
-    if (user) {
-      user.score = score;
-      // update score if user exists
-    } else {
-      user = this.userRepository.create({ username, score });
-      //create a new user if not found
+  async updateScore(username: string, puzzleId: number, score: number) {
+   
+    const puzzle = await this.puzzleService.getAPuzzle(puzzleId);
+    if (!puzzle) {
+      throw new NotFoundException(`Puzzle with ID ${puzzleId} not found.`);
     }
 
-    // broadcast updated leaderboard via WebSockets
+    let user = await this.userRepository.findOne({ where: { username } });
+    if (!user) {
+     
+      user = this.userRepository.create({ username });
+      await this.userRepository.save(user);
+    }
+
+
+    let existingScore = await this.scoresRepository.findOne({
+      where: { user, puzzle },
+    });
+
+    if (existingScore) {
+      existingScore.score = score;
+      existingScore = this.scoresRepository.create({ user, puzzle, score });
+    }
+
+    await this.scoresRepository.save(existingScore);
+
+ 
     const leaderboard = await this.getLeaderboard(1, 10);
     this.leaderboardGateway.sendLeaderboardUpdate(leaderboard);
 
-    return this.userRepository.save(user);
+    return existingScore;
+  }
+
+ 
+  async handlePuzzleDeletion(puzzleId: number) {
+    const puzzle = await this.puzzleService.getAPuzzle(puzzleId);
+    if (!puzzle) {
+      throw new NotFoundException(`Puzzle with ID ${puzzleId} not found.`);
+    }
+
+   
+    await this.scoresRepository
+      .createQueryBuilder()
+      .update(Scores)
+      .set({ puzzle: null }) 
+      .where("puzzleId = :puzzleId", { puzzleId })
+      .execute();
+
+    return { message: `Puzzle ID ${puzzleId} scores updated.` };
   }
 }

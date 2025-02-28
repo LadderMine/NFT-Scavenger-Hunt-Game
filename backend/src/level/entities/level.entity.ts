@@ -55,7 +55,7 @@ export class Level {
   })
   level: LevelEnum;
 
-  public async incrementCount(level: LevelEnum) {
+  public  async incrementCount(level: LevelEnum) {
     let levelRecord = await this.levelRepository.findOne({ where: { level } });
 this.levelRepository
     if (!levelRecord) {

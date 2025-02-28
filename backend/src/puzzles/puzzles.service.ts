@@ -42,4 +42,19 @@ export class PuzzlesService {
     Object.assign(puzzle, updatePuzzleDto);
     return this.puzzleRepository.save(puzzle);
   }
+
+  public async createPuzzle(puzzleData: Partial<Puzzles>): Promise<Puzzles> {
+    // Create a new puzzle instance
+    const puzzle = this.puzzleRepository.create(puzzleData);
+  
+    // Save the puzzle to the database
+    await this.puzzleRepository.save(puzzle);
+  
+    // Increment level count if levelEnum is provided
+    if (puzzle.levelEnum) {
+      await this.levelService.incrementCount(puzzle.levelEnum);
+    }
+  
+    return puzzle;
+  }
 }
