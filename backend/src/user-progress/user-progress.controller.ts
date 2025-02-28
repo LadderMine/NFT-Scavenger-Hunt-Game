@@ -9,7 +9,7 @@ import {
   Request,
   Query,
   BadRequestException,
-  UseGuards,
+  UseGuards
 } from '@nestjs/common';
 import { UserProgressDto } from './dto/user-progress.dto';
 import { Roles } from 'src/auth/decorators/roles.decorator';
@@ -45,7 +45,7 @@ export class UserProgressController {
     );
   }
 
-  //get user-score endpoint
+  // GET endpoint for user score
   @Get('user-score')
   @Roles(Role.ADMIN)
   @UseGuards(RolesGuard)
@@ -56,9 +56,17 @@ export class UserProgressController {
     if (!puzzleId) {
       throw new BadRequestException('Puzzle ID is required');
     }
-
-    return this.userProgressService.getUserScore(userId, puzzleId);
+    return this.userProgressService.getUserScore(userId);
   }
+
+  @Post('puzzle-completed')
+  async puzzleCompleted(@Request() req, @Body() body: { puzzleId: number }) {
+    return this.userProgressService.puzzleCompleted(req.user.id, body.puzzleId);
+  }
+
+  @Post('level-completed')
+  async levelCompleted(@Request() req, @Body() body: { levelId: number }) {
+    return this.userProgressService.levelCompleted(req.user.id, body.levelId);
 
   @Get(':userId/level/:levelId')
   @Roles(Role.ADMIN)
