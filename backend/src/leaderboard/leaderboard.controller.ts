@@ -1,4 +1,13 @@
-import {Get,Post,Body,Param,Patch,Delete,Controller,ParseIntPipe,} from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+  ParseIntPipe,
+} from '@nestjs/common';
 import { LeaderboardService } from './providers/leaderboard.service';
 import { Leaderboard } from './entities/leaderboard.entity';
 import { CreateLeaderboardDto } from './dto/create-leaderboard.dto';
@@ -16,8 +25,8 @@ export class LeaderboardController {
   }
 
   @Get()
-  async getLeaderboard(): Promise<Leaderboard[]> {
-    return this.leaderboardService.getLeaderboard();
+  findAll() {
+    return this.leaderboardService.findAll();
   }
 
   @Get(':id')
@@ -28,11 +37,11 @@ export class LeaderboardController {
   }
 
   @Patch(':id')
-  async updateLeaderboardEntry(
+  update(
     @Param('id', ParseIntPipe) id: number,
     @Body() updateLeaderboardDto: UpdateLeaderboardDto,
-  ): Promise<Leaderboard> {
-    return this.leaderboardService.updateLeaderboardEntry(id, updateLeaderboardDto);
+  ) {
+    return this.leaderboardService.update(id, updateLeaderboardDto);
   }
 
   @Delete(':id')
@@ -57,8 +66,7 @@ export class LeaderboardController {
   }
 
   @Get('stats')
-  async getLeaderboardStats(): Promise<{ totalPlayers: number, totalPoints: number }> {
+  async getLeaderboardStats(): Promise<{ totalPlayers: number; totalPoints: number }> {
     return this.leaderboardService.getLeaderboardStats();
   }
 }
-
