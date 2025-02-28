@@ -9,8 +9,12 @@ import {
   Request,
   Query,
   BadRequestException,
+  UseGuards
 } from '@nestjs/common';
 import { UserProgressDto } from './dto/user-progress.dto';
+import { Roles } from 'src/auth/decorators/roles.decorator';
+import { RolesGuard } from 'src/auth/guard/roles.guard';
+import { Role } from 'src/auth/enums/roles.enum';
 
 @Controller('user-progress')
 export class UserProgressController {
@@ -22,6 +26,8 @@ export class UserProgressController {
   }
 
   @Post('update')
+  @Roles(Role.ADMIN)
+  @UseGuards(RolesGuard)
   async updateProgress(
     @Request() req,
     @Body()
@@ -41,6 +47,8 @@ export class UserProgressController {
 
   // GET endpoint for user score
   @Get('user-score')
+  @Roles(Role.ADMIN)
+  @UseGuards(RolesGuard)
   async getUserScore(
     @Query('userId') userId: number,
     @Query('puzzleId') puzzleId: number,
@@ -59,5 +67,24 @@ export class UserProgressController {
   @Post('level-completed')
   async levelCompleted(@Request() req, @Body() body: { levelId: number }) {
     return this.userProgressService.levelCompleted(req.user.id, body.levelId);
+
+  @Get(':userId/level/:levelId')
+  @Roles(Role.ADMIN)
+  @UseGuards(RolesGuard)
+  async getLevelProgress(
+    @Query('userId', ParseIntPipe) userId: number,
+    @Query('levelId', ParseIntPipe) levelId: string,
+  ) {
+    return this.userProgressService.getLevelProgress(userId, levelId);
+  }
+
+  @Get(':userId/level/:levelId/solved')
+  @Roles(Role.ADMIN)
+  @UseGuards(RolesGuard)
+  async getSolvedPuzzlesInLevel(
+    @Query('userId', ParseIntPipe) userId: number,
+    @Query('levelId', ParseIntPipe) levelId: string,
+  ): Promise<number> {
+    return this.userProgressService.getSolvedPuzzlesInLevel(userId, levelId);
   }
 }
