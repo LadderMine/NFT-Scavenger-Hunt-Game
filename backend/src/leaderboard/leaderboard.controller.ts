@@ -1,16 +1,13 @@
 import {
+  Controller,
   Get,
   Post,
   Body,
-  Param,
   Patch,
+  Param,
   Delete,
-  Controller,
-  ParseIntPipe,
 } from '@nestjs/common';
-
-import { LeaderboardService } from './leaderboard.service';
-import { Leaderboard } from './entities/leaderboard.entity';
+import { LeaderboardService } from '././providers/leaderboard.service';
 import { CreateLeaderboardDto } from './dto/create-leaderboard.dto';
 import { UpdateLeaderboardDto } from './dto/update-leaderboard.dto';
 
@@ -19,30 +16,30 @@ export class LeaderboardController {
   constructor(private readonly leaderboardService: LeaderboardService) {}
 
   @Post()
-  async addUserToLeaderboard(@Body() createLeaderboardDto: CreateLeaderboardDto): Promise<Leaderboard> {
-    return this.leaderboardService.addUserToLeaderboard(createLeaderboardDto);
+  create(@Body() createLeaderboardDto: CreateLeaderboardDto) {
+    return this.leaderboardService.create(createLeaderboardDto);
   }
 
   @Get()
-  async getLeaderboard(): Promise<Leaderboard[]> {
-    return this.leaderboardService.getLeaderboard();
+  findAll() {
+    return this.leaderboardService.findAll();
   }
 
   @Get(':id')
-  async getLeaderboardEntry(@Param('id', ParseIntPipe) id: number): Promise<Leaderboard> {
-    return this.leaderboardService.getLeaderboardEntry(id);
+  findOne(@Param('id') id: string) {
+    return this.leaderboardService.findOne(+id);
   }
 
   @Patch(':id')
-  async updateLeaderboardEntry(
-    @Param('id', ParseIntPipe) id: number,
+  update(
+    @Param('id') id: string,
     @Body() updateLeaderboardDto: UpdateLeaderboardDto,
-  ): Promise<Leaderboard> {
-    return this.leaderboardService.updateLeaderboardEntry(id, updateLeaderboardDto);
+  ) {
+    return this.leaderboardService.update(+id, updateLeaderboardDto);
   }
 
   @Delete(':id')
-  async deleteLeaderboardEntry(@Param('id', ParseIntPipe) id: number): Promise<void> {
-    return this.leaderboardService.deleteLeaderboardEntry(id);
+  remove(@Param('id') id: string) {
+    return this.leaderboardService.remove(+id);
   }
 }
