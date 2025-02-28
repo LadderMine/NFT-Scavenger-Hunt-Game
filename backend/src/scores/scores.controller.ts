@@ -1,12 +1,36 @@
-import { Body, Controller, Get, Post, Query, BadRequestException } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Post,
+  Query,
+  BadRequestException,
+  UseGuards,
+  ParseIntPipe,
+  Param,
+} from '@nestjs/common';
 import { ScoresService } from './scores.service';
+import { Roles } from 'src/auth/decorators/roles.decorator';
+import { Role } from 'src/auth/enums/roles.enum';
+import { RolesGuard } from 'src/auth/guard/roles.guard';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Scores } from './scores.entity';
+import { Repository } from 'typeorm';
 
 @Controller('scores')
 export class ScoresController {
-  constructor(private readonly scoresService: ScoresService) {}
+  constructor(
+    private readonly scoresService: ScoresService,
+
+    //repository injection of scores entity 
+    @InjectRepository(Scores)
+    private scoresRepository: Repository<Scores>
+  ) {}
 
   // GET /scores?page=1&limit=10
   @Get()
+  @Roles(Role.ADMIN)
+  @UseGuards(RolesGuard)
   async getScores(
     @Query('page') page: string = '1',
     @Query('limit') limit: string = '10',
@@ -17,8 +41,16 @@ export class ScoresController {
     return this.scoresService.getLeaderboard(pageNumber, limitNumber);
   }
 
+  @Get('/:id')
+  public getScoresBy(@Param('id', ParseIntPipe) id: number) {
+    console.log(`Fetching user with ID: ${id}`);
+    return this.scoresService.findOneById(id);
+  }
+
   // POST /scores/update-score
   @Post('/update-score')
+  @Roles(Role.ADMIN)
+  @UseGuards(RolesGuard)
   async updateScore(@Body() body: { username: string; score: number }) {
     const { username, score } = body;
     try {

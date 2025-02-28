@@ -7,17 +7,23 @@ import {
   Param,
   Delete,
   ParseIntPipe,
+  UseGuards,
 } from '@nestjs/common';
 import { LeaderboardService } from './providers/leaderboard.service';
 import { Leaderboard } from './entities/leaderboard.entity';
 import { CreateLeaderboardDto } from './dto/create-leaderboard.dto';
 import { UpdateLeaderboardDto } from './dto/update-leaderboard.dto';
+import { Roles } from 'src/auth/decorators/roles.decorator';
+import { Role } from 'src/auth/enums/roles.enum';
+import { RolesGuard } from 'src/auth/guard/roles.guard';
 
 @Controller('leaderboard')
 export class LeaderboardController {
   constructor(private readonly leaderboardService: LeaderboardService) {}
 
   @Post()
+  @Roles(Role.ADMIN)
+  @UseGuards(RolesGuard)
   async addUserToLeaderboard(
     @Body() createLeaderboardDto: CreateLeaderboardDto,
   ): Promise<Leaderboard> {
@@ -25,11 +31,15 @@ export class LeaderboardController {
   }
 
   @Get()
+  @Roles(Role.ADMIN)
+  @UseGuards(RolesGuard)
   findAll() {
     return this.leaderboardService.findAll();
   }
 
   @Get(':id')
+  @Roles(Role.ADMIN)
+  @UseGuards(RolesGuard)
   async getLeaderboardEntry(
     @Param('id', ParseIntPipe) id: number,
   ): Promise<Leaderboard> {
@@ -37,6 +47,8 @@ export class LeaderboardController {
   }
 
   @Patch(':id')
+  @Roles(Role.ADMIN)
+  @UseGuards(RolesGuard)
   update(
     @Param('id', ParseIntPipe) id: number,
     @Body() updateLeaderboardDto: UpdateLeaderboardDto,
@@ -45,6 +57,8 @@ export class LeaderboardController {
   }
 
   @Delete(':id')
+  @Roles(Role.ADMIN)
+  @UseGuards(RolesGuard)
   async deleteLeaderboardEntry(
     @Param('id', ParseIntPipe) id: number,
   ): Promise<void> {
@@ -52,6 +66,8 @@ export class LeaderboardController {
   }
 
   @Get('me/:username')
+  @Roles(Role.ADMIN)
+  @UseGuards(RolesGuard)
   async getUserLeaderboardStats(
     @Param('username') username: string,
   ): Promise<Leaderboard> {
@@ -59,6 +75,8 @@ export class LeaderboardController {
   }
 
   @Get('rank/:username')
+  @Roles(Role.ADMIN)
+  @UseGuards(RolesGuard)
   async getUserRank(
     @Param('username') username: string,
   ): Promise<{ rank: number }> {
@@ -66,6 +84,8 @@ export class LeaderboardController {
   }
 
   @Get('stats')
+  @Roles(Role.ADMIN)
+  @UseGuards(RolesGuard)
   async getLeaderboardStats(): Promise<{ totalPlayers: number; totalPoints: number }> {
     return this.leaderboardService.getLeaderboardStats();
   }
