@@ -44,3 +44,5 @@ const ValueCard = ({ icon: Icon, title, description, stats, delay }) => {
     </div>
   );
 };
+
+export default ValueCard;
