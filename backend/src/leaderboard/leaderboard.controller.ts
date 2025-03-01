@@ -1,36 +1,105 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+  ParseIntPipe,
+  UseGuards,
+} from '@nestjs/common';
+import { LeaderboardService } from './providers/leaderboard.service';
+import { Leaderboard } from './entities/leaderboard.entity';
 import { CreateLeaderboardDto } from './dto/create-leaderboard.dto';
 import { UpdateLeaderboardDto } from './dto/update-leaderboard.dto';
-import { LeaderboardService } from './providers/leaderboard.service';
-
-
+import { Roles } from 'src/auth/decorators/roles.decorator';
+import { Role } from 'src/auth/enums/roles.enum';
+import { RolesGuard } from 'src/auth/guard/roles.guard';
+import { RankService } from './rank/providers/rank.service';
 
 @Controller('leaderboard')
 export class LeaderboardController {
-  constructor(private readonly leaderboardService: LeaderboardService) {}
+  constructor(private readonly leaderboardService: LeaderboardService,
+    private readonly rankService: RankService,
+  ) {}
 
   @Post()
-  create(@Body() createLeaderboardDto: CreateLeaderboardDto) {
-    return this.leaderboardService.create(createLeaderboardDto);
+  @Roles(Role.ADMIN)
+  @UseGuards(RolesGuard)
+  async addUserToLeaderboard(
+    @Body() createLeaderboardDto: CreateLeaderboardDto,
+  ): Promise<Leaderboard> {
+    return this.leaderboardService.addUserToLeaderboard(createLeaderboardDto);
   }
 
   @Get()
+  @Roles(Role.ADMIN)
+  @UseGuards(RolesGuard)
   findAll() {
     return this.leaderboardService.findAll();
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.leaderboardService.findOne(+id);
+  @Roles(Role.ADMIN)
+  @UseGuards(RolesGuard)
+  async getLeaderboardEntry(
+    @Param('id', ParseIntPipe) id: number,
+  ): Promise<Leaderboard> {
+    return this.leaderboardService.getLeaderboardEntry(id);
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateLeaderboardDto: UpdateLeaderboardDto) {
-    return this.leaderboardService.update(+id, updateLeaderboardDto);
+  @Roles(Role.ADMIN)
+  @UseGuards(RolesGuard)
+  update(
+    @Param('id', ParseIntPipe) id: number,
+    @Body() updateLeaderboardDto: UpdateLeaderboardDto,
+  ) {
+    return this.leaderboardService.update(id, updateLeaderboardDto);
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.leaderboardService.remove(+id);
+  @Roles(Role.ADMIN)
+  @UseGuards(RolesGuard)
+  async deleteLeaderboardEntry(
+    @Param('id', ParseIntPipe) id: number,
+  ): Promise<void> {
+    return this.leaderboardService.deleteLeaderboardEntry(id);
   }
+
+  @Get('me/:username')
+  @Roles(Role.ADMIN)
+  @UseGuards(RolesGuard)
+  async getUserLeaderboardStats(
+    @Param('username') username: string,
+  ): Promise<Leaderboard> {
+    return this.leaderboardService.getUserLeaderboardStats(username);
+  }
+
+  @Get('rank/:username')
+  @Roles(Role.ADMIN)
+  @UseGuards(RolesGuard)
+  async getUserRank(
+    @Param('username') username: string,
+  ): Promise<{ rank: number }> {
+    return this.leaderboardService.getUserRank(username);
+  }
+
+  @Get('stats')
+  @Roles(Role.ADMIN)
+  @UseGuards(RolesGuard)
+  async getLeaderboardStats(): Promise<{ totalPlayers: number; totalPoints: number }> {
+    return this.leaderboardService.getLeaderboardStats();
+  }
+
+  @Patch(':userId/score')
+  async updateScore(
+    @Param('userId') userId: number,
+    @Body('newPoints') newPoints: number,
+  ) {
+    await this.rankService.updatePlayerScore(userId, newPoints);
+    return { message: 'Score updated successfully' };
+  }
+
 }

@@ -1,11 +1,12 @@
 import { 
   Controller, Post, Body, Get, Query, Param, Patch, Delete, 
-  BadRequestException, NotFoundException, InternalServerErrorException, 
+  BadRequestException, NotFoundException, ParseIntPipe, InternalServerErrorException, 
   ValidationPipe 
 } from '@nestjs/common';
 import { AnswersService } from './answers.service';
 import { CheckAnswerDto } from './dto/check-answer.dto';
 import { CreateAnswerDto, UpdateAnswerDto } from './answers.dto';
+import { Answer } from './answers.entity';
 
 @Controller('answers')
 export class AnswersController {
@@ -80,4 +81,39 @@ export class AnswersController {
       throw new InternalServerErrorException(error.message);
     }
   }
+
+
+  @Get(':field/:value')
+  async findOneBy(
+    @Param('field') field: string,
+    @Param('value') value: any,
+  ): Promise<Answer> {
+    try{
+    const result =  this.answersService.findOneBy(field, value);
+    return result;
+    } catch (error) {
+      throw new InternalServerErrorException(error.message);
+    }
+  }
+
+  @Get('id/:id')
+  async findOneById(@Param('id', ParseIntPipe) id: number): Promise<Answer> {
+    try{
+      const result = this.answersService.findOneBy('id', id);
+      return result;
+    } catch (error) {
+      throw new InternalServerErrorException(error.message);
+    }
+  }
+
+  @Get('text')
+  async findOneByText(@Query('text') text: string): Promise<Answer> {
+    try{
+      const result =  this.answersService.findOneBy('text', text);
+      return result;
+    } catch (error) {
+      throw new InternalServerErrorException(error.message);
+    }
+  };
+
 }

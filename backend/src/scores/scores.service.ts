@@ -1,43 +1,113 @@
-import { Inject, Injectable } from '@nestjs/common';
+import { Inject, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { User } from 'src/users/users.entity';
 import { Repository } from 'typeorm';
 import { Scores } from './scores.entity';
+import { User } from 'src/users/users.entity';
 import { PuzzlesService } from 'src/puzzles/puzzles.service';
 import { CreateScoreDto } from './dto/create-score.dto';
 import { UsersService } from 'src/users/users.service';
 import { UserProgressService } from 'src/user-progress/user-progress.service';
 import { UpdateScoreDto } from './dto/update-score.dto';
+import { LeaderboardGateway } from 'src/leaderboard/leaderboard.gateway';
+import { Puzzles } from 'src/puzzles/puzzles.entity';
 
 @Injectable()
 export class ScoresService {
   constructor(
-
-    //define repository injection for scores entity
     @InjectRepository(Scores)
-    private  scoresRepository: Repository<Scores>,
+    private scoresRepository: Repository<Scores>,
 
+    @InjectRepository(User)
+    private userRepository: Repository<User>,
     //deine dependecy injection for user service
     private readonly userService : UsersService,
 
 
-    //define dependency injection for puzzle Service
     private readonly puzzleService: PuzzlesService,
-
-    //define dependency injection for user progress Service
-    private readonly userProgressService: UserProgressService
+    private readonly leaderboardGateway: LeaderboardGateway,
   ) {}
 
+  // Fetch leaderboard with pagination
+  async getLeaderboard(page: number = 1, limit: number = 10) {
+    const [users, total] = await this.userRepository.findAndCount({
+      order: { scores: 'DESC', updatedAt: 'ASC' },
+      skip: (page - 1) * limit,
+      take: limit,
+    });
+
+    return {
+      data: users,
+      currentPage: page,
+      totalPages: Math.ceil(total / limit),
+      totalItems: total,
+    };
+  }
+
+  async updateScore(username: string, puzzleId: number, score: number) {
+   
+    const puzzle = await this.puzzleService.getAPuzzle(puzzleId);
+    if (!puzzle) {
+      throw new NotFoundException(`Puzzle with ID ${puzzleId} not found.`);
+    }
+
+    let user = await this.userRepository.findOne({ where: { username } });
+    if (!user) {
+     
+      user = this.userRepository.create({ username });
+      await this.userRepository.save(user);
+    }
+
+
+    let existingScore = await this.scoresRepository.findOne({
+      where: { user, puzzle },
+    });
+
+    if (existingScore) {
+      existingScore.score = score;
+      existingScore = this.scoresRepository.create({ user, puzzle, score });
+    }
+
+    await this.scoresRepository.save(existingScore);
+
+ 
+    const leaderboard = await this.getLeaderboard(1, 10);
+    this.leaderboardGateway.sendLeaderboardUpdate(leaderboard);
+
+    return existingScore;
+  }
+
+  async handlePuzzleDeletion(puzzleId: number) {
+    const puzzle = await this.puzzleService.getAPuzzle(puzzleId);
+    if (!puzzle) {
+      throw new NotFoundException(`Puzzle with ID ${puzzleId} not found.`);
+    }
+
+   
+    await this.scoresRepository
+      .createQueryBuilder()
+      .update(Scores)
+      .set({ puzzle: null }) 
+      .where("puzzleId = :puzzleId", { puzzleId })
+      .execute();
+
+    return { message: `Puzzle ID ${puzzleId} scores updated.` };
+  }
+
+  public async findOneById(id: number): Promise<Scores> {
+    const scores = await this.scoresRepository.findOne({ where: { id } });
+
+    if (!scores) {
+      throw new NotFoundException(`User with ID ${id} not found`);
+    }
+    return ( scores);
+  }
+  
   /**
    * A function to retrieve scores from DB
    * @returns an array with all Scores
    */
   async getAllScores(){
     return await this.scoresRepository.find();
-  }
-
-  async getById(id:number){
-    return await this.scoresRepository.findOne({where: {id}});
   }
 
   async createScore(dto: CreateScoreDto){
@@ -47,46 +117,18 @@ export class ScoresService {
     const puzzle = await this.puzzleService.getAPuzzle(dto.puzzleId);
     if (!puzzle) throw new Error("Puzzle not found");
     
-    const userProgress = await this.userProgressService.getUserProgress(user.id); //returns an array, scores expect one item
-    if (!userProgress) throw new Error("User progress not found");
 
     // TODO: Fix the relation between userProgress and scores so that the create method is properly formated
     const score = this.scoresRepository.create({
         user,
         score: dto.score,
         puzzle,
-        userProgress
     });
-    return await this.scoresRepository.save(score);
-  }
-
-  async updateScore(id: number, dto: UpdateScoreDto): Promise<Scores | null> {
-    const score = await this.scoresRepository.findOne({ where: { id } });
-    if (!score) throw new Error("Score not found");
-
-    score.score = dto.score;
     return await this.scoresRepository.save(score);
   }
 
   async deleteScore(id: number): Promise<void> {
     await this.scoresRepository.delete(id);
   }
-
-  //fetch leaderboard with pagination
-  //TODO -> Fix the function to use userService, it provides more order
-  // async getLeaderboard(page: number = 1, limit: number = 10) {
-  //   const [users, total] = await this.userRepository.findAndCount({
-  //     order: { scores: 'DESC', update_at: 'ASC' },
-  //     skip: (page - 1) * limit,
-  //     take: limit,
-  //   });
-
-  //   return {
-  //     data: users,
-  //     currentPage: page,
-  //     totalPages: Math.ceil(total / limit),
-  //     totalItems: total,
-  //   };
-  // }
 
 }
