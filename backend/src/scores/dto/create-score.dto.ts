@@ -12,4 +12,10 @@ export class CreateScoreDto {
   @IsInt()
   @IsNotEmpty()
   score: number;
+
+  @ApiProperty({ description: 'Id for the connected puzzle' })
+  @Min(0)
+  @IsInt()
+  @IsNotEmpty()
+  puzzleId: number;
 }

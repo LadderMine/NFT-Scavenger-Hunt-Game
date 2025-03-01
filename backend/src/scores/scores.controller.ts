@@ -1,7 +1,7 @@
-import { Body, Controller, Get, NotFoundException, Param, Post, Query } from '@nestjs/common';
+import { Body, Controller, Delete, Get, NotFoundException, Param, Patch, Post, Query } from '@nestjs/common';
 import { ScoresService } from './scores.service';
 import { CreateScoreDto } from './dto/create-score.dto';
-import { ScoreResponseDto } from './dto/response-score.dto';
+import { UpdateScoreDto } from './dto/update-score.dto';
 
 @Controller('scores')
 export class ScoresController {
@@ -10,8 +10,7 @@ export class ScoresController {
 
   @Post()
   async createScore(@Body() scoreDto: CreateScoreDto){
-    const result = await this.scoresService.createScore(scoreDto);
-    return result;
+    return await this.scoresService.createScore(scoreDto);
   }
 
 
@@ -21,14 +20,23 @@ export class ScoresController {
   }
 
   @Get(':id') // Use ':id' to define a route parameter
-  async getScore(@Param('id') id: number) : ScoreResponseDto {
-    const result:ScoreResponseDto = await this.scoresService.getById(id);
+  async getScore(@Param('id') id: number) {
+    const result = await this.scoresService.getById(id);
     if (!result) {
       throw new NotFoundException(`Score with ID ${id} not found`);
     }
     return result; // Return the found score
   }
 
+  @Patch(":id")
+  async update(@Param("id") id: number, @Body() updateScoreDto: UpdateScoreDto) {
+    return this.scoresService.updateScore(id, updateScoreDto);
+  }
+
+  @Delete(":id")
+  async remove(@Param("id") id: number) {
+    return this.scoresService.deleteScore(id);
+  }
 
 
   // async getScores(
