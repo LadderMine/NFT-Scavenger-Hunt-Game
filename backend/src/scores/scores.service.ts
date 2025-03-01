@@ -4,9 +4,7 @@ import { User } from 'src/users/users.entity';
 import { Repository } from 'typeorm';
 import { Scores } from './scores.entity';
 import { PuzzlesService } from 'src/puzzles/puzzles.service';
-import { ScoreResponseDto } from './dto/response-score.dto';
 import { CreateScoreDto } from './dto/create-score.dto';
-import { async } from 'rxjs';
 import { UsersService } from 'src/users/users.service';
 import { UserProgressService } from 'src/user-progress/user-progress.service';
 import { UpdateScoreDto } from './dto/update-score.dto';
@@ -21,6 +19,7 @@ export class ScoresService {
 
     //deine dependecy injection for user service
     private readonly userService : UsersService,
+
 
     //define dependency injection for puzzle Service
     private readonly puzzleService: PuzzlesService,

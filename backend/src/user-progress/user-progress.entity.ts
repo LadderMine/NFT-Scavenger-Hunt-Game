@@ -1,7 +1,8 @@
 import { Hints } from "src/hints/hints.entity"
 import { Puzzles } from "src/puzzles/puzzles.entity"
+import { Scores } from "src/scores/scores.entity"
 import { User } from "src/users/users.entity"
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, JoinColumn, Relation } from "typeorm"
+import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, JoinColumn, Relation, OneToMany } from "typeorm"
 
 
 @Entity()
@@ -15,6 +16,12 @@ export class UserProgress {
   )
   @JoinColumn({ name: "userId" })
   user: Relation<User>
+
+  @OneToMany(
+    () => Scores,
+    (score) => score.userProgress
+  )
+  scores : Scores;
 
   @ManyToOne(
     () => Puzzles,
