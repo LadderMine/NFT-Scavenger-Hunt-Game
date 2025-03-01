@@ -17,16 +17,13 @@ export class Scores {
     id: number;
 
     @ManyToOne(() => User, (user) => user.scores, { onDelete: 'CASCADE' }) // Relationship with User
-    user: User[] // should it be a single entity?
+    user: User 
     
     @Column({ type: 'int', default: 0 })
-    score: Scores[];
+    score: number;
 
-    @ManyToOne(() => Puzzles, (puzzle) => puzzle.scores, { onDelete: 'CASCADE' }) // Relationship with Puzzle
-    puzzleId: Puzzles;
-    
-    @ManyToOne(() => Puzzles, (puzzles) => puzzles.scores, { onDelete: "CASCADE" })
-    puzzles: Puzzles;
+    @ManyToOne(() => Puzzles, (puzzle) => puzzle.scores, { onDelete: "CASCADE" })
+    puzzle: Puzzles;
   
     @ManyToOne(() => UserProgress, (userProgress) => userProgress.scores, { cascade: true })
     userProgress: UserProgress;
