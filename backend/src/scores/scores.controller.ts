@@ -2,7 +2,6 @@ import { Body, Controller, Delete, Get, NotFoundException, Param, Patch, Post, Q
 import { ScoresService } from './scores.service';
 import { PuzzlesService } from 'src/puzzles/puzzles.service';
 import { CreateScoreDto } from './dto/create-score.dto';
-import { UpdateScoreDto } from './dto/update-score.dto';
 
 @Controller('scores')
 export class ScoresController {
@@ -41,16 +40,6 @@ export class ScoresController {
     return this.scoresService.deleteScore(id);
   }
 
-
-  // async getScores(
-  //   @Query('page') page: string = '1',
-  //   @Query('limit') limit: string = '10',
-  // ) {
-  //   const pageNumber = parseInt(page, 10);
-  //   const limitNumber = parseInt(limit, 10);
-
-  //   return this.socresSerivce.getLeaderboard(pageNumber, limitNumber);
-  // }
 
   @Patch()
   async updateScore(

@@ -6,10 +6,7 @@ import { User } from 'src/users/users.entity';
 import { PuzzlesService } from 'src/puzzles/puzzles.service';
 import { CreateScoreDto } from './dto/create-score.dto';
 import { UsersService } from 'src/users/users.service';
-import { UserProgressService } from 'src/user-progress/user-progress.service';
-import { UpdateScoreDto } from './dto/update-score.dto';
 import { LeaderboardGateway } from 'src/leaderboard/leaderboard.gateway';
-import { Puzzles } from 'src/puzzles/puzzles.entity';
 
 @Injectable()
 export class ScoresService {
