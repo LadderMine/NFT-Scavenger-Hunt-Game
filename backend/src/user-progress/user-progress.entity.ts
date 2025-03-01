@@ -1,14 +1,8 @@
-import { Hints } from 'src/hints/hints.entity';
-import { Puzzles } from 'src/puzzles/puzzles.entity';
-import { User } from 'src/users/users.entity';
-import {
-  Entity,
-  PrimaryGeneratedColumn,
-  Column,
-  ManyToOne,
-  JoinColumn,
-  Relation,
-} from 'typeorm';
+import { Hints } from "src/hints/hints.entity"
+import { Puzzles } from "src/puzzles/puzzles.entity"
+import { User } from "src/users/users.entity"
+import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, JoinColumn, Relation, OneToMany } from "typeorm"
+
 
 @Entity()
 export class UserProgress {
