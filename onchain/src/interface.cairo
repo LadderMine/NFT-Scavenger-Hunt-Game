@@ -11,7 +11,7 @@ pub trait IScavengerHunt<TContractState> {
     );
     fn get_question(self: @TContractState, question_id: u64) -> Question;
     fn set_question_per_level(ref self: TContractState, amount: u8);
-    fn get_question_per_level(self: @TContractState, count: u8) -> u8;
+    fn get_question_per_level(self: @TContractState) -> u8;
     fn initialize_player_progress(ref self: TContractState, player_address: ContractAddress);
     fn submit_answer(ref self: TContractState, question_id: u64, answer: ByteArray) -> bool;
     fn request_hint(
@@ -26,9 +26,11 @@ pub trait IScavengerHunt<TContractState> {
         level: Levels,
         hint: ByteArray,
     );
+    fn next_level(self: @TContractState, level: Levels) -> Levels;
+    fn get_player_level(self: @TContractState, player: ContractAddress) -> Levels;
 }
 
-#[derive(Drop, Serde, starknet::Store)]
+#[derive(Drop, Debug, Serde, starknet::Store)]
 pub struct Question {
     pub question_id: u64,
     pub question: ByteArray,
@@ -37,7 +39,7 @@ pub struct Question {
     pub hint: ByteArray,
 }
 
-#[derive(Drop, Copy, Serde, PartialEq, starknet::Store)]
+#[derive(Drop, Debug, Copy, Serde, PartialEq, starknet::Store)]
 pub enum Levels {
     #[default]
     Easy,
@@ -46,7 +48,7 @@ pub enum Levels {
     Master,
 }
 
-#[derive(Drop, Serde, starknet::Store)]
+#[derive(Drop, Copy, Serde, starknet::Store)]
 pub struct PlayerProgress {
     pub address: ContractAddress,
     pub current_level: Levels,
