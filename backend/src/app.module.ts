@@ -23,11 +23,12 @@ import { Puzzles } from './puzzles/puzzles.entity';
 import { PuzzleSubscriber } from './level/decorators/subscriber-decorator';
 import { RankService } from './rank/providers/rank.service';
 import { RankJob } from './rank/providers/rank.job';
+import { StripeModule } from './stripe/stripe.module';
 import { SubscriptionModule } from './subscription/subscription.module';
-
 
 @Module({
   imports: [
+    StripeModule,
     ConfigModule.forRoot({
       isGlobal: true,
       envFilePath: ['.env'],
