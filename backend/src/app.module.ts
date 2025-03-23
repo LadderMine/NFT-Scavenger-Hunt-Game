@@ -20,6 +20,7 @@ import { AuthTokenGuard } from './auth/guard/auth-token/auth-token.guard';
 import { LevelModule } from './level/level.module';
 import { LeaderboardModule } from './leaderboard/leaderboard.module';
 import { Puzzles } from './puzzles/puzzles.entity';
+import { TransactionModule } from './transaction/transaction.module';
 
 
 @Module({
@@ -58,6 +59,7 @@ import { Puzzles } from './puzzles/puzzles.entity';
     JwtModule.registerAsync(jwtConfig.asProvider()),
     LevelModule,
     LeaderboardModule,
+    TransactionModule
   ],
   controllers: [AppController],
   providers: [
