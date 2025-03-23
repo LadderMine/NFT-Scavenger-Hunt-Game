@@ -1,5 +1,5 @@
 #[starknet::contract]
-mod MockERC1155Receiver {
+pub mod MockERC1155Receiver {
     use openzeppelin::introspection::src5::SRC5Component;
     use openzeppelin::token::erc1155::ERC1155ReceiverComponent;
 

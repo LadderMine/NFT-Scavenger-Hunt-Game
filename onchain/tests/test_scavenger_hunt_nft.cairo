@@ -4,7 +4,9 @@ use snforge_std::{
     declare, ContractClassTrait, start_cheat_caller_address, stop_cheat_caller_address
 };
 use openzeppelin::token::{erc1155::interface::{IERC1155Dispatcher, IERC1155DispatcherTrait}};
-use onchain::scavenger_hunt_nft::{IScavengerHuntNFTDispatcher, IScavengerHuntNFTDispatcherTrait};
+use onchain::contracts::scavenger_hunt_nft::{
+    IScavengerHuntNFTDispatcher, IScavengerHuntNFTDispatcherTrait
+};
 use onchain::interface::{Levels};
 
 // Define for testing

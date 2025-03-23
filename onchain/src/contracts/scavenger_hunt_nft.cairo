@@ -13,7 +13,7 @@ pub trait IScavengerHuntNFT<TContractState> {
 }
 
 #[starknet::contract]
-mod ScavengerHuntNFT {
+pub mod ScavengerHuntNFT {
     use openzeppelin::introspection::src5::SRC5Component;
     use openzeppelin::token::erc1155::{ERC1155Component, ERC1155HooksEmptyImpl};
     use openzeppelin::access::accesscontrol::AccessControlComponent;
