@@ -24,6 +24,7 @@ import { PuzzleSubscriber } from './level/decorators/subscriber-decorator';
 import { RankService } from './rank/providers/rank.service';
 import { RankJob } from './rank/providers/rank.job';
 import { StripeModule } from './stripe/stripe.module';
+import { SubscriptionModule } from './subscription/subscription.module';
 
 @Module({
   imports: [
@@ -62,6 +63,7 @@ import { StripeModule } from './stripe/stripe.module';
     JwtModule.registerAsync(jwtConfig.asProvider()),
     LevelModule,
     LeaderboardModule,
+    SubscriptionModule,
   ],
   controllers: [AppController],
   providers: [
