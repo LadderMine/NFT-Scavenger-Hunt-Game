@@ -12,6 +12,8 @@ import { JwtModule } from '@nestjs/jwt';
 import jwtConfig from './config/jwt.config';
 import { LogInProvider } from './providers/log-in.provider';
 import { GenerateTokenProvider } from './providers/generate-token.provider';
+import { APP_GUARD } from '@nestjs/core';
+import { RolesGuard } from './guard/roles.guard';
 
 @Module({
   imports: [
@@ -30,7 +32,11 @@ import { GenerateTokenProvider } from './providers/generate-token.provider';
     AccessTokenGuard,
     LogInProvider,
     GenerateTokenProvider,
+    {
+      provide: APP_GUARD,
+      useClass: RolesGuard,
+    },
   ],
   exports: [AuthService, HashingProvider, AccessTokenGuard],
 })
-export class AuthModule {}
+export class AuthModule { }

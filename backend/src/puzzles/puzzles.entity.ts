@@ -1,37 +1,71 @@
-import { Hints } from "src/hints/hints.entity";
-import { Level } from "src/level/entities/level.entity";
-import { NFTs } from "src/nfts/nfts.entity";
-import { UserProgress } from "src/user-progress/user-progress.entity";
-import { Scores } from "src/scores/scores.entity";
-import { Entity, PrimaryGeneratedColumn, Column, OneToMany, OneToOne, ManyToOne } from "typeorm";
+import { Answers } from 'src/answers/answers.entity';
+import { Hints } from 'src/hints/hints.entity';
+import { Level } from 'src/level/entities/level.entity';
+import { NFTs } from 'src/nfts/nfts.entity';
+import { UserProgress } from 'src/user-progress/User-Progress.entity';
+import { User } from 'src/users/users.entity';
+import { Scores } from 'src/scores/scores.entity';
+import { Answer } from 'src/answers/answers.entity';
+import { 
+  Entity,
+  PrimaryGeneratedColumn,
+  Column,
+  OneToMany,
+  ManyToOne,
+  OneToOne,
+  BeforeInsert
+} from 'typeorm';
+import { Answers } from "src/answers/answers.entity";
+import { Hints } from 'src/hints/hints.entity';
+import { Level } from 'src/level/entities/level.entity';
+import { NFTs } from 'src/nfts/nfts.entity';
+import { Scores } from 'src/scores/scores.entity';
+import { UserProgress } from 'src/user-progress/user-progress.entity';
+import { LevelEnum } from 'src/enums/LevelEnum';
 
 @Entity()
-export class Puzzles { 
+export class Puzzles {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @OneToMany(() => Hints, (hints) => hints.puzzles) 
+  @OneToMany(() => Hints, (hints) => hints.puzzles)
   hints: Hints[];
 
-  @Column({ type: "timestamp", default: () => "CURRENT_TIMESTAMP" })
+  @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
   createdAt: Date;
 
-  @Column({ type: "timestamp", default: () => "CURRENT_TIMESTAMP", onUpdate: "CURRENT_TIMESTAMP" })
+  @Column({
+      type: 'timestamp',
+      default: () => 'CURRENT_TIMESTAMP',
+      onUpdate: 'CURRENT_TIMESTAMP',
+  })
   updatedAt: Date;
 
-  @Column({ type: "int" })
+  @Column({ type: 'int' })
   pointValue: number;
 
-  @OneToMany(() => UserProgress, (userProgress) => userProgress.puzzles)
-  userProgress: UserProgress[];
-
-  @OneToOne(() => NFTs, (nfts) => nfts.puzzles) 
+  @OneToOne(() => NFTs, (nfts) => nfts.puzzles, { nullable: true })
   nfts: NFTs;
+
+  @ManyToOne(() => UserProgress, (userProgress) => userProgress.puzzles)
+  userProgress: UserProgress;
 
   @ManyToOne(() => Level, (level) => level.puzzles)
   level: Level;
 
-  // Add Scores relationship
-  @OneToMany(() => Scores, (score) => score.puzzleId)
+  @Column({ type: 'enum', enum: LevelEnum })
+  levelEnum: LevelEnum;
+
+  @OneToMany(() => Scores, (score) => score.puzzle, { onDelete: 'SET NULL' }) 
   scores: Scores[];
+
+  @OneToMany(() => Answers, (answer) => answer.puzzle)
+  answers: Answers[];
+
+  @BeforeInsert()
+  async updateLevelCount() {
+      if (this.level) {
+          await Level.incrementCount(this.levelEnum);
+      }
+  }
 }

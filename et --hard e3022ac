@@ -1,0 +1,254 @@
+[33m248ef9b[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mfeat/create-score-endpoint[m[33m, [m[1;31morigin/feat/create-score-endpoint[m[33m)[m feat/ finish basic crud operations
+[33me3022ac[m Initial adaptation
+[33m762e40d[m Merge pull request #260 from davidedde/Refactor-value-card
+[33m46e69b7[m Merge pull request #280 from kayceeDev/feat-check-answer
+[33mbc303c4[m Merge branch 'main' into feat-check-answer
+[33md3ee4a0[m Merge pull request #285 from simplicityf/main
+[33m2f80eb5[m Merge branch 'main' into main
+[33m19e8229[m Merge pull request #287 from gregemax/main
+[33md22dc75[m [contract] feat: create an erc1155 contract (#186)
+[33m4dd4cda[m feat: add check answer logic
+[33m0770bd5[m done
+[33mb0e9a60[m Merge pull request #230 from AbdulSnk/d-injection
+[33mc1e37d3[m Merge branch 'main' into d-injection
+[33maa0bee9[m Merge pull request #266 from kingjosmel/Refactor-NFTRewardSection
+[33m9f3b906[m Merge pull request #281 from mdauwal/mdtech
+[33mca081b2[m Merge pull request #286 from Xaxxoo/socials
+[33md8e0654[m Merge pull request #270 from enyinnaya1234/feature/Refactor-Leaderboard
+[33m775fd91[m add social module with follow and activity features
+[33m9b6c32a[m Merge pull request #265 from tali-creator/Refactor-About-Page
+[33m541c6fa[m Merge branch 'main' into d-injection
+[33m02eb37b[m Merge pull request #284 from Xaxxoo/connectedWalletUI
+[33mc6919c7[m add connected wallets page with wallet management features
+[33m8ae18d4[m done
+[33m12ccde3[m Merge branch 'DistinctCodes:main' into main
+[33m297c602[m feat(answer): add Answer DTO with validations and update AnswersController
+[33m5a31665[m Merge pull request #251 from Godsmiracle001/feature/testimonial-refactor
+[33m0b70342[m implementation of create sendHint endpoint
+[33mb7a4240[m Refactored the initial commit
+[33m9858f69[m Merge pull request #279 from Xaxxoo/connected-wallets
+[33m56c67df[m connected wallet page
+[33m63648da[m Merge pull request #257 from OlufunbiIK/user-progress
+[33m35a411e[m Merge pull request #276 from Uyoxy/puzzle
+[33m9fd2ec0[m Merge pull request #277 from GtHadi/hadi
+[33ma8b4fb9[m Merge pull request #278 from kknola/feat/story-mode-and-progression-api
+[33mfdb80e4[m add story mode and progression api
+[33mce21802[m Implement UI Components in the FAQ Page
+[33m39a3343[m Implement an update puzzle endpoint
+[33mb0adf94[m Implement UI Components in the FAQ Page
+[33m90c5eec[m Merge branch 'DistinctCodes:main' into Refactor-About-Page
+[33md2f03e5[m Merge pull request #269 from gaderay/main
+[33m3508372[m refac: Refactor Leaderboard Components and Optimize Rank Rewards Rendering
+[33m8836ade[m Merge pull request #219 from ayomideadeniran/feature/user-endpoints
+[33m9521a48[m Merge branch 'main' into feature/user-endpoints
+[33m1d2b0e5[m Add progress tracking UI for game levels
+[33md2436b0[m Merge pull request #214 from godwinameh/godwinameh
+[33m01183d0[m Merge branch 'main' into godwinameh
+[33mbe6bf53[m Merge pull request #268 from modibboyusuph/main
+[33mdd53ee2[m Merge pull request #227 from Mkalbani/u-progress
+[33mb1463f1[m Merge branch 'main' into u-progress
+[33md7f31ea[m Update users.entity.ts
+[33m585d522[m updated the profile page
+[33mb4b95f9[m Update users.entity.ts
+[33m68c7f8c[m Update package-lock.json
+[33m2077bc6[m Merge pull request #267 from Gsure-tech/implement-ui-components-in-the-contact-page
+[33mde369ba[m implement ui components in the contact page
+[33mfd803bf[m Refactor NFTRewardSection
+[33m68776a0[m Merge pull request #261 from Zubairuzb/dev
+[33mc61b611[m Refactor About Page to Use Dynamic Rendering
+[33m18a20a7[m Merge pull request #240 from phertyameen/level/puzzlecount
+[33m0bee64f[m Refactor About Page to Use Dynamic Rendering
+[33mc903390[m Merge pull request #263 from jboybillions200/main
+[33m57aeaf6[m resolve conflict
+[33m45e8620[m Update puzzles.service.ts
+[33m0ff31e5[m Update puzzles.service.ts
+[33m5ac5c16[m Update puzzles.service.ts
+[33mcd9164b[m Update app.module.ts
+[33mb7298a9[m Update package-lock.json
+[33mcff98fe[m Add FAQ UI to the Scavenger Hunt Game
+[33m0fb1563[m ...
+[33md920234[m i implemented changes on profile
+[33m99455b5[m Add FAQ UI to the Scavenger Hunt Game
+[33m30bc354[m Refactor Value Card Component
+[33m5c77017[m Merge pull request #252 from mijinummi/ummi
+[33m87b774a[m completed code: contact page UI
+[33mc9a2896[m Merge branch 'main' into user-progress
+[33mbbbed82[m implemented the designfor the about page
+[33mefa7834[m implementation of contact page user interface done
+[33m0315f14[m Refactored TestimonialSection.jsx to follow DRY principle and use Next.js optimizations
+[33m81dd7e0[m Merge pull request #221 from OgbuGideon/feat-updatehint-endpoint
+[33m02ec307[m Merge pull request #226 from crood-xp/NFT-DTO
+[33m52aeddd[m Merge pull request #245 from A6dulmalik/rankResource
+[33mda3e1cb[m Merge branch 'main' into rankResource
+[33mbfbe692[m Merge pull request #232 from cjScrypt/main
+[33ma5bbe99[m Merge pull request #242 from LaGodxy/BACKEND-Implement-Access-Token-and-Auth-Guard-in-the-App-Module-to-Protect-All-Routes-#197
+[33mff06758[m i made some changes in the entities
+[33m7aa38c1[m intial commit -create rank resource -create calculateRank and updateLeaderBaoardRanks service -update leaderbaord service.
+[33m38c785c[m Merge branch 'godwinameh' of https://github.com/godwinameh/NFT-Scavenger-Hunt-Game into godwinameh
+[33mbeb1c04[m i updated my puzzles entity
+[33m60c8f92[m BACKEND-Implement-Access-Token-and-Auth-Guard-in-the-App-Module-to-Protect-All-Routes-#197
+[33mf6d9c8a[m i updated my relationshin in the entities
+[33m66e32e9[m Merge pull request #238 from akintewe/feat/install-shadcn-components
+[33m29c4a3b[m Merge pull request #236 from jahrulezfrancis/feature/organize-homepage-components-#234
+[33m25da279[m fixes
+[33m810c75c[m feat: install ShadCN UI components (accordion, select, textarea, breadcrumb)
+[33m6abb6a0[m Added homepage components to the homepage
+[33m4e3c8c0[m moved homepage components into the homepage folder
+[33m22e6f28[m Merge branch 'main' of https://github.com/DistinctCodes/NFT-Scavenger-Hunt-Game into level/puzzlecount
+[33m12dccdf[m Level Entity Reflects the Count of Associated Puzzles
+[33m9137d20[m Merge pull request #233 from AbdulmujibOladayo/main
+[33m5cb0714[m Merge pull request #2 from DistinctCodes/main
+[33m74a5497[m modified homepage
+[33m5dd326d[m [CONTRACT] feat: Implement Hashing for Stored Answers (#204)
+[33meceb440[m feat: Add `PuzzlesService.create` method that creates a `Puzzle` and correctly link `Hints` and `Level`
+[33mcb4a248[m feat: Add CreatePuzzleDto and puzzle creation controller
+[33md570640[m Implemented manual authentication removing guard
+[33me4351a9[m Merge pull request #231 from AbdulmujibOladayo/main
+[33m7992b21[m Merge pull request #1 from DistinctCodes/main
+[33m51e636a[m Updated the page.js
+[33m6125649[m Merge branch 'main' into u-progress
+[33m19b4879[m Update nfts.entity.ts
+[33mb6311a3[m Update nfts.entity.ts
+[33mcdfba86[m Update nfts.entity.ts
+[33m4e7844e[m Update nfts.service.ts
+[33m318c526[m Update nfts.service.spec.ts
+[33md55b555[m Update nfts.module.ts
+[33ma8473c2[m Update nfts.controller.ts
+[33meee14a3[m Update nfts.controller.spec.ts
+[33m55a0b4f[m Update nfts.controller.spec.ts
+[33m2f0db04[m Merge pull request #229 from AbdulmujibOladayo/main
+[33m9017afb[m feat:Implement DI & Fix Circular Dependencies
+[33m7406f8b[m created the help feature modal
+[33ma0ee0df[m  Create Answer Entity & Establish Relationships
+[33maa05bbf[m feat: implement DTO for score creation
+[33md508bed[m Removed the function in the puzzle.services.ts and reverted the file
+[33m98e21bc[m created levelEnums, defined the four levels, refrenced the enum in the puzzle entity and puzzle services
+[33m011fbdd[m removed duplicates import
+[33m6cdda9f[m update code
+[33maddde7f[m updated code
+[33m88566de[m update user dtos and endpoint
+[33ma836064[m level entity implemented
+[33m4ce612d[m "feat: glopabl exception filter and custom erro handling"
+[33m4c7172e[m "feat: leaderboard enitity and dto"
+[33m7abc214[m "fix: refershToken"
+[33md640d7b[m "feat:refresh-token"
+[33mfa50430[m removed Puzzle entity
+[33m084f4b0[m changes effected
+[33me808d34[m Add some AmazingFeature
+[33m2f3fae9[m added dto and createhint service fuction
+[33m28f46dd[m deleted the requested files
+[33m33d8688[m updated score, puzzle and user entities. created puzzle dto
+[33m112f015[m I have updated the puzzle dto
+[33m2367abb[m Initial Commit
+[33mad3f810[m Refactored: Removed HintController & AuthEntity (#151)
+[33m5842f33[m - Created a DTO folder within the user-progress module. - Implemented the User Progress DTO, matching the User Progress entity structure. - Applied validation rules for required fields and data types using decorators. - Established relationships with related entities (User, Puzzle, Scores) in the DTO. - Exported the User Progress DTO for use in controllers and services. - Updated the user-progress module to utilize the new DTO instead of raw data objects.
+[33m4189e17[m update commit
+[33m6087cb8[m Merge pull request #228 from mftee/main
+[33mb6f5126[m Merge branch 'main' of https://github.com/mftee/NFT-Scavenger-Hunt-Game
+[33m8a8db52[m installed starknet dependencies
+[33m139c4d7[m Merge pull request #1 from DistinctCodes/main
+[33m9593a59[m good as new
+[33md24bbd7[m sttarted working on the connect wallet page
+[33m832f187[m Merge branch 'main' of https://github.com/mftee/NFT-Scavenger-Hunt-Game
+[33maf3ca39[m - Created a DTO folder within the user-progress module. - Implemented the User Progress DTO, matching the User Progress entity structure. - Applied validation rules for required fields and data types using decorators. - Established relationships with related entities (User, Puzzle, Scores) in the DTO. - Exported the User Progress DTO for use in controllers and services. - Updated the user-progress module to utilize the new DTO instead of raw data objects.
+[33m690642b[m working on the connect wallet page
+[33mf2703a3[m fix: hint repo, refactor
+[33m9a90cb6[m modified
+[33m778ffb3[m Merge pull request #217 from KuchiMercy/levelEnum
+[33med93846[m resolved conflicts
+[33mb0f8cdd[m resolved conflicts
+[33mc3bd228[m Merge pull request #225 from ryzen-xp/Create-Answer-Entity
+[33mc392c1c[m Merge pull request #218 from ltoussaint/feat/implement-score-dto
+[33m772f6c4[m Update nfts.service.ts
+[33ma06e983[m Update nfts.service.spec.ts
+[33m2e438c2[m Update nfts.module.ts
+[33meed63fd[m Update nfts.entity.ts
+[33me3fc9f0[m Update nfts.controller.ts
+[33m95f11f2[m Update nfts.controller.spec.ts
+[33m7a1caf8[m feat: implement DTO for score creation
+[33m76b84aa[m Add files via upload
+[33m421b98a[m Merge pull request #223 from RUKAYAT-CODER/difficultyRating
+[33m561cd18[m Merge branch 'main' of https://github.com/RUKAYAT-CODER/NFT-Scavenger-Hunt-Game into difficultyRating
+[33m75a5711[m Merge branch 'main' into Create-Answer-Entity
+[33mbde8334[m Merge pull request #224 from dDevAhmed/feature/level-entity
+[33m271c156[m  Create Answer Entity & Establish Relationships
+[33mb5d81e0[m Merge pull request #209 from OthmanImam/feature/Backend-NFT-Scavenger-Hunt-Game#158
+[33m387173a[m Merge branch 'main' into feature/Backend-NFT-Scavenger-Hunt-Game#158
+[33m27198ee[m Merge pull request #216 from portableDD/exceptionHandler
+[33m85fec48[m Merge pull request #213 from portableDD/refreshToken
+[33meb0a077[m level entity implemented
+[33m2234764[m update code
+[33m93be1d5[m updated code
+[33m3bc0cf7[m Removed the function in the puzzle.services.ts and reverted the file
+[33m3fa64f9[m Merge branch 'main' into exceptionHandler
+[33m4eeadbc[m update user dtos and endpoint
+[33med7fe74[m Merge branch 'main' into feat-updatehint-endpoint
+[33mca5eff7[m feat: BACKEND create updateHint Endpoint and DTO
+[33m875c8de[m Merge pull request #208 from Luluameh/remove-hint-auth
+[33mf0133a0[m "fix: refershToken"
+[33me4219dc[m Merge branch 'main' into remove-hint-auth
+[33m8ddd0e8[m Merge pull request #210 from Shukazuby/feature/AmazingFeature
+[33mc1f3d7f[m removed Puzzle entity
+[33m0b8e9e6[m Merge pull request #211 from feyishola/update-score-entity
+[33m8e90dc7[m Merge pull request #205 from lishmanTech/elisha
+[33m4cdbaec[m I have updated the puzzle dto
+[33mae77a27[m deleted the requested files
+[33mfa0b770[m Add findAllUsers and deleteUser endpoints for User module
+[33mc422be5[m changes effected
+[33m6aad312[m Initial Commit
+[33m568d5e5[m created levelEnums, defined the four levels, refrenced the enum in the puzzle entity and puzzle services
+[33me5d4c48[m "feat: glopabl exception filter and custom erro handling"
+[33m3cb3c98[m "feat: leaderboard enitity and dto"
+[33mc3b3746[m i created relationship between the entities
+[33mdd8bfbc[m i created relationship between the entities
+[33m0ff8003[m "feat:refresh-token"
+[33m1bbbb69[m UpdateD User Progress Entity And Removed Relation
+[33md5b7afd[m updated score, puzzle and user entities. created puzzle dto
+[33m5879484[m Add some AmazingFeature
+[33mf1053c3[m added dto and createhint service fuction
+[33m2331353[m update commit
+[33me0fb429[m - Created a DTO folder within the user-progress module. - Implemented the User Progress DTO, matching the User Progress entity structure. - Applied validation rules for required fields and data types using decorators. - Established relationships with related entities (User, Puzzle, Scores) in the DTO. - Exported the User Progress DTO for use in controllers and services. - Updated the user-progress module to utilize the new DTO instead of raw data objects.
+[33mec4156f[m Merge pull request #207 from nafiuishaaq/feature/leaderboard
+[33m645f663[m Refactored: Removed HintController & AuthEntity (#151)
+[33mf894c23[m created leaderboard resouces
+[33mf6e50e1[m update commit
+[33m16e5d20[m users-progress
+[33m09fb983[m Update getUserScore in User-Progress Service to Retrieve Score Based on Puzzle #192
+[33mea1048e[m Merge pull request #203 from PeterOche/main
+[33mdd650dc[m level resources
+[33mb7affff[m [contract] feat: Implement Edit Question Functionality for Admins #122 (#146)
+[33m5f6b056[m Merge pull request #150 from Ayoazeez26/feat/add-footer
+[33m5b5ee9d[m format doc
+[33md0c3d57[m feat: removed unused code
+[33m7515b86[m feat: added footer
+[33md0395c4[m Merge pull request #149 from BigBen-7/zustand
+[33m83f0ff7[m Merge branch 'zustand' of https://github.com/BigBen-7/NFT-Scavenger-Hunt-Game into zustand
+[33mbc43469[m feat(store): Implement Zustand for game state management
+[33m3cd1088[m feat(store): Implement Zustand for game state management
+[33mf0fbbec[m Merge pull request #148 from Kaylahray/design-featured-challengesUI
+[33m8c5ca08[m Merge pull request #141 from KAMALDEEN333/WhyJoinQuest
+[33mdbba54d[m Merge pull request #142 from shamoo53/community-buzz-section
+[33maf1631f[m Merge pull request #147 from dDevAhmed/feature/techcard-component
+[33mc5f8d41[m Merge pull request #139 from Spycall/feature/cta
+[33mc48dd09[m Merge pull request #144 from leemah/feature/FeatureCard
+[33mbf91554[m designed the featured challenges UI section.
+[33mafeb909[m Merge pull request #145 from Divineifed1/issue-136
+[33med75b1a[m Merge pull request #143 from henryuks129/main
+[33mdb2a090[m TechCard component implementation
+[33m4f07a29[m Merge pull request #135 from KuchiMercy/leaderboard-section
+[33mbe16fcb[m Created and designed aboutpage
+[33md867369[m feat:NFT reward section
+[33mdb6ed3c[m feat: add reusable FeatureCard component
+[33mbafd8cd[m created the commnunity buzz section
+[33mc9940e8[m initial-commit
+[33ma299160[m Merge pull request #140 from lynaDev2/HowItWork
+[33m1580167[m how it works implementation
+[33m4f37159[m how it works implementation
+[33m7639eef[m designed the cta section ui
+[33m1eef23f[m Created the leaderboard-section component
+[33mf970313[m Merge pull request #1 from DistinctCodes/main
+[33mba279c4[m Merge pull request #134 from DistinctCodes/dev
+[33mc579fca[m commented out the store
+[33mdd8bad1[m Merge pull request #120 from Ibinola/feat/animated-blur-bg
+[33m84b6426[m add animated blur background
+[33mb96c195[m Merge pull request #119 from nottherealalanturing/feat/animated

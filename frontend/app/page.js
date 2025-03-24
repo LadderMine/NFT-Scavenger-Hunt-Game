@@ -4,9 +4,15 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Trophy, GamepadIcon } from "lucide-react";
 import ShareButton from "@/components/ShareButton";
-import TestComponent from "@/components/TestComponent";
+import Footer from "@/components/Footer";
 import AnimatedBlurBackground from "@/components/AnimatedBlurBackground";
-import NFTRewardSection from "@/components/NFTRewardSection";
+import HowItWorks from "@/components/homepage/HowItWork";
+import FeaturedChallenges from "@/components/homepage/FeaturedChallenges";
+import NFTRewardsShowcase from "@/components/homepage/NFTRewardSection";
+import WhyJoinSection from "@/components/homepage/WhyJoinUsSection";
+import LeaderboardSection from "@/components/homepage/LeaderboardSection";
+import TestimonialsSection from "@/components/homepage/TestimonialSection";
+import GetStartedCTA from "@/components/homepage/GetStartedCTA";
 
 export default function Home() {
   return (
@@ -16,7 +22,6 @@ export default function Home() {
 
       {/* Content */}
       <div className="relative flex min-h-screen flex-col items-center justify-center p-6 sm:p-24">
-        <TestComponent />
         {/* Glass card container */}
         <div className="backdrop-blur-lg bg-white/10 p-8 sm:p-12 rounded-2xl shadow-2xl border border-white/20 max-w-3xl w-full text-center">
           {/* Grid effect */}
@@ -81,8 +86,16 @@ export default function Home() {
           </div>
         </div>
       </div>
-    {/* NFT REWARD SECTION */}
-    <NFTRewardSection/>
+
+      {/* HOMEPAGE COMPONENTS */}
+      <HowItWorks />
+      <FeaturedChallenges />
+      <NFTRewardsShowcase />
+      <WhyJoinSection />
+      <LeaderboardSection />
+      <TestimonialsSection />
+      <GetStartedCTA />
+      <Footer />
     </main>
   );
 }

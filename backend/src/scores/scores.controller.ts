@@ -1,26 +1,61 @@
-import { Body, Controller, Get, Post, Query } from '@nestjs/common';
+import { Body, Controller, Delete, Get, NotFoundException, Param, Patch, Post, Query } from '@nestjs/common';
 import { ScoresService } from './scores.service';
+import { PuzzlesService } from 'src/puzzles/puzzles.service';
+import { CreateScoreDto } from './dto/create-score.dto';
 
 @Controller('scores')
 export class ScoresController {
-  constructor(private readonly socresSerivce: ScoresService) {}
+  constructor(
+    private readonly scoresService: ScoresService,
+    private readonly puzzlesService: PuzzlesService,
+  ) {}
 
-  //GET method leaderboard? page=1&limit=10
-  @Get()
-  async getScores(
-    @Query('page') page: string = '1',
-    @Query('limit') limit: string = '10',
-  ) {
-    const pageNumber = parseInt(page, 10);
-    const limitNumber = parseInt(limit, 10);
-
-    return this.socresSerivce.getLeaderboard(pageNumber, limitNumber);
+  @Get('/leaderboard')
+  async getLeaderboard(@Query('page') page: number = 1, @Query('limit') limit: number = 10) {
+    return this.scoresService.getLeaderboard(page, limit);
   }
 
-  // POST /update-score
-  @Post('/update-score')
-  updateScore(@Body() body: { username: string; score: number }) {
-    const { username, score } = body;
-    return this.socresSerivce.updateScore(username, score);
+  @Post()
+  async createScore(@Body() scoreDto: CreateScoreDto){
+    return await this.scoresService.createScore(scoreDto);
+  }
+
+
+  @Get()
+  async getAllScores(){
+    return await this.scoresService.getAllScores();
+  }
+
+  @Get(':id') // Use ':id' to define a route parameter
+  async getScore(@Param('id') id: number) {
+    const result = await this.scoresService.findOneById(id);
+    if (!result) {
+      throw new NotFoundException(`Score with ID ${id} not found`);
+    }
+    return result; // Return the found score
+  }
+
+  @Delete(":id")
+  async remove(@Param("id") id: number) {
+    return this.scoresService.deleteScore(id);
+  }
+
+
+  @Patch()
+  async updateScore(
+    @Body('username') username: string,
+    @Body('puzzleId') puzzleId: number,
+    @Body('score') score: number,
+  ) {
+    if (!puzzleId) {
+      throw new NotFoundException('Puzzle ID is required.');
+    }
+
+    return this.scoresService.updateScore(username, puzzleId, score);
+  }
+
+  @Post('/handle-puzzle-deletion/:puzzleId')
+  async handlePuzzleDeletion(@Param('puzzleId') puzzleId: number) {
+    return this.scoresService.handlePuzzleDeletion(puzzleId);
   }
 }

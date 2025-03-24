@@ -23,10 +23,17 @@ import { LeaderboardModule } from './leaderboard/leaderboard.module';
 import { Puzzles } from './puzzles/puzzles.entity';
 import { FileUploadModule } from './file-upload/file-upload.module';
 import { join } from 'path';
+import { PuzzleSubscriber } from './level/decorators/subscriber-decorator';
+import { RankService } from './rank/providers/rank.service';
+import { RankJob } from './rank/providers/rank.job';
+import { StripeModule } from './stripe/stripe.module';
+import { SubscriptionModule } from './subscription/subscription.module';
+import { TransactionModule } from './transaction/transaction.module';
 
 
 @Module({
   imports: [
+    StripeModule,
     ConfigModule.forRoot({
       isGlobal: true,
       envFilePath: ['.env'],
@@ -34,7 +41,6 @@ import { join } from 'path';
       cache: true,
     }),
     TypeOrmModule.forRootAsync({
-      
       //end
       imports: [ConfigModule],
       inject: [ConfigService],
@@ -67,12 +73,22 @@ import { join } from 'path';
       LevelModule,
       LeaderboardModule,
       FileUploadModule,
+    JwtModule.registerAsync(jwtConfig.asProvider()),
+    LevelModule,
+    LeaderboardModule,
+    TransactionModule,
+    SubscriptionModule,
   ],
   controllers: [AppController],
-  providers: [AppService,
-  {
-    provide: APP_GUARD,
-    useClass:AuthTokenGuard,
-  }],
+  providers: [
+    PuzzleSubscriber,
+    AppService,
+    RankService,
+    RankJob,
+    {
+      provide: APP_GUARD,
+      useClass: AuthTokenGuard,
+    },
+  ],
 })
 export class AppModule {}

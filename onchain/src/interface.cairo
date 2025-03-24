@@ -11,7 +11,7 @@ pub trait IScavengerHunt<TContractState> {
     );
     fn get_question(self: @TContractState, question_id: u64) -> Question;
     fn set_question_per_level(ref self: TContractState, amount: u8);
-    fn get_question_per_level(self: @TContractState, amount: u8) -> u8;
+    fn get_question_per_level(self: @TContractState) -> u8;
     fn initialize_player_progress(ref self: TContractState, player_address: ContractAddress);
     fn submit_answer(ref self: TContractState, question_id: u64, answer: ByteArray) -> bool;
     fn request_hint(
@@ -26,18 +26,20 @@ pub trait IScavengerHunt<TContractState> {
         level: Levels,
         hint: ByteArray,
     );
+    fn next_level(self: @TContractState, level: Levels) -> Levels;
+    fn get_player_level(self: @TContractState, player: ContractAddress) -> Levels;
 }
 
-#[derive(Drop, Serde, starknet::Store)]
+#[derive(Drop, Debug, Serde, starknet::Store)]
 pub struct Question {
     pub question_id: u64,
     pub question: ByteArray,
-    pub answer: ByteArray, // TODO: Store hashed answer
+    pub hashed_answer: felt252,
     pub level: Levels,
     pub hint: ByteArray,
 }
 
-#[derive(Drop, Copy, Serde, PartialEq, starknet::Store)]
+#[derive(Drop, Debug, Copy, Serde, PartialEq, starknet::Store)]
 pub enum Levels {
     #[default]
     Easy,
@@ -46,7 +48,7 @@ pub enum Levels {
     Master,
 }
 
-#[derive(Drop, Serde, starknet::Store)]
+#[derive(Drop, Copy, Serde, starknet::Store)]
 pub struct PlayerProgress {
     pub address: ContractAddress,
     pub current_level: Levels,
@@ -81,6 +83,34 @@ impl Felt252TryIntoLevels of TryInto<felt252, Levels> {
         } else if self == 'MEDIUM' {
             Option::Some(Levels::Medium)
         } else if self == 'HARD' {
+            Option::Some(Levels::Hard)
+        } else if self == 'MASTER' {
+            Option::Some(Levels::Master)
+        } else {
+            Option::None
+        }
+    }
+}
+
+
+impl LevelsIntoTokenIDs of Into<Levels, u256> {
+    fn into(self: Levels) -> u256 {
+        match self {
+            Levels::Easy => 1,
+            Levels::Medium => 2,
+            Levels::Hard => 3,
+            Levels::Master => 4,
+        }
+    }
+}
+
+impl TokenIDsTryIntoLevels of TryInto<u256, Levels> {
+    fn try_into(self: u256) -> Option<Levels> {
+        if self == 1 {
+            Option::Some(Levels::Easy)
+        } else if self == 2 {
+            Option::Some(Levels::Medium)
+        } else if self == 3 {
             Option::Some(Levels::Hard)
         } else if self == 'MASTER' {
             Option::Some(Levels::Master)
