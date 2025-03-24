@@ -26,6 +26,7 @@ import { RankJob } from './rank/providers/rank.job';
 import { StripeModule } from './stripe/stripe.module';
 import { SubscriptionModule } from './subscription/subscription.module';
 import { TransactionModule } from './transaction/transaction.module';
+import { UserActivityLogsModule } from './user-activity-logs/user-activity-logs.module';
 
 
 @Module({
@@ -67,6 +68,7 @@ import { TransactionModule } from './transaction/transaction.module';
     LeaderboardModule,
     TransactionModule,
     SubscriptionModule,
+    UserActivityLogsModule,
 
   ],
   controllers: [AppController],
