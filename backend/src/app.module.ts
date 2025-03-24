@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
@@ -19,7 +20,7 @@ import { APP_GUARD } from '@nestjs/core';
 import { AuthTokenGuard } from './auth/guard/auth-token/auth-token.guard';
 import { LevelModule } from './level/level.module';
 import { LeaderboardModule } from './leaderboard/leaderboard.module';
-import { Puzzles } from './puzzles/puzzles.entity';
+// Remove unused import of Puzzles entity
 import { PuzzleSubscriber } from './level/decorators/subscriber-decorator';
 import { RankService } from './rank/providers/rank.service';
 import { RankJob } from './rank/providers/rank.job';
@@ -27,6 +28,10 @@ import { StripeModule } from './stripe/stripe.module';
 import { SubscriptionModule } from './subscription/subscription.module';
 import { TransactionModule } from './transaction/transaction.module';
 import { EmailModule } from './email/email.module';
+
+import { UserActivityLogsModule } from './user-activity-logs/user-activity-logs.module';
+
+import { AuditLogsModule } from './audit-logs/audit-logs.module';
 
 
 @Module({
@@ -68,7 +73,12 @@ import { EmailModule } from './email/email.module';
     LeaderboardModule,
     TransactionModule,
     SubscriptionModule,
+
     EmailModule,
+
+
+    UserActivityLogsModule,
+    AuditLogsModule,
 
   ],
   controllers: [AppController],
