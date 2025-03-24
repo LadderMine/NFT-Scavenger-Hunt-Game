@@ -4,6 +4,9 @@ import {
   Column,
   CreateDateColumn,
   ManyToOne,
+  OneToOne,
+  JoinColumn,
+  OneToMany,
 } from 'typeorm';
 import { User } from '../users/users.entity';
 import { Puzzles } from '../puzzles/puzzles.entity';
@@ -31,4 +34,24 @@ export class Answer {
     onDelete: 'SET NULL',
   })
   hint?: Hints;
+  length: number;
 }
+
+export class Answers {
+  @PrimaryGeneratedColumn()
+  id: number;
+    
+  @OneToOne(() => Hints, (hint) => hint.answers)
+  @JoinColumn()
+  hint: Hints;
+    
+  @OneToMany(() => Puzzles, (puzzles) => puzzles.answers)
+  puzzles: Puzzles[];
+
+  @OneToOne(() => Hints, (hint) => hint.answers, { cascade: true })
+  hints: Hints;
+
+//   @OneToMany(() => Hints, (hints) => hints.answer)
+//   hints: Hints[];
+  }
+

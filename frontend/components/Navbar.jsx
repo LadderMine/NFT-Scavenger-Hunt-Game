@@ -4,7 +4,7 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Menu, X, Gamepad, Trophy, Book, User } from "lucide-react";
 
-const Navbar = () => {
+const NavigationHeader = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   return (
@@ -50,8 +50,13 @@ const Navbar = () => {
                 <span>Learn</span>
               </Link>
               <Button className="bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600">
-                <User className="w-4 h-4 mr-2" />
-                Connect Wallet
+                <Link
+                  href={"/connect-wallet"}
+                  className="flex items-center space-x-2"
+                >
+                  <User className="w-4 h-4 mr-2" />
+                  Connect Wallet
+                </Link>
               </Button>
             </div>
 
@@ -112,4 +117,4 @@ const Navbar = () => {
   );
 };
 
-export default Navbar;
+export default NavigationHeader;

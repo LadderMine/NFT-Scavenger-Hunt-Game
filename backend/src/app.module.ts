@@ -20,11 +20,17 @@ import { AuthTokenGuard } from './auth/guard/auth-token/auth-token.guard';
 import { LevelModule } from './level/level.module';
 import { LeaderboardModule } from './leaderboard/leaderboard.module';
 import { Puzzles } from './puzzles/puzzles.entity';
+import { PuzzleSubscriber } from './level/decorators/subscriber-decorator';
+import { RankService } from './rank/providers/rank.service';
+import { RankJob } from './rank/providers/rank.job';
+import { StripeModule } from './stripe/stripe.module';
+import { SubscriptionModule } from './subscription/subscription.module';
 import { TransactionModule } from './transaction/transaction.module';
 
 
 @Module({
   imports: [
+    StripeModule,
     ConfigModule.forRoot({
       isGlobal: true,
       envFilePath: ['.env'],
@@ -59,11 +65,16 @@ import { TransactionModule } from './transaction/transaction.module';
     JwtModule.registerAsync(jwtConfig.asProvider()),
     LevelModule,
     LeaderboardModule,
-    TransactionModule
+    TransactionModule,
+    SubscriptionModule,
+
   ],
   controllers: [AppController],
   providers: [
+    PuzzleSubscriber,
     AppService,
+    RankService,
+    RankJob,
     {
       provide: APP_GUARD,
       useClass: AuthTokenGuard,
