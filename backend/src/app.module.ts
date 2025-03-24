@@ -15,11 +15,14 @@ import appConfig from 'config/app.config';
 import databaseConfig from 'config/database.config';
 import { JwtModule } from '@nestjs/jwt';
 import jwtConfig from './auth/config/jwt.config';
+import { ServeStaticModule } from '@nestjs/serve-static';
 import { APP_GUARD } from '@nestjs/core';
 import { AuthTokenGuard } from './auth/guard/auth-token/auth-token.guard';
 import { LevelModule } from './level/level.module';
 import { LeaderboardModule } from './leaderboard/leaderboard.module';
 import { Puzzles } from './puzzles/puzzles.entity';
+import { FileUploadModule } from './file-upload/file-upload.module';
+import { join } from 'path';
 import { PuzzleSubscriber } from './level/decorators/subscriber-decorator';
 import { RankService } from './rank/providers/rank.service';
 import { RankJob } from './rank/providers/rank.job';
@@ -53,6 +56,10 @@ import { TransactionModule } from './transaction/transaction.module';
         autoLoadEntities: configService.get('database.autoload'),
       }),
     }),
+    ServeStaticModule.forRoot({
+      rootPath: join(__dirname, '..', 'uploads'),
+      serveRoot: '/uploads',
+    }),
     UsersModule,
     PuzzlesModule,
     NftsModule,
@@ -62,12 +69,15 @@ import { TransactionModule } from './transaction/transaction.module';
     UserProgressModule,
     AuthModule,
     ConfigModule.forFeature(jwtConfig),
+      JwtModule.registerAsync(jwtConfig.asProvider()),
+      LevelModule,
+      LeaderboardModule,
+      FileUploadModule,
     JwtModule.registerAsync(jwtConfig.asProvider()),
     LevelModule,
     LeaderboardModule,
     TransactionModule,
     SubscriptionModule,
-
   ],
   controllers: [AppController],
   providers: [
