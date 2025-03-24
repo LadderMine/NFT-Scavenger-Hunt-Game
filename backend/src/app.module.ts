@@ -23,6 +23,7 @@ import { Puzzles } from './puzzles/puzzles.entity';
 import { PuzzleSubscriber } from './level/decorators/subscriber-decorator';
 import { RankService } from './rank/providers/rank.service';
 import { RankJob } from './rank/providers/rank.job';
+import { SubscriptionModule } from './subscription/subscription.module';
 
 
 @Module({
@@ -61,6 +62,7 @@ import { RankJob } from './rank/providers/rank.job';
     JwtModule.registerAsync(jwtConfig.asProvider()),
     LevelModule,
     LeaderboardModule,
+    SubscriptionModule,
   ],
   controllers: [AppController],
   providers: [
