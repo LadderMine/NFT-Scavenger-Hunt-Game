@@ -25,6 +25,8 @@ import { RankService } from './rank/providers/rank.service';
 import { RankJob } from './rank/providers/rank.job';
 import { StripeModule } from './stripe/stripe.module';
 import { SubscriptionModule } from './subscription/subscription.module';
+import { TransactionModule } from './transaction/transaction.module';
+
 
 @Module({
   imports: [
@@ -63,7 +65,9 @@ import { SubscriptionModule } from './subscription/subscription.module';
     JwtModule.registerAsync(jwtConfig.asProvider()),
     LevelModule,
     LeaderboardModule,
+    TransactionModule,
     SubscriptionModule,
+
   ],
   controllers: [AppController],
   providers: [
