@@ -27,7 +27,11 @@ import { RankJob } from './rank/providers/rank.job';
 import { StripeModule } from './stripe/stripe.module';
 import { SubscriptionModule } from './subscription/subscription.module';
 import { TransactionModule } from './transaction/transaction.module';
+
+import { UserActivityLogsModule } from './user-activity-logs/user-activity-logs.module';
+
 import { AuditLogsModule } from './audit-logs/audit-logs.module';
+
 
 @Module({
   imports: [
@@ -68,6 +72,7 @@ import { AuditLogsModule } from './audit-logs/audit-logs.module';
     LeaderboardModule,
     TransactionModule,
     SubscriptionModule,
+    UserActivityLogsModule,
     AuditLogsModule,
   ],
   controllers: [AppController],
