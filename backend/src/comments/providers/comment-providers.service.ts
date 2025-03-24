@@ -12,13 +12,16 @@ export class CommentsService {
     const comment = this.commentRepo.create(createCommentDto);
     return this.commentRepo.save(comment);
   }
-
+  
   async findAll(postId: number) {
-    return this.commentRepo.find({ where: { postId } });
-  }
+    return this.commentRepo.find({
+      where: { post: { id: postId } } as any,
+      relations: ['post'],
+    });
+  }  
 
   async update(id: number, dto: UpdateCommentDto) {
-    const comment = await this.commentRepo.findOne({ where: { id } });
+    const comment = await this.commentRepo.findOne({ where: { id } as any });
     if (!comment) throw new NotFoundException('Comment not found');
 
     Object.assign(comment, dto);
@@ -26,7 +29,7 @@ export class CommentsService {
   }
 
   async remove(id: number) {
-    const comment = await this.commentRepo.findOne({ where: { id } });
+    const comment = await this.commentRepo.findOne({ where: { id } as any });
     if (!comment) throw new NotFoundException('Comment not found');
 
     return this.commentRepo.remove(comment);

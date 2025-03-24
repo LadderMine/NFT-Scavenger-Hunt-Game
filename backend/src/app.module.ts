@@ -28,6 +28,7 @@ import { SubscriptionModule } from './subscription/subscription.module';
 import { TransactionModule } from './transaction/transaction.module';
 import { CommentsModule } from './comments/comments.module';
 import { ReactionsModule } from './reactions/reactions.module';
+import { PostsModule } from './posts/posts.module';
 
 
 @Module({
@@ -71,6 +72,7 @@ import { ReactionsModule } from './reactions/reactions.module';
     SubscriptionModule,
     CommentsModule,
     ReactionsModule,
+    PostsModule,
 
   ],
   controllers: [AppController],

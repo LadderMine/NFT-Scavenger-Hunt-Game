@@ -1,5 +1,5 @@
+import { Post } from 'src/posts/posts.entity';
 import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, CreateDateColumn, Unique } from 'typeorm';
-import { Post } from 'src/posts/entities/post.entity';
 
 @Entity()
 @Unique(['postId', 'userId']) // Ensures a user can react only once per post
