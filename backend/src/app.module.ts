@@ -20,6 +20,9 @@ import { APP_GUARD } from '@nestjs/core';
 import { AuthTokenGuard } from './auth/guard/auth-token/auth-token.guard';
 import { LevelModule } from './level/level.module';
 import { LeaderboardModule } from './leaderboard/leaderboard.module';
+import { ApiTrackingModule } from './api-tracking/api-tracking.module';
+import { APP_INTERCEPTOR } from '@nestjs/core';
+import { ApiTrackingInterceptor } from './api-tracking/interceptor/api-tracking.interceptor';
 // Remove unused import of Puzzles entity
 import { PuzzleSubscriber } from './level/decorators/subscriber-decorator';
 import { RankService } from './rank/providers/rank.service';
@@ -28,6 +31,7 @@ import { StripeModule } from './stripe/stripe.module';
 import { SubscriptionModule } from './subscription/subscription.module';
 import { TransactionModule } from './transaction/transaction.module';
 import { AuditLogsModule } from './audit-logs/audit-logs.module';
+
 
 @Module({
   imports: [
@@ -69,6 +73,7 @@ import { AuditLogsModule } from './audit-logs/audit-logs.module';
     TransactionModule,
     SubscriptionModule,
     AuditLogsModule,
+    ApiTrackingModule,
   ],
   controllers: [AppController],
   providers: [
@@ -79,6 +84,10 @@ import { AuditLogsModule } from './audit-logs/audit-logs.module';
     {
       provide: APP_GUARD,
       useClass: AuthTokenGuard,
+    },
+    {
+      provide: APP_INTERCEPTOR,
+      useClass: ApiTrackingInterceptor,
     },
   ],
 })
