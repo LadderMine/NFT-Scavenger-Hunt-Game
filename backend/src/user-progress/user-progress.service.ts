@@ -3,10 +3,10 @@ import { InjectRepository } from '@nestjs/typeorm';
 import type { Repository } from 'typeorm';
 import type { Hints } from '../hints/hints.entity';
 import { UserProgress } from './userprogress.entity';
-import { Repository } from "typeorm";
-import { Hints } from "../hints/hints.entity";
-import { UserProgress } from "./userprogress.entity";
-import { UserProgressDto } from "./dto/user-progress.dto";
+import { Repository } from 'typeorm';
+import { Hints } from '../hints/hints.entity';
+import { UserProgress } from './userprogress.entity';
+import { UserProgressDto } from './dto/user-progress.dto';
 
 @Injectable()
 export class UserProgressService {

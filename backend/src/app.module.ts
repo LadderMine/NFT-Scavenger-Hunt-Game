@@ -23,6 +23,7 @@ import appConfig from 'config/app.config';
 import databaseConfig from 'config/database.config';
 import jwtConfig from './auth/config/jwt.config';
 import { AuthTokenGuard } from './auth/guard/auth-token/auth-token.guard';
+import { NotificationSettingsModule } from './notification-settings/notification-settings.module';
 import { RankModule } from './rank/rank.module';
 
 
@@ -68,6 +69,7 @@ import { AuthTokenGuard } from './auth/guard/auth-token/auth-token.guard';
     // JWT configuration
     ConfigModule.forFeature(jwtConfig),
     JwtModule.registerAsync(jwtConfig.asProvider()),
+    NotificationSettingsModule,
   ],
   controllers: [AppController],
   providers: [
