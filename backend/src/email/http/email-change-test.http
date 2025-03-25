@@ -1,0 +1,10 @@
+
+POST http://localhost:3000/email-change/request
+Content-Type: application/json
+
+{
+  "userId": "12345",
+  "newEmail": "newuser@example.com"
+}
+
+GET http://localhost:3000/email-change/verify?token=YOUR_GENERATED_TOKEN
