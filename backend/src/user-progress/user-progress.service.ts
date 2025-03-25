@@ -22,13 +22,9 @@ export class UserProgressService {
   constructor(
     @InjectRepository(UserProgress)
     private userProgressRepository: Repository<UserProgress>,
-<<<<<<< HEAD
-
-=======
     @InjectRepository(Level)
     private readonly levelRepository: Repository<Level>,
     // Dependency injection for user service
->>>>>>> bc428868e0877915a9049acaa4e6974eed31b733
     private readonly userservice: UsersService,
 
     private readonly puzzleservice: PuzzlesService,

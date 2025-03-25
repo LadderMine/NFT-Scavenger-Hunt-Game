@@ -18,6 +18,8 @@ import { JwtModule } from '@nestjs/jwt';
 import jwtConfig from './auth/config/jwt.config';
 import { APP_GUARD } from '@nestjs/core';
 import { AuthTokenGuard } from './auth/guard/auth-token/auth-token.guard';
+import { NotificationSettingsModule } from './notification-settings/notification-settings.module';
+import { RankModule } from './rank/rank.module';
 import { LevelModule } from './level/level.module';
 import { LeaderboardModule } from './leaderboard/leaderboard.module';
 import { ApiTrackingModule } from './api-tracking/api-tracking.module';
@@ -31,9 +33,7 @@ import { StripeModule } from './stripe/stripe.module';
 import { SubscriptionModule } from './subscription/subscription.module';
 import { TransactionModule } from './transaction/transaction.module';
 import { EmailModule } from './email/email.module';
-
 import { UserActivityLogsModule } from './user-activity-logs/user-activity-logs.module';
-
 import { AuditLogsModule } from './audit-logs/audit-logs.module';
 
 
@@ -84,7 +84,10 @@ import { AuditLogsModule } from './audit-logs/audit-logs.module';
     AuditLogsModule,
 
     ApiTrackingModule,
-
+    // JWT configuration
+    ConfigModule.forFeature(jwtConfig),
+    JwtModule.registerAsync(jwtConfig.asProvider()),
+    NotificationSettingsModule,
   ],
   controllers: [AppController],
   providers: [
