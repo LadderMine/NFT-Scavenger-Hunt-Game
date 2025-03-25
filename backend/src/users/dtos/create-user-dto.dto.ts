@@ -1,7 +1,18 @@
 /* eslint-disable prettier/prettier */
-import { IsEmail, IsNotEmpty, MinLength, IsOptional, IsArray, IsNumber } from 'class-validator';
+import {
+  IsEmail,
+  IsNotEmpty,
+  MinLength,
+  IsOptional,
+  IsArray,
+  IsNumber,
+  IsInt,
+} from 'class-validator';
 
 export class CreateUserDto {
+  @IsInt()
+  id: number;
+
   @IsNotEmpty()
   username: string;
 
@@ -16,5 +27,5 @@ export class CreateUserDto {
   @IsOptional()
   @IsArray()
   @IsNumber({}, { each: true, message: 'Each score ID must be a number' })
-  scores?: number[];  // Accepts an array of Score IDs (optional)
+  scores?: number[]; // Accepts an array of Score IDs (optional)
 }

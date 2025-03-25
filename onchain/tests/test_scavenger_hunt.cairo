@@ -2,7 +2,7 @@ use starknet::{ContractAddress, contract_address_const};
 
 use snforge_std::{
     declare, ContractClassTrait, DeclareResultTrait, start_cheat_caller_address,
-    stop_cheat_caller_address
+    stop_cheat_caller_address,
 };
 
 use onchain::interface::{IScavengerHuntDispatcher, IScavengerHuntDispatcherTrait, Question, Levels};
@@ -35,7 +35,7 @@ fn test_set_question_per_level() {
     dispatcher.set_question_per_level(5);
     stop_cheat_caller_address(contract_address);
 
-    let question_per_level = dispatcher.get_question_per_level(0);
+    let question_per_level = dispatcher.get_question_per_level();
     assert!(question_per_level == 5, "Expected 5 questions per level, got {}", question_per_level);
 }
 
@@ -47,7 +47,7 @@ fn test_set_question_per_level_should_panic_with_missing_role() {
 
     dispatcher.set_question_per_level(5);
 
-    let question_per_level = dispatcher.get_question_per_level(0);
+    let question_per_level = dispatcher.get_question_per_level();
     assert!(question_per_level == 5, "Expected 5 questions per level, got {}", question_per_level);
 }
 
@@ -116,36 +116,6 @@ fn test_add_and_get_question_should_panic_with_missing_role() {
 
     // Add a question
     dispatcher.add_question(level, question.clone(), answer.clone(), hint.clone());
-}
-
-#[test]
-fn test_submit_answer() {
-    let contract_address = deploy_contract();
-    let dispatcher = IScavengerHuntDispatcher { contract_address };
-
-    // Define test data
-    let level = Levels::Easy;
-    let question = "What is 2 + 2?";
-    let correct_answer = "4";
-    let wrong_answer = "5";
-    let hint = "It's an even number";
-
-    // Add a question
-    start_cheat_caller_address(contract_address, ADMIN());
-    dispatcher.set_question_per_level(5);
-    dispatcher.add_question(level, question.clone(), correct_answer.clone(), hint.clone());
-    stop_cheat_caller_address(contract_address);
-
-    // first question is assigned ID 1
-    let question_id = 1;
-
-    // Submit a wrong answer first
-    let result_wrong = dispatcher.submit_answer(question_id, wrong_answer.clone());
-    assert!(!result_wrong, "expected_sub_with_wrong_ans");
-
-    // Submit  correct answer
-    let result_correct = dispatcher.submit_answer(question_id, correct_answer.clone());
-    assert!(result_correct, "expected_sub_with_correct_ans");
 }
 
 #[test]
@@ -230,7 +200,7 @@ fn test_update_question() {
     start_cheat_caller_address(contract_address, ADMIN());
     dispatcher
         .update_question(
-            1, updated_question.clone(), updated_answer.clone(), level, updated_hint.clone()
+            1, updated_question.clone(), updated_answer.clone(), level, updated_hint.clone(),
         );
     stop_cheat_caller_address(contract_address);
 
@@ -284,7 +254,7 @@ fn test_update_question_should_panic_with_missing_role() {
     // Attempt to update the question without admin role
     dispatcher
         .update_question(
-            1, updated_question.clone(), updated_answer.clone(), level, updated_hint.clone()
+            1, updated_question.clone(), updated_answer.clone(), level, updated_hint.clone(),
         );
 }
 
@@ -306,3 +276,199 @@ fn test_update_question_should_panic_if_question_does_not_exist() {
     dispatcher.update_question(invalid_question_id, question, answer, level, hint);
     stop_cheat_caller_address(contract_address);
 }
+
+#[test]
+fn test_level_progression() {
+    let contract_address = deploy_contract();
+    let dispatcher = IScavengerHuntDispatcher { contract_address };
+    let player_address = USER();
+
+    let level = Levels::Easy;
+    let question = "Who is the pirate king?";
+    let answer = "Gol d Roger";
+    let hint = "It starts with 'G'";
+
+    // Admin setup
+    start_cheat_caller_address(contract_address, ADMIN());
+    dispatcher.set_question_per_level(2);
+    dispatcher.add_question(level, question.clone(), answer.clone(), hint.clone());
+    dispatcher.add_question(level, "What is One Piece?", "A treasure", "It is the ultimate prize");
+    stop_cheat_caller_address(contract_address);
+
+    // Player actions (keep caller as player_address throughout)
+    start_cheat_caller_address(contract_address, player_address);
+    dispatcher.initialize_player_progress(player_address);
+
+    let player_progress = dispatcher.get_player_level(player_address);
+    let player_level = player_progress.into();
+    assert!(player_level == 'EASY', "Player should start at Easy level");
+
+    // Submit answers as player
+    let result_1 = dispatcher.submit_answer(1, "Gol d Roger");
+    let result_2 = dispatcher.submit_answer(2, "A treasure");
+
+    assert!(result_1 && result_2, "Answer should be correct for both question {} and {}", 1, 2);
+
+    // Check updated level
+    let updated_progress = dispatcher.get_player_level(player_address);
+    let player_new_level = updated_progress.into();
+    assert!(
+        player_new_level == 'MEDIUM',
+        "Player should have progressed to MEDIUM level, but is still at EASY"
+    );
+
+    stop_cheat_caller_address(contract_address);
+}
+#[test]
+fn test_no_progression_on_partial_completion() {
+    let contract_address = deploy_contract();
+    let dispatcher = IScavengerHuntDispatcher { contract_address };
+    let player_address = USER();
+
+    // Admin setup
+    start_cheat_caller_address(contract_address, ADMIN());
+    dispatcher.set_question_per_level(3);
+    dispatcher.add_question(Levels::Easy, "Q1?", "A1", "H1");
+    dispatcher.add_question(Levels::Easy, "Q2?", "A2", "H2");
+    dispatcher.add_question(Levels::Easy, "Q3?", "A3", "H3");
+    stop_cheat_caller_address(contract_address);
+
+    // Player setup
+    start_cheat_caller_address(contract_address, player_address);
+    dispatcher.initialize_player_progress(player_address);
+
+    // Submit 2 out of 3 answers
+    dispatcher.submit_answer(1, "A1");
+    dispatcher.submit_answer(2, "A2");
+
+    // Check level
+    let current_level = dispatcher.get_player_level(player_address);
+    let level_felt = current_level.into();
+    assert!(
+        level_felt == 'EASY', "Player should still be at Easy since all questions were not answered"
+    );
+
+    stop_cheat_caller_address(contract_address);
+}
+
+#[test]
+fn test_incorrect_answer_does_not_progress() {
+    let contract_address = deploy_contract();
+    let dispatcher = IScavengerHuntDispatcher { contract_address };
+    let player_address = USER();
+
+    start_cheat_caller_address(contract_address, ADMIN());
+    dispatcher.set_question_per_level(1);
+    dispatcher.add_question(Levels::Easy, "Q1?", "Correct", "Hint");
+    stop_cheat_caller_address(contract_address);
+
+    start_cheat_caller_address(contract_address, player_address);
+    dispatcher.initialize_player_progress(player_address);
+
+    let result = dispatcher.submit_answer(1, "Wrong");
+    assert!(!result, "Submitting an incorrect answer should return false");
+
+    let current_level = dispatcher.get_player_level(player_address);
+    let level_felt = current_level.into();
+    assert!(level_felt == 'EASY', "Player should still be at Easy after incorrect answer");
+
+    stop_cheat_caller_address(contract_address);
+}
+
+#[test]
+fn test_max_level_does_not_progress() {
+    let contract_address = deploy_contract();
+    let dispatcher = IScavengerHuntDispatcher { contract_address };
+    let player_address = USER();
+
+    start_cheat_caller_address(contract_address, ADMIN());
+    dispatcher.set_question_per_level(2);
+    dispatcher.add_question(Levels::Master, "Final Q1?", "Final A1", "H1");
+    dispatcher.add_question(Levels::Master, "Final Q2?", "Final A2", "H2");
+    stop_cheat_caller_address(contract_address);
+
+    start_cheat_caller_address(contract_address, player_address);
+    dispatcher.initialize_player_progress(player_address);
+    // Manually set to Master (assuming we add this function or cheat state)
+    // For now, simulate by answering prior levels or modify contract
+    dispatcher.submit_answer(1, "Final A1");
+    dispatcher.submit_answer(2, "Final A2");
+
+    let current_level = dispatcher.get_player_level(player_address);
+    let level_felt = current_level.into();
+    assert!(
+        level_felt == 'MASTER', "Player should remain at Master after completing all questions"
+    );
+
+    stop_cheat_caller_address(contract_address);
+}
+
+#[test]
+fn test_multiple_level_progressions() {
+    let contract_address = deploy_contract();
+    let dispatcher = IScavengerHuntDispatcher { contract_address };
+    let player_address = USER();
+
+    // Admin setup
+    start_cheat_caller_address(contract_address, ADMIN());
+    dispatcher.set_question_per_level(2);
+    // Easy level questions
+    dispatcher.add_question(Levels::Easy, "Easy Q1?", "A1", "H1"); // ID 1
+    dispatcher.add_question(Levels::Easy, "Easy Q2?", "A2", "H2"); // ID 2
+    // Medium level questions
+    dispatcher.add_question(Levels::Medium, "Med Q1?", "A1", "H1"); // ID 3
+    dispatcher.add_question(Levels::Medium, "Med Q2?", "A2", "H2"); // ID 4
+    // Hard level questions
+    dispatcher.add_question(Levels::Hard, "Hard Q1?", "A1", "H1"); // ID 5
+    dispatcher.add_question(Levels::Hard, "Hard Q2?", "A2", "H2"); // ID 6
+    // Master level questions
+    dispatcher.add_question(Levels::Master, "Master Q1?", "A1", "H1"); // ID 7
+    dispatcher.add_question(Levels::Master, "Master Q2?", "A2", "H2"); // ID 8
+    stop_cheat_caller_address(contract_address);
+
+    // Player setup
+    start_cheat_caller_address(contract_address, player_address);
+    dispatcher.initialize_player_progress(player_address);
+
+    // Initial level check
+    let player_progress = dispatcher.get_player_level(player_address);
+    let player_level = player_progress.into();
+    assert!(player_level == 'EASY', "Player should start at Easy level");
+
+    // Easy level submissions (IDs 1-2)
+    let result_easy_1 = dispatcher.submit_answer(1, "A1");
+    let result_easy_2 = dispatcher.submit_answer(2, "A2");
+    assert!(result_easy_1 && result_easy_2, "Easy answers should be correct for questions 1 and 2");
+    let after_easy_progress = dispatcher.get_player_level(player_address);
+    let after_easy_level = after_easy_progress.into();
+    assert!(after_easy_level == 'MEDIUM', "Player should progress to Medium after Easy");
+
+    // Medium level submissions (IDs 3-4)
+    let result_med_1 = dispatcher.submit_answer(3, "A1");
+    let result_med_2 = dispatcher.submit_answer(4, "A2");
+    assert!(result_med_1 && result_med_2, "Medium answers should be correct for questions 3 and 4");
+    let after_med_progress = dispatcher.get_player_level(player_address);
+    let after_med_level = after_med_progress.into();
+    assert!(after_med_level == 'HARD', "Player should progress to Hard after Medium");
+
+    // Hard level submissions (IDs 5-6)
+    let result_hard_1 = dispatcher.submit_answer(5, "A1");
+    let result_hard_2 = dispatcher.submit_answer(6, "A2");
+    assert!(result_hard_1 && result_hard_2, "Hard answers should be correct for questions 5 and 6");
+    let after_hard_progress = dispatcher.get_player_level(player_address);
+    let after_hard_level = after_hard_progress.into();
+    assert!(after_hard_level == 'MASTER', "Player should progress to Master after Hard");
+
+    // Master level submissions (IDs 7-8)
+    let result_master_1 = dispatcher.submit_answer(7, "A1");
+    let result_master_2 = dispatcher.submit_answer(8, "A2");
+    assert!(
+        result_master_1 && result_master_2, "Master answers should be correct for questions 7 and 8"
+    );
+    let after_master_progress = dispatcher.get_player_level(player_address);
+    let after_master_level = after_master_progress.into();
+    assert!(after_master_level == 'MASTER', "Player should remain at Master");
+
+    stop_cheat_caller_address(contract_address);
+}
+

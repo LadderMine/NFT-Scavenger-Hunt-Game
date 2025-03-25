@@ -1,9 +1,9 @@
 #[starknet::contract]
-mod ScavengerHunt {
+pub mod ScavengerHunt {
     use starknet::event::EventEmitter;
     use starknet::storage::{
         StoragePointerReadAccess, StoragePointerWriteAccess, StoragePathEntry, Map,
-        StorageMapReadAccess, StorageMapWriteAccess
+        StorageMapReadAccess, StorageMapWriteAccess,
     };
     use starknet::{ContractAddress, get_caller_address};
     use openzeppelin::introspection::src5::SRC5Component;
@@ -56,6 +56,8 @@ mod ScavengerHunt {
         AccessControlEvent: AccessControlComponent::Event,
         #[flat]
         SRC5Event: SRC5Component::Event,
+        LevelCompleted: LevelCompleted,
+        AnswerSubmitted: AnswerSubmitted,
     }
 
     #[derive(Drop, starknet::Event)]
@@ -68,13 +70,28 @@ mod ScavengerHunt {
     pub struct PlayerInitialized {
         pub player_address: ContractAddress,
         pub level: felt252,
-        pub is_initialized: bool
+        pub is_initialized: bool,
     }
 
     #[derive(Drop, starknet::Event)]
     pub struct QuestionUpdated {
         pub question_id: u64,
         pub level: Levels,
+    }
+
+    #[derive(Drop, starknet::Event)]
+    pub struct LevelCompleted {
+        pub player: ContractAddress,
+        pub completed_level: Levels,
+        pub next_level: Levels,
+    }
+
+    #[derive(Drop, starknet::Event)]
+    pub struct AnswerSubmitted {
+        pub player: ContractAddress,
+        pub question_id: u64,
+        pub level: Levels,
+        pub is_correct: bool,
     }
 
     #[constructor]
@@ -133,7 +150,7 @@ mod ScavengerHunt {
             self.question_per_level.write(amount);
         }
 
-        fn get_question_per_level(self: @ContractState, amount: u8) -> u8 {
+        fn get_question_per_level(self: @ContractState) -> u8 {
             self.question_per_level.read()
         }
 
@@ -148,8 +165,8 @@ mod ScavengerHunt {
                 .write(
                     player_address,
                     PlayerProgress {
-                        address: player_address, current_level: Levels::Easy, is_initialized: true
-                    }
+                        address: player_address, current_level: Levels::Easy, is_initialized: true,
+                    },
                 );
 
             // set player current level
@@ -163,46 +180,79 @@ mod ScavengerHunt {
                         last_question_index: 0,
                         is_completed: false,
                         attempts: 0,
-                        nft_minted: false
-                    }
+                        nft_minted: false,
+                    },
                 );
 
             self.emit(PlayerInitialized { player_address, level: 'EASY', is_initialized: true });
         }
 
         fn submit_answer(ref self: ContractState, question_id: u64, answer: ByteArray) -> bool {
-            let question_data = self.questions.read(question_id);
-            let caller = get_caller_address(); // Fetch caller's address
+            let caller = get_caller_address();
 
+            // Check if player is initialized
+            let player_progress = self.player_progress.read(caller);
+            assert!(player_progress.is_initialized, "Player not initialized");
+
+            // Validate question exists
+            let question_data = self.questions.read(question_id);
+            assert!(question_data.question_id == question_id, "Question not found");
+
+            // Get and update level progress
             let mut level_progress = self
                 .player_level_progress
                 .read((caller, question_data.level.into()));
 
-            // Increment attempts regardless of correctness
+            // Hash the answer
+            let hashed_answer = hash_byte_array(answer);
+            let is_correct = question_data.hashed_answer == hashed_answer;
+
+            // Increment attempts
             level_progress.attempts += 1;
 
-            // Hash the answer ByteArray
-            let hashed_answer = hash_byte_array(answer.clone()); // Clone to avoid ownership issues
-
-            if question_data.hashed_answer == hashed_answer {
-                // Correct answer
+            if is_correct {
+                // Correct answer logic
                 level_progress.last_question_index += 1;
-
                 let total_questions = self.question_per_level.read();
+                assert!(total_questions > 0, "Questions per level not set");
+
+                // Check level completion
                 if level_progress.last_question_index >= total_questions {
                     level_progress.is_completed = true;
-                }
 
-                // Update storage
-                self
-                    .player_level_progress
-                    .write((caller, question_data.level.into()), level_progress);
-                return true;
+                    // Update player's current level
+                    let next_level = self.next_level(question_data.level);
+                    self
+                        .player_progress
+                        .write(
+                            caller,
+                            PlayerProgress {
+                                address: caller, current_level: next_level, is_initialized: true
+                            }
+                        );
+
+                    // Emit level completion event
+                    self
+                        .emit(
+                            LevelCompleted {
+                                player: caller, completed_level: question_data.level, next_level
+                            }
+                        );
+                }
             }
 
             // Update storage for attempts
             self.player_level_progress.write((caller, question_data.level.into()), level_progress);
-            false
+
+            // Emit answer submission event
+            self
+                .emit(
+                    AnswerSubmitted {
+                        player: caller, question_id, level: question_data.level, is_correct
+                    }
+                );
+
+            is_correct
         }
 
         fn request_hint(self: @ContractState, question_id: u64) -> ByteArray {
@@ -249,6 +299,22 @@ mod ScavengerHunt {
 
             // Emit an event
             self.emit(QuestionUpdated { question_id, level: original_level });
+        }
+
+        fn next_level(self: @ContractState, level: Levels) -> Levels {
+            match level {
+                Levels::Easy => Levels::Medium,
+                Levels::Medium => Levels::Hard,
+                Levels::Hard => Levels::Master,
+                Levels::Master => Levels::Master,
+            }
+        }
+
+        fn get_player_level(self: @ContractState, player: ContractAddress) -> Levels {
+            let player_progress = self.player_progress.read(player);
+            let player_level = player_progress.current_level;
+
+            player_level
         }
     }
 }

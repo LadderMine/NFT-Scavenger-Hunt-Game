@@ -4,12 +4,19 @@ import { Repository } from 'typeorm';
 import { CreateLevelDto } from './dto/create-level.dto';
 import { UpdateLevelDto } from './dto/update-level.dto';
 import { Level } from './entities/level.entity';
+import { PuzzlesService } from 'src/puzzles/puzzles.service';
+
 
 @Injectable()
 export class LevelService {
+
+  //provide repositry injection of level entity
   constructor(
-    @InjectRepository(Level)
+    @InjectRepository(Level) 
     private readonly levelRepository: Repository<Level>,
+
+    //proide dependency innjection of puzzle service
+    private readonly puzzleService: PuzzlesService 
   ) {}
 
   async create(createLevelDto: CreateLevelDto) {
