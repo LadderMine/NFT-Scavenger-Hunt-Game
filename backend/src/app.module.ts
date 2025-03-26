@@ -37,6 +37,7 @@ import { AuditLogsModule } from './audit-logs/audit-logs.module';
 import { EmailChangeModule } from './email-change/email-change.module';
 import { ErrorLoggingModule } from './error-logging/error-logging.module';
 import { ErrorLoggingInterceptor } from './error-logging/interceptors/error-logging.interceptor';
+import { RefundsModule } from './refunds/refunds.module';
 
 
 @Module({
@@ -88,6 +89,7 @@ import { ErrorLoggingInterceptor } from './error-logging/interceptors/error-logg
     JwtModule.registerAsync(jwtConfig.asProvider()),
     NotificationSettingsModule,
     ErrorLoggingModule,
+    RefundsModule,
   ],
   controllers: [AppController],
   providers: [
