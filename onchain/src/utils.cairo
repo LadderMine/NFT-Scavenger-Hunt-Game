@@ -1,7 +1,7 @@
-use core::poseidon::poseidon_hash_span;
 use core::array::ArrayTrait;
 use core::byte_array::ByteArray;
 use core::felt252;
+use core::poseidon::poseidon_hash_span;
 
 pub fn hash_byte_array(byte_array: ByteArray) -> felt252 {
     let mut felt_array: Array<felt252> = ArrayTrait::new();
