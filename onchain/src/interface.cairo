@@ -28,6 +28,8 @@ pub trait IScavengerHunt<TContractState> {
     );
     fn next_level(self: @TContractState, level: Levels) -> Levels;
     fn get_player_level(self: @TContractState, player: ContractAddress) -> Levels;
+    fn set_nft_contract_address(ref self: TContractState, new_address: ContractAddress);
+    fn get_nft_contract_address(self: @TContractState) -> ContractAddress;
 }
 
 #[derive(Drop, Debug, Serde, starknet::Store)]

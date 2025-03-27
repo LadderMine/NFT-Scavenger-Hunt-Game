@@ -40,6 +40,7 @@ pub mod ScavengerHunt {
         player_level_progress: Map<
             (ContractAddress, felt252), LevelProgress,
         >, // (user, level) -> LevelProgress
+        nft_contract_address: ContractAddress,
         #[substorage(v0)]
         accesscontrol: AccessControlComponent::Storage,
         #[substorage(v0)]
@@ -58,6 +59,7 @@ pub mod ScavengerHunt {
         SRC5Event: SRC5Component::Event,
         LevelCompleted: LevelCompleted,
         AnswerSubmitted: AnswerSubmitted,
+        NFTContractUpdated: NFTContractUpdated,
     }
 
     #[derive(Drop, starknet::Event)]
@@ -92,6 +94,12 @@ pub mod ScavengerHunt {
         pub question_id: u64,
         pub level: Levels,
         pub is_correct: bool,
+    }
+
+    #[derive(Drop, starknet::Event)]
+    pub struct NFTContractUpdated {
+        pub old_address: ContractAddress,
+        pub new_address: ContractAddress,
     }
 
     #[constructor]
@@ -315,6 +323,17 @@ pub mod ScavengerHunt {
             let player_level = player_progress.current_level;
 
             player_level
+        }
+
+        fn set_nft_contract_address(ref self: ContractState, new_address: ContractAddress) {
+            self.accesscontrol.assert_only_role(ADMIN_ROLE);
+            let old_address = self.nft_contract_address.read();
+            self.nft_contract_address.write(new_address);
+            self.emit(NFTContractUpdated { old_address, new_address });
+        }
+
+        fn get_nft_contract_address(self: @ContractState) -> ContractAddress {
+            self.nft_contract_address.read()
         }
     }
 }
