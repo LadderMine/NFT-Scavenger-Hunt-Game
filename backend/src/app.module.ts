@@ -38,6 +38,7 @@ import { EmailChangeModule } from './email-change/email-change.module';
 import { ErrorLoggingModule } from './error-logging/error-logging.module';
 import { ErrorLoggingInterceptor } from './error-logging/interceptors/error-logging.interceptor';
 import { RefundsModule } from './refunds/refunds.module';
+import { PromoCodeModule } from './promo-code/promo-code.module';
 
 
 @Module({
@@ -91,6 +92,7 @@ import { RefundsModule } from './refunds/refunds.module';
     NotificationSettingsModule,
     ErrorLoggingModule,
     RefundsModule,
+    PromoCodeModule,
   ],
   controllers: [AppController],
   providers: [
