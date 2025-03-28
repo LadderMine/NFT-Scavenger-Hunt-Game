@@ -221,6 +221,6 @@ export class UserProgressService {
     progress.progressPercentage = Math.round(
       (puzzleProgress + levelProgress) / 2,
 
-    ); 
+    );
   }
 }
