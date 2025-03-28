@@ -85,6 +85,7 @@ import { PromoCodeModule } from './promo-code/promo-code.module';
     UserActivityLogsModule,
     AuditLogsModule,
     ApiTrackingModule,
+   
     // JWT configuration
     ConfigModule.forFeature(jwtConfig),
     JwtModule.registerAsync(jwtConfig.asProvider()),
