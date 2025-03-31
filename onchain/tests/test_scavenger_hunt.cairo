@@ -1,14 +1,13 @@
 use onchain::contracts::scavenger_hunt::ScavengerHunt;
-use onchain::contracts::scavenger_hunt::ScavengerHunt::{InternalFunctionsTrait,};
 use onchain::interface::{IScavengerHuntDispatcher, IScavengerHuntDispatcherTrait, Levels, Question};
 use onchain::utils::hash_byte_array;
 use snforge_std::{
-    ContractClassTrait, DeclareResultTrait, EventSpyAssertionsTrait, declare, spy_events,
-    start_cheat_caller_address, stop_cheat_caller_address,
+    ContractClassTrait, DeclareResultTrait, declare, start_cheat_caller_address,
+    stop_cheat_caller_address,
 };
 use starknet::{ContractAddress, contract_address_const};
 use starknet::storage::{StoragePointerReadAccess, StoragePointerWriteAccess};
-
+use onchain::contracts::scavenger_hunt::ScavengerHunt::{InternalFunctionsTrait};
 
 fn ADMIN() -> ContractAddress {
     contract_address_const::<'ADMIN'>()
@@ -522,4 +521,3 @@ fn test_set_nft_contract_address_should_panic_with_missing_role() {
 
     dispatcher.set_nft_contract_address(new_nft_address);
 }
-
