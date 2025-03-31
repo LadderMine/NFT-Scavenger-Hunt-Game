@@ -523,3 +523,146 @@ fn test_set_nft_contract_address_should_panic_with_missing_role() {
     dispatcher.set_nft_contract_address(new_nft_address);
 }
 
+#[test]
+#[should_panic(expected: 'Question cannot be empty')]
+fn test_add_question_empty_question() {
+    // Deploy the contract
+    let contract_address = deploy_contract();
+    let dispatcher = IScavengerHuntDispatcher { contract_address };
+
+    // Define test data
+    let level = Levels::Easy;
+    let question = ""; // ByteArray
+    let answer = "Paris"; // ByteArray
+    let hint = "It starts with 'P'"; // ByteArray
+
+    start_cheat_caller_address(contract_address, ADMIN());
+
+    // Add a question
+    dispatcher.add_question(level, question.clone(), answer.clone(), hint.clone());
+}
+
+#[test]
+#[should_panic(expected: 'Answer cannot be empty')]
+fn test_add_question_empty_answer() {
+    // Deploy the contract
+    let contract_address = deploy_contract();
+    let dispatcher = IScavengerHuntDispatcher { contract_address };
+
+    // Define test data
+    let level = Levels::Easy;
+    let question = "question"; // ByteArray
+    let answer = ""; // ByteArray
+    let hint = "It starts with 'P'"; // ByteArray
+
+    start_cheat_caller_address(contract_address, ADMIN());
+
+    // Add a question
+    dispatcher.add_question(level, question.clone(), answer.clone(), hint.clone());
+}
+
+#[test]
+#[should_panic(expected: 'Hint cannot be empty')]
+fn test_add_question_empty_hint() {
+    // Deploy the contract
+    let contract_address = deploy_contract();
+    let dispatcher = IScavengerHuntDispatcher { contract_address };
+
+    // Define test data
+    let level = Levels::Easy;
+    let question = "question"; // ByteArray
+    let answer = "answer"; // ByteArray
+    let hint = ""; // ByteArray
+
+    start_cheat_caller_address(contract_address, ADMIN());
+
+    // Add a question
+    dispatcher.add_question(level, question.clone(), answer.clone(), hint.clone());
+}
+
+#[test]
+#[should_panic(expected: 'Question cannot be empty')]
+fn test_update_question_empty_question() {
+    let contract_address = deploy_contract();
+    let dispatcher = IScavengerHuntDispatcher { contract_address };
+
+    // Define initial test data
+    let level = Levels::Easy;
+    let question = "What is the capital of France?";
+    let answer = "Paris";
+    let hint = "It starts with 'P'";
+
+    // Add a question
+    start_cheat_caller_address(contract_address, ADMIN());
+    dispatcher.set_question_per_level(5);
+    dispatcher.add_question(level, question.clone(), answer.clone(), hint.clone());
+
+    // Define updated test data
+    let updated_question = "";
+    let updated_answer = "Berlin";
+    let updated_hint = "It starts with 'B'";
+
+    // Attempt to update the question
+    dispatcher
+        .update_question(
+            1, updated_question.clone(), updated_answer.clone(), level, updated_hint.clone(),
+        );
+}
+
+#[test]
+#[should_panic(expected: 'Answer cannot be empty')]
+fn test_update_question_empty_answer() {
+    let contract_address = deploy_contract();
+    let dispatcher = IScavengerHuntDispatcher { contract_address };
+
+    // Define initial test data
+    let level = Levels::Easy;
+    let question = "What is the capital of France?";
+    let answer = "Paris";
+    let hint = "It starts with 'P'";
+
+    // Add a question
+    start_cheat_caller_address(contract_address, ADMIN());
+    dispatcher.set_question_per_level(5);
+    dispatcher.add_question(level, question.clone(), answer.clone(), hint.clone());
+
+    // Define updated test data
+    let updated_question = "What is the capital of Germany?";
+    let updated_answer = "";
+    let updated_hint = "It starts with 'B'";
+
+    // Attempt to update the question
+    dispatcher
+        .update_question(
+            1, updated_question.clone(), updated_answer.clone(), level, updated_hint.clone(),
+        );
+}
+
+#[test]
+#[should_panic(expected: 'Hint cannot be empty')]
+fn test_update_question_empty_hint() {
+    let contract_address = deploy_contract();
+    let dispatcher = IScavengerHuntDispatcher { contract_address };
+
+    // Define initial test data
+    let level = Levels::Easy;
+    let question = "What is the capital of France?";
+    let answer = "Paris";
+    let hint = "It starts with 'P'";
+
+    // Add a question
+    start_cheat_caller_address(contract_address, ADMIN());
+    dispatcher.set_question_per_level(5);
+    dispatcher.add_question(level, question.clone(), answer.clone(), hint.clone());
+
+    // Define updated test data
+    let updated_question = "What is the capital of Germany?";
+    let updated_answer = "Berlin";
+    let updated_hint = "";
+
+    // Attempt to update the question
+    dispatcher
+        .update_question(
+            1, updated_question.clone(), updated_answer.clone(), level, updated_hint.clone(),
+        );
+}
