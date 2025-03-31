@@ -521,3 +521,38 @@ fn test_set_nft_contract_address_should_panic_with_missing_role() {
 
     dispatcher.set_nft_contract_address(new_nft_address);
 }
+#[test]
+#[should_panic(expected: "Level not completed")]
+fn test_cannot_claim_nft_before_completion() {
+    // Deploy the contract
+    let contract_address = deploy_contract();
+    let dispatcher = IScavengerHuntDispatcher { contract_address };
+
+    // Player attempts to claim NFT without completing the level
+    start_cheat_caller_address(contract_address, USER());
+    dispatcher.claim_level_completion_nft(Levels::Easy); // Should panic
+    stop_cheat_caller_address(contract_address);
+}
+
+#[test]
+#[should_panic(expected: "NFT already minted")]
+fn test_cannot_claim_nft_twice() {
+    // Deploy the contract
+    let contract_address = deploy_contract();
+    let dispatcher = IScavengerHuntDispatcher { contract_address };
+
+    // Admin setup: Set questions per level and add a question
+    start_cheat_caller_address(contract_address, ADMIN());
+    dispatcher.set_question_per_level(1);
+    dispatcher.add_question(Levels::Easy, "Q?", "A", "H");
+    stop_cheat_caller_address(contract_address);
+
+    // Player completes the level and claims the NFT
+    start_cheat_caller_address(contract_address, USER());
+    dispatcher.submit_answer(1, "A");
+    dispatcher.claim_level_completion_nft(Levels::Easy);
+
+    // Player attempts to claim the NFT again (should panic)
+    dispatcher.claim_level_completion_nft(Levels::Easy); // Should panic
+    stop_cheat_caller_address(contract_address);
+}

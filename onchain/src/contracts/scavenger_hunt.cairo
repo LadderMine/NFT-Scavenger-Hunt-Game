@@ -315,6 +315,29 @@ pub mod ScavengerHunt {
         fn get_nft_contract_address(self: @ContractState) -> ContractAddress {
             self.nft_contract_address.read()
         }
+        fn claim_level_completion_nft(ref self: ContractState, level: Levels) {
+            let caller = get_caller_address();
+
+            // Check if player is initialized
+            let player_progress = self.player_progress.read(caller);
+
+            if !player_progress.is_initialized {
+                self.initialize_player_progress(caller);
+            }
+
+            // Check if the player has completed the level
+            let level_progress = self.player_level_progress.read((caller, level.into()));
+            assert!(level_progress.is_completed, "Level not completed");
+
+            // Mint the NFT badge for the player
+            self._mint_level_badge(caller, level);
+        }
+        // getter function to get player level progress
+        fn get_player_level_progress(
+            self: @ContractState, player: ContractAddress, level: Levels,
+        ) -> LevelProgress {
+            self.player_level_progress.read((player, level.into()))
+        }
     }
 
     #[generate_trait]
