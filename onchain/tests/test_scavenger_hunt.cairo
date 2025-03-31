@@ -554,7 +554,7 @@ fn test_cannot_claim_nft_twice() {
     // Player attempts to claim the NFT again (should panic)
     dispatcher.claim_level_completion_nft(Levels::Easy); // Should panic
     stop_cheat_caller_address(contract_address);
-
+}
 #[test]
 #[should_panic(expected: 'Question cannot be empty')]
 fn test_add_question_empty_question() {
