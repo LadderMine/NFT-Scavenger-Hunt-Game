@@ -60,6 +60,7 @@ pub mod ScavengerHunt {
         LevelCompleted: LevelCompleted,
         AnswerSubmitted: AnswerSubmitted,
         NFTContractUpdated: NFTContractUpdated,
+        HintRequested: HintRequested,
     }
 
     #[derive(Drop, starknet::Event)]
@@ -100,6 +101,13 @@ pub mod ScavengerHunt {
     pub struct NFTContractUpdated {
         pub old_address: ContractAddress,
         pub new_address: ContractAddress,
+    }
+
+    #[derive(Drop, starknet::Event)]
+    pub struct HintRequested {
+        pub player: ContractAddress,
+        pub question_id: u64,
+        pub level: Levels,
     }
 
 
@@ -245,10 +253,25 @@ pub mod ScavengerHunt {
             is_correct
         }
 
-        fn request_hint(self: @ContractState, question_id: u64) -> ByteArray {
+        fn request_hint(ref self: ContractState, question_id: u64) -> ByteArray {
+            let caller = get_caller_address();
+            //Add player initialization check.
+            let player_progress = self.player_progress.read(caller);
+            assert!(player_progress.is_initialized, 'Player not initialized');
             // Retrieve the question from storage
             let question = self.questions.read(question_id);
-
+            // Verify that player has the appropriate level access.
+            let player_level = player_progress.current_level;
+            assert!(
+                player_level == question.level,
+                'Player does not have access to this level'
+            );
+            // Emit an event when a hint is requested.
+            self.emit(HintRequested {
+                player: caller,
+                question_id,
+                level: question.level,
+            });
             // Return the hint stored in the question
             question.hint
         }
