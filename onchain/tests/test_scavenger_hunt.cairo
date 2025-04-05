@@ -1,15 +1,18 @@
 use onchain::contracts::scavenger_hunt::ScavengerHunt;
-use onchain::interface::{IScavengerHuntDispatcher, IScavengerHuntDispatcherTrait, Levels, Question, };
+use onchain::interface::{
+    IScavengerHuntDispatcher, IScavengerHuntDispatcherTrait, Levels, Question,
+};
 use onchain::utils::hash_byte_array;
 use snforge_std::{
     ContractClassTrait, DeclareResultTrait, declare, start_cheat_caller_address,
-    stop_cheat_caller_address,};
+    stop_cheat_caller_address,
+};
 use starknet::{ContractAddress, contract_address_const};
 use starknet::storage::{StoragePointerReadAccess, StoragePointerWriteAccess};
 use onchain::contracts::scavenger_hunt::ScavengerHunt::{InternalFunctionsTrait, LevelBadgeMinted};
 use onchain::contracts::scavenger_hunt::ScavengerHunt::Event;
 fn ADMIN() -> ContractAddress {
-    contract_address_const::<'ADMIN'>()   
+    contract_address_const::<'ADMIN'>()
 }
 
 fn USER() -> ContractAddress {
