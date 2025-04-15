@@ -264,12 +264,13 @@ pub mod ScavengerHunt {
             let player_level = player_progress.current_level;
             assert!(player_level == question.level, "Player does not have access to this level");
             // Emit an event when a hint is requested.
-            self.emit(Event::HintRequested(HintRequested {
-                player: caller,
-                question_id,
-                level: question.level,
-            }));
-                   question.hint
+            self
+                .emit(
+                    Event::HintRequested(
+                        HintRequested { player: caller, question_id, level: question.level, }
+                    )
+                );
+            question.hint
         }
 
         fn get_question_in_level(self: @ContractState, level: Levels, index: u8) -> ByteArray {
