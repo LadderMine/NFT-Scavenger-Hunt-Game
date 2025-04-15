@@ -257,23 +257,19 @@ pub mod ScavengerHunt {
             let caller = get_caller_address();
             //Add player initialization check.
             let player_progress = self.player_progress.read(caller);
-            assert!(player_progress.is_initialized, 'Player not initialized');
+            assert!(player_progress.is_initialized, "Player not initialized");
             // Retrieve the question from storage
             let question = self.questions.read(question_id);
             // Verify that player has the appropriate level access.
             let player_level = player_progress.current_level;
-            assert!(
-                player_level == question.level,
-                'Player does not have access to this level'
-            );
+            assert!(player_level == question.level, "Player does not have access to this level");
             // Emit an event when a hint is requested.
-            self.emit(HintRequested {
+            self.emit(Event::HintRequested(HintRequested {
                 player: caller,
                 question_id,
                 level: question.level,
-            });
-            // Return the hint stored in the question
-            question.hint
+            }));
+                   question.hint
         }
 
         fn get_question_in_level(self: @ContractState, level: Levels, index: u8) -> ByteArray {
