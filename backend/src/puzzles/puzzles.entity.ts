@@ -3,9 +3,7 @@ import { Hints } from 'src/hints/hints.entity';
 import { Level } from 'src/level/entities/level.entity';
 import { NFTs } from 'src/nfts/nfts.entity';
 import { UserProgress } from 'src/user-progress/User-Progress.entity';
-import { User } from 'src/users/users.entity';
 import { Scores } from 'src/scores/scores.entity';
-import { Answer } from 'src/answers/answers.entity';
 import { 
   Entity,
   PrimaryGeneratedColumn,
@@ -13,20 +11,18 @@ import {
   OneToMany,
   ManyToOne,
   OneToOne,
-  BeforeInsert
+  BeforeInsert,
+  DeleteDateColumn
 } from 'typeorm';
-import { Answers } from "src/answers/answers.entity";
-import { Hints } from 'src/hints/hints.entity';
-import { Level } from 'src/level/entities/level.entity';
-import { NFTs } from 'src/nfts/nfts.entity';
-import { Scores } from 'src/scores/scores.entity';
-import { UserProgress } from 'src/user-progress/user-progress.entity';
 import { LevelEnum } from 'src/enums/LevelEnum';
 
 @Entity()
 export class Puzzles {
   @PrimaryGeneratedColumn()
   id: number;
+
+  @Column({nullable: true})
+  title: string;
 
   @OneToMany(() => Hints, (hints) => hints.puzzles)
   hints: Hints[];
@@ -40,6 +36,9 @@ export class Puzzles {
       onUpdate: 'CURRENT_TIMESTAMP',
   })
   updatedAt: Date;
+
+  @DeleteDateColumn({ nullable: true })
+  deletedAt?: Date; // Soft delete column
 
   @Column({ type: 'int' })
   pointValue: number;
@@ -59,7 +58,7 @@ export class Puzzles {
   @OneToMany(() => Scores, (score) => score.puzzle, { onDelete: 'SET NULL' }) 
   scores: Scores[];
 
-  @OneToMany(() => Answers, (answer) => answer.puzzle)
+  @OneToMany(() => Answers, (answer) => answer.puzzles)
   answers: Answers[];
 
   @BeforeInsert()

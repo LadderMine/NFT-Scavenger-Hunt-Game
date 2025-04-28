@@ -62,5 +62,16 @@ export class PuzzlesService {
   
     return puzzle;
   }
+
+  async deletePuzzle(id: string): Promise<void> {
+    const puzzle = await this.puzzleRepository.findOne({ where: { id: Number(id) } });
+
+    if (!puzzle) {
+      throw new NotFoundException('Puzzle not found.');
+    }
+
+    await this.puzzleRepository.softRemove(puzzle); // Use softRemove for soft delete
+    // Use remove(puzzle) for hard delete
+  }
 }
 
