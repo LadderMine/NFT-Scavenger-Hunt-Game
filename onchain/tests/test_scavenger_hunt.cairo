@@ -203,10 +203,13 @@ fn test_request_hint() {
     dispatcher.add_question(level, question.clone(), answer.clone(), hint.clone());
     stop_cheat_caller_address(contract_address);
 
-    // Retrieve the hint for the question
-    let question_id = 1; // Assuming the first question has ID 1
-    let retrieved_hint = dispatcher.request_hint(question_id);
+    // USER: submit correct answer to initialize player and progress
+    start_cheat_caller_address(contract_address, USER());
+    dispatcher.submit_answer(1, answer.clone());
 
+    // USER: request hint
+    let retrieved_hint = dispatcher.request_hint(1);
+    stop_cheat_caller_address(contract_address);
     // Verify that the retrieved hint matches the expected hint
     assert!(retrieved_hint == hint, "Expected hint '{}', got '{}'", hint, retrieved_hint);
 }
