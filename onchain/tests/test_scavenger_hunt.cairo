@@ -1,14 +1,21 @@
 use onchain::contracts::scavenger_hunt::ScavengerHunt;
-use onchain::contracts::scavenger_hunt::ScavengerHunt::{InternalFunctionsTrait,};
-use onchain::interface::{IScavengerHuntDispatcher, IScavengerHuntDispatcherTrait, Levels, Question};
+use onchain::interface::{
+    IScavengerHuntDispatcher, IScavengerHuntDispatcherTrait, Levels, Question,
+};
 use onchain::utils::hash_byte_array;
 use snforge_std::{
-    ContractClassTrait, DeclareResultTrait, EventSpyAssertionsTrait, declare, spy_events,
-    start_cheat_caller_address, stop_cheat_caller_address,
+    ContractClassTrait, DeclareResultTrait, declare, start_cheat_caller_address, spy_events,
+    EventSpyAssertionsTrait, stop_cheat_caller_address,
 };
+use core::serde::Serde;
 use starknet::{ContractAddress, contract_address_const};
 use starknet::storage::{StoragePointerReadAccess, StoragePointerWriteAccess};
-
+use onchain::contracts::scavenger_hunt::ScavengerHunt::{InternalFunctionsTrait, LevelBadgeMinted};
+use onchain::contracts::scavenger_hunt::ScavengerHunt::{Event as ScavengerHuntEvent};
+use onchain::contracts::scavenger_hunt_nft::{
+    IScavengerHuntNFTDispatcher, IScavengerHuntNFTDispatcherTrait
+};
+use onchain::contracts::scavenger_hunt_nft::ScavengerHuntNFT;
 
 fn ADMIN() -> ContractAddress {
     contract_address_const::<'ADMIN'>()
@@ -18,6 +25,11 @@ fn USER() -> ContractAddress {
     contract_address_const::<'USER'>()
 }
 
+// Added for clarity in state tests
+fn DUMMY_NFT_ADDR() -> ContractAddress {
+    // Used in state-based tests where deployment isn't needed but address must be non-zero
+    contract_address_const::<'DUMMY_NFT_ADDR'>()
+}
 
 fn deploy_contract() -> ContractAddress {
     let contract = declare("ScavengerHunt").unwrap().contract_class();
@@ -26,6 +38,58 @@ fn deploy_contract() -> ContractAddress {
     let (contract_address, _) = contract.deploy(@constructor_calldata).unwrap();
     contract_address
 }
+fn deploy_scavenger_hunt_nft(
+    token_uri: ByteArray, scavenger_hunt_address: ContractAddress
+) -> ContractAddress {
+    let declare_result = declare("ScavengerHuntNFT").unwrap();
+    let contract_class = declare_result.contract_class();
+    let mut constructor_args: Array<felt252> = array![];
+    // Serialize ByteArray for token_uri
+    token_uri.serialize(ref constructor_args);
+    // Append scavenger_hunt_address
+    constructor_args.append(scavenger_hunt_address.into());
+
+    let (address, _) = contract_class.deploy(@constructor_args).unwrap();
+    address
+}
+// Setup helper deploying Hunt, NFT, and the Mock Receiver
+fn setup_all_contracts() -> (
+    IScavengerHuntDispatcher, IScavengerHuntNFTDispatcher, ContractAddress
+) {
+    let hunt_contract_class = declare("ScavengerHunt").unwrap().contract_class();
+
+    let receiver_contract_class = declare("MockERC1155Receiver").unwrap().contract_class();
+
+    // 2. Deploy ScavengerHunt
+    let mut hunt_calldata = array![ADMIN().into()];
+    let (hunt_address, _) = hunt_contract_class.deploy(@hunt_calldata).unwrap();
+    let hunt_dispatcher = IScavengerHuntDispatcher { contract_address: hunt_address };
+
+    // 3. Deploy ScavengerHuntNFT
+    let token_uri_bytes: ByteArray = "ipfs://placeholder_uri/";
+    let nft_address = deploy_scavenger_hunt_nft(token_uri_bytes, hunt_address);
+    let nft_dispatcher = IScavengerHuntNFTDispatcher { contract_address: nft_address };
+
+    // 4. Deploy Mock Receiver
+    let (receiver_address, _) = receiver_contract_class
+        .deploy(@array![])
+        .unwrap(); // Deploy receiver with its constructor
+
+    // 5. Configure ScavengerHunt: Set NFT contract address
+    start_cheat_caller_address(hunt_address, ADMIN());
+    hunt_dispatcher.set_nft_contract_address(nft_address);
+    stop_cheat_caller_address(hunt_address);
+
+    // 6. Optional: Verify MINTER role
+    start_cheat_caller_address(nft_address, ADMIN());
+    assert(
+        nft_dispatcher.has_minter_role(hunt_address), 1
+    ); // Use 1 as a felt252-compatible error code
+    stop_cheat_caller_address(nft_address);
+
+    (hunt_dispatcher, nft_dispatcher, receiver_address) // Return receiver address
+}
+
 
 #[test]
 fn test_set_question_per_level() {
@@ -522,7 +586,6 @@ fn test_set_nft_contract_address_should_panic_with_missing_role() {
 
     dispatcher.set_nft_contract_address(new_nft_address);
 }
-
 #[test]
 #[should_panic(expected: 'Question cannot be empty')]
 fn test_add_question_empty_question() {
@@ -666,3 +729,161 @@ fn test_update_question_empty_hint() {
             1, updated_question.clone(), updated_answer.clone(), level, updated_hint.clone(),
         );
 }
+
+#[test]
+#[should_panic(expected: "Level not completed")]
+fn test_mint_level_badge_not_completed() {
+    let mut state = ScavengerHunt::contract_state_for_testing();
+    let player = USER();
+    let level = Levels::Easy;
+
+    // Initialize player but don't complete level
+    state.initialize_player_progress(player);
+    state.nft_contract_address.write(contract_address_const::<'MOCK_NFT'>());
+
+    // This should panic
+    state._mint_level_badge(player, level);
+}
+#[test]
+#[should_panic(expected: "NFT already minted")]
+fn test_mint_level_badge_duplicate() {
+    let mut state = ScavengerHunt::contract_state_for_testing();
+    let player = USER();
+    let level = Levels::Easy;
+
+    // Initialize and mark as completed & minted
+    state.initialize_player_progress(player);
+    let mut level_progress = state.player_level_progress.read((player, level.into()));
+    level_progress.is_completed = true;
+    level_progress.nft_minted = true;
+    state.player_level_progress.write((player, level.into()), level_progress);
+    state.nft_contract_address.write(contract_address_const::<'MOCK_NFT'>());
+
+    // Attempt duplicate mint
+    state._mint_level_badge(player, level);
+}
+// --- REFACTORED Integration Test using deployed Mock Receiver ---
+#[test]
+fn test_claim_level_completion_nft_integration() {
+    // Use the setup deploying Hunt, NFT, and Receiver
+    let (hunt_dispatcher, nft_dispatcher, receiver_address) = setup_all_contracts();
+    let hunt_address = hunt_dispatcher.contract_address;
+    let nft_address = nft_dispatcher.contract_address;
+    // --- FIX: Use the DEPLOYED receiver address as the player ---
+    let player = receiver_address;
+    // -----------------------------------------------------------
+    let level_to_complete = Levels::Easy;
+    let question_id = 1;
+    let correct_answer: ByteArray = "A";
+    let q1: ByteArray = "Q?";
+    let h1: ByteArray = "Hint";
+
+    // Setup state using ADMIN cheat
+    start_cheat_caller_address(hunt_address, ADMIN());
+    hunt_dispatcher.set_question_per_level(1);
+    hunt_dispatcher.add_question(level_to_complete, q1, correct_answer.clone(), h1);
+    stop_cheat_caller_address(hunt_address);
+
+    // Simulate completion using player (receiver) cheat
+    start_cheat_caller_address(hunt_address, player);
+    assert!(
+        hunt_dispatcher.submit_answer(question_id, correct_answer) == true, "Completion failed"
+    );
+    let progress_before_claim = hunt_dispatcher
+        .get_player_level_progress(player, level_to_complete);
+    assert!(progress_before_claim.is_completed == true, "Level not completed flag");
+    assert!(progress_before_claim.nft_minted == false, "NFT already minted flag");
+    stop_cheat_caller_address(hunt_address);
+
+    // Claim NFT using player (receiver) cheat & Spy events
+    let mut spy = spy_events();
+    start_cheat_caller_address(hunt_address, player);
+    hunt_dispatcher.claim_level_completion_nft(level_to_complete); // This should now succeed
+    stop_cheat_caller_address(hunt_address);
+
+    // Assertions
+    assert!(nft_dispatcher.has_level_badge(player, level_to_complete), "NFT badge check failed");
+    let final_progress = hunt_dispatcher.get_player_level_progress(player, level_to_complete);
+    assert!(final_progress.nft_minted, "nft_minted flag check failed");
+
+    // Assert event emission using the (emitter, Enum::Variant(Struct)) format
+    spy
+        .assert_emitted(
+            @array![
+                (
+                    hunt_address,
+                    ScavengerHuntEvent::LevelBadgeMinted(
+                        LevelBadgeMinted {
+                            player: player, level: level_to_complete
+                        } // Use receiver address here
+                    )
+                )
+            ]
+        );
+}
+
+// --- Other Integration Tests using cheat_caller_address ---
+
+#[test]
+#[should_panic] // Keep just should_panic - it passed correctly before
+fn test_claim_level_completion_nft_before_completion() {
+    // Use the setup that includes NFT contract (needed for claim logic)
+    let (hunt_dispatcher, _, _) = setup_all_contracts(); // Use new setup
+    let hunt_address = hunt_dispatcher.contract_address;
+    let q1: ByteArray = "Q?";
+    let a1: ByteArray = "A";
+    let h1: ByteArray = "H";
+
+    start_cheat_caller_address(hunt_address, ADMIN());
+    hunt_dispatcher.set_question_per_level(1);
+    hunt_dispatcher.add_question(Levels::Easy, q1, a1, h1);
+    stop_cheat_caller_address(hunt_address);
+
+    // USER() is fine as the *caller* here, the panic is internal logic
+    start_cheat_caller_address(hunt_address, USER());
+    hunt_dispatcher.claim_level_completion_nft(Levels::Easy); // This should panic internally
+    stop_cheat_caller_address(hunt_address);
+}
+
+#[test]
+#[should_panic]
+fn test_claim_level_completion_nft_duplicate_claim() {
+    // Use the setup deploying Hunt, NFT, and Receiver
+    let (hunt_dispatcher, nft_dispatcher, receiver_address) = setup_all_contracts();
+    let hunt_address = hunt_dispatcher.contract_address;
+    let player = receiver_address;
+    let level_to_complete = Levels::Easy;
+    let question_id = 1;
+    let correct_answer: ByteArray = "A";
+    let q1: ByteArray = "Q?";
+    let h1: ByteArray = "Hint";
+
+    start_cheat_caller_address(hunt_address, ADMIN());
+    hunt_dispatcher.set_question_per_level(1);
+    hunt_dispatcher.add_question(level_to_complete, q1, correct_answer.clone(), h1);
+    stop_cheat_caller_address(hunt_address);
+
+    // Complete level using player (receiver) cheat
+    start_cheat_caller_address(hunt_address, player);
+    assert!(
+        hunt_dispatcher.submit_answer(question_id, correct_answer) == true, "Completion failed"
+    );
+    stop_cheat_caller_address(hunt_address);
+
+    // First claim (should succeed now with valid receiver)
+    start_cheat_caller_address(hunt_address, player);
+    hunt_dispatcher.claim_level_completion_nft(level_to_complete);
+    stop_cheat_caller_address(hunt_address);
+
+    // Verify first claim worked
+    assert!(nft_dispatcher.has_level_badge(player, level_to_complete), "First claim failed");
+    let progress_after_first_claim = hunt_dispatcher
+        .get_player_level_progress(player, level_to_complete);
+    assert!(progress_after_first_claim.nft_minted == true, "Flag not set");
+
+    // Attempt second claim (should now panic correctly with 'NFT already minted')
+    start_cheat_caller_address(hunt_address, player);
+    hunt_dispatcher.claim_level_completion_nft(level_to_complete);
+    stop_cheat_caller_address(hunt_address);
+}
+

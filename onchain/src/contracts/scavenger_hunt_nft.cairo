@@ -42,7 +42,7 @@ pub mod ScavengerHuntNFT {
 
     #[event]
     #[derive(Drop, starknet::Event)]
-    enum Event {
+    pub enum Event {
         #[flat]
         ERC1155Event: ERC1155Component::Event,
         #[flat]
