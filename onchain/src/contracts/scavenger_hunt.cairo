@@ -13,6 +13,9 @@ pub mod ScavengerHunt {
         StoragePointerReadAccess, StoragePointerWriteAccess,
     };
     use starknet::{ContractAddress, get_caller_address};
+    use onchain::contracts::scavenger_hunt_nft::{
+        IScavengerHuntNFTDispatcher, IScavengerHuntNFTDispatcherTrait
+    };
 
     const ADMIN_ROLE: felt252 = selector!("ADMIN_ROLE");
 
@@ -61,6 +64,7 @@ pub mod ScavengerHunt {
         AnswerSubmitted: AnswerSubmitted,
         NFTContractUpdated: NFTContractUpdated,
         HintRequested: HintRequested,
+        LevelBadgeMinted: LevelBadgeMinted,
     }
 
     #[derive(Drop, starknet::Event)]
@@ -110,6 +114,11 @@ pub mod ScavengerHunt {
         pub level: Levels,
     }
 
+    #[derive(Drop, starknet::Event)]
+    pub struct LevelBadgeMinted {
+        pub player: ContractAddress,
+        pub level: Levels,
+    }
 
     #[constructor]
     fn constructor(ref self: ContractState, admin: ContractAddress) {
@@ -349,6 +358,29 @@ pub mod ScavengerHunt {
         fn get_nft_contract_address(self: @ContractState) -> ContractAddress {
             self.nft_contract_address.read()
         }
+        fn claim_level_completion_nft(ref self: ContractState, level: Levels) {
+            let caller = get_caller_address();
+
+            // Check if player is initialized
+            let player_progress = self.player_progress.read(caller);
+
+            if !player_progress.is_initialized {
+                self.initialize_player_progress(caller);
+            }
+
+            // Check if the player has completed the level
+            let level_progress = self.player_level_progress.read((caller, level.into()));
+            assert!(level_progress.is_completed, "Level not completed");
+
+            // Mint the NFT badge for the player
+            self._mint_level_badge(caller, level);
+        }
+        // getter function to get player level progress
+        fn get_player_level_progress(
+            self: @ContractState, player: ContractAddress, level: Levels,
+        ) -> LevelProgress {
+            self.player_level_progress.read((player, level.into()))
+        }
     }
 
     #[generate_trait]
@@ -384,6 +416,31 @@ pub mod ScavengerHunt {
                 );
 
             self.emit(PlayerInitialized { player_address, level: 'EASY', is_initialized: true });
+        }
+        // New function: Mint an NFT badge for level completion
+        fn _mint_level_badge(ref self: ContractState, player: ContractAddress, level: Levels) {
+            // Retrieve the player's level progress
+            let mut level_progress = self.player_level_progress.read((player, level.into()));
+
+            // Verify the player has completed the level
+            assert!(level_progress.is_completed, "Level not completed");
+
+            // Verify an NFT hasn't already been minted for this level
+            assert!(!level_progress.nft_minted, "NFT already minted for this level");
+
+            // Get the NFT contract address
+            let nft_contract = self.nft_contract_address.read();
+
+            // Call the NFT contract to mint the badge
+            IScavengerHuntNFTDispatcher { contract_address: nft_contract }
+                .mint_level_badge(player, level);
+
+            // Update the player's level progress to mark the NFT as minted
+            level_progress.nft_minted = true;
+            self.player_level_progress.write((player, level.into()), level_progress);
+
+            // Emit an event for the NFT minting
+            self.emit(LevelBadgeMinted { player, level });
         }
     }
 }
