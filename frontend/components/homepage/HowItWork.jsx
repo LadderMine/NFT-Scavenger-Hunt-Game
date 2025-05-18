@@ -1,6 +1,6 @@
 import React from "react";
 import { Brain, Target, Trophy, BarChart3 } from "lucide-react";
-import HowItWorksStep from "@/components/HowItWorksStep";
+import HowItWorksStep from "../HowItWorksStep";
 
 const howItWorksSteps = [
   {
@@ -57,14 +57,14 @@ const HowItWorks = () => {
         How It Works
       </h2>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-        {howItWorksSteps.map(() => (
+        {howItWorksSteps.map(({ icon, step, title, description, delay }) => (
           <HowItWorksStep
-            icon={howItWorksSteps.icon}
-            key={howItWorksSteps.step}
-            step={howItWorksSteps.step}
-            title={howItWorksSteps.title}
-            description={howItWorksSteps.description}
-            delay={howItWorksSteps.delay}
+            key={step}
+            icon={icon}
+            step={step}
+            title={title}
+            description={description}
+            delay={delay}
           />
         ))}
       </div>
