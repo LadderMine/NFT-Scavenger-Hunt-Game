@@ -39,6 +39,10 @@ import { ErrorLoggingModule } from './error-logging/error-logging.module';
 import { ErrorLoggingInterceptor } from './error-logging/interceptors/error-logging.interceptor';
 import { RefundsModule } from './refunds/refunds.module';
 import { PromoCodeModule } from './promo-code/promo-code.module';
+import { ScheduleModule } from './schedule/schedule.module';
+import { ScheduleService } from './providers/schedule.service';
+import { CleanupModule } from './cleanup/cleanup.module';
+import { CleanupService } from './cleanup/providers/cleanup.service';
 
 
 @Module({
@@ -48,8 +52,10 @@ import { PromoCodeModule } from './promo-code/promo-code.module';
       isGlobal: true,
       envFilePath: ['.env'],
       load: [appConfig, databaseConfig],
-      cache: true,
+      cache: true
     }),
+    ScheduleModule.forRoot(),
+    CleanupModule,
     TypeOrmModule.forRootAsync({
       //end
       imports: [ConfigModule],
@@ -93,6 +99,8 @@ import { PromoCodeModule } from './promo-code/promo-code.module';
     ErrorLoggingModule,
     RefundsModule,
     PromoCodeModule,
+    ScheduleModule,
+    CleanupModule,
   ],
   controllers: [AppController],
   providers: [
@@ -112,6 +120,8 @@ import { PromoCodeModule } from './promo-code/promo-code.module';
       provide: APP_INTERCEPTOR,
       useClass: ErrorLoggingInterceptor,
     },
+    ScheduleService,
+    CleanupService,
   ],
 })
 export class AppModule {}
