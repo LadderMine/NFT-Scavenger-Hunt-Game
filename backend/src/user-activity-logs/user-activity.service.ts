@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { ActivityLog } from './user-activity.entity';
+import { ActivityLogDto } from './dto/log-activity.dto';
 
 @Injectable()
 export class ActivityLogsService {
@@ -10,12 +11,11 @@ export class ActivityLogsService {
     private activityLogRepository: Repository<ActivityLog>,
   ) {}
 
-  async logActivity(
-    userId: string | null,
-    action: string,
-    metadata?: Record<string, any>,
-  ): Promise<ActivityLog> {
-    const log = this.activityLogRepository.create({ userId, action, metadata });
+  async logActivity(logActivityDto: ActivityLogDto): Promise<ActivityLog> {
+    const log = this.activityLogRepository.create({
+      ...logActivityDto,
+      userId: String(logActivityDto.userId),
+    });
     return this.activityLogRepository.save(log);
   }
 
