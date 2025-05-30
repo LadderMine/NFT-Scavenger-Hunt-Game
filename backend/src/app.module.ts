@@ -39,6 +39,10 @@ import { ErrorLoggingModule } from './error-logging/error-logging.module';
 import { ErrorLoggingInterceptor } from './error-logging/interceptors/error-logging.interceptor';
 import { RefundsModule } from './refunds/refunds.module';
 import { PromoCodeModule } from './promo-code/promo-code.module';
+import { ScheduleModule } from './schedule/schedule.module';
+import { ScheduleService } from './providers/schedule.service';
+import { CleanupModule } from './cleanup/cleanup.module';
+import { CleanupService } from './cleanup/providers/cleanup.service';
 import { PreviewPuzzleModule } from './preview-puzzle/preview-puzzle.module';
 import { PuzzleMatchingModule } from './puzzle-matching/puzzle-matching.module';
 import { UserEventsModule } from './user-events/user-events.module';
@@ -51,8 +55,10 @@ import { UserEventsModule } from './user-events/user-events.module';
       isGlobal: true,
       envFilePath: ['.env'],
       load: [appConfig, databaseConfig],
-      cache: true,
+      cache: true
     }),
+    ScheduleModule.forRoot(),
+    CleanupModule,
     TypeOrmModule.forRootAsync({
       //end
       imports: [ConfigModule],
@@ -96,6 +102,8 @@ import { UserEventsModule } from './user-events/user-events.module';
     ErrorLoggingModule,
     RefundsModule,
     PromoCodeModule,
+    ScheduleModule,
+    CleanupModule,
     PreviewPuzzleModule,
     PuzzleMatchingModule,
     UserEventsModule,
@@ -118,6 +126,8 @@ import { UserEventsModule } from './user-events/user-events.module';
       provide: APP_INTERCEPTOR,
       useClass: ErrorLoggingInterceptor,
     },
+    ScheduleService,
+    CleanupService,
   ],
 })
 export class AppModule {}
