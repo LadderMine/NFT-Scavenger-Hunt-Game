@@ -39,6 +39,7 @@ import { ErrorLoggingModule } from './error-logging/error-logging.module';
 import { ErrorLoggingInterceptor } from './error-logging/interceptors/error-logging.interceptor';
 import { RefundsModule } from './refunds/refunds.module';
 import { PromoCodeModule } from './promo-code/promo-code.module';
+import { PuzzleMatchingModule } from './puzzle-matching/puzzle-matching.module';
 
 
 @Module({
@@ -93,6 +94,7 @@ import { PromoCodeModule } from './promo-code/promo-code.module';
     ErrorLoggingModule,
     RefundsModule,
     PromoCodeModule,
+    PuzzleMatchingModule,
   ],
   controllers: [AppController],
   providers: [
