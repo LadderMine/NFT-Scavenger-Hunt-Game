@@ -11,8 +11,8 @@ import {
   OneToMany,
   ManyToOne,
   OneToOne,
-  BeforeInsert,
-  DeleteDateColumn
+  DeleteDateColumn,
+  Index,
 } from 'typeorm';
 import { LevelEnum } from 'src/enums/LevelEnum';
 
@@ -23,6 +23,25 @@ export class Puzzles {
 
   @Column({nullable: true})
   title: string;
+
+  // --- Versioning Fields ---
+  @Column({ type: 'int', default: 1 })
+  version: number;
+
+  @Index() 
+  @Column({ type: 'int', nullable: true })
+  originalPuzzleId: number | null; 
+
+  @ManyToOne(() => Puzzles, { nullable: true, createForeignKeyConstraints: false })
+  originalPuzzle: Puzzles | null;
+
+  @OneToMany(() => Puzzles, puzzle => puzzle.originalPuzzle)
+  versions: Puzzles[];
+
+  @Index() 
+  @Column({ type: 'boolean', default: true })
+  isLatest: boolean;
+  // --- End Versioning Fields ---
 
   @OneToMany(() => Hints, (hints) => hints.puzzles)
   hints: Hints[];
@@ -46,9 +65,6 @@ export class Puzzles {
   @OneToOne(() => NFTs, (nfts) => nfts.puzzles, { nullable: true })
   nfts: NFTs;
 
-  @ManyToOne(() => UserProgress, (userProgress) => userProgress.puzzles)
-  userProgress: UserProgress;
-
   @ManyToOne(() => Level, (level) => level.puzzles)
   level: Level;
 
@@ -60,11 +76,4 @@ export class Puzzles {
 
   @OneToMany(() => Answers, (answer) => answer.puzzles)
   answers: Answers[];
-
-  @BeforeInsert()
-  async updateLevelCount() {
-      if (this.level) {
-          await Level.incrementCount(this.levelEnum);
-      }
-  }
 }
