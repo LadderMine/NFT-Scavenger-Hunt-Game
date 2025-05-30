@@ -39,6 +39,7 @@ import { ErrorLoggingModule } from './error-logging/error-logging.module';
 import { ErrorLoggingInterceptor } from './error-logging/interceptors/error-logging.interceptor';
 import { RefundsModule } from './refunds/refunds.module';
 import { PromoCodeModule } from './promo-code/promo-code.module';
+import { PreviewPuzzleModule } from './preview-puzzle/preview-puzzle.module';
 import { PuzzleMatchingModule } from './puzzle-matching/puzzle-matching.module';
 import { UserEventsModule } from './user-events/user-events.module';
 
@@ -95,6 +96,7 @@ import { UserEventsModule } from './user-events/user-events.module';
     ErrorLoggingModule,
     RefundsModule,
     PromoCodeModule,
+    PreviewPuzzleModule,
     PuzzleMatchingModule,
     UserEventsModule,
   ],
