@@ -46,6 +46,7 @@ import { CleanupService } from './cleanup/providers/cleanup.service';
 import { PreviewPuzzleModule } from './preview-puzzle/preview-puzzle.module';
 import { PuzzleMatchingModule } from './puzzle-matching/puzzle-matching.module';
 import { UserEventsModule } from './user-events/user-events.module';
+import { DailyPuzzleModule } from './daily-puzzle/daily-puzzle.module';
 
 
 @Module({
@@ -94,6 +95,7 @@ import { UserEventsModule } from './user-events/user-events.module';
     UserActivityLogsModule,
     AuditLogsModule,
     ApiTrackingModule,
+    DailyPuzzleModule,
    
     // JWT configuration
     ConfigModule.forFeature(jwtConfig),
@@ -107,6 +109,7 @@ import { UserEventsModule } from './user-events/user-events.module';
     PreviewPuzzleModule,
     PuzzleMatchingModule,
     UserEventsModule,
+    DailyPuzzleModule,
   ],
   controllers: [AppController],
   providers: [
