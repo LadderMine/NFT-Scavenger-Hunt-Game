@@ -9,4 +9,4 @@ import { ActivityLog } from './user-activity.entity';
   providers: [ActivityLogsService],
   exports: [ActivityLogsService],
 })
-export class ActivityLogsModule {}
+export class UserActivityLogsModule {}

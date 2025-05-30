@@ -43,6 +43,9 @@ import { ScheduleModule } from './schedule/schedule.module';
 import { ScheduleService } from './providers/schedule.service';
 import { CleanupModule } from './cleanup/cleanup.module';
 import { CleanupService } from './cleanup/providers/cleanup.service';
+import { PreviewPuzzleModule } from './preview-puzzle/preview-puzzle.module';
+import { PuzzleMatchingModule } from './puzzle-matching/puzzle-matching.module';
+import { UserEventsModule } from './user-events/user-events.module';
 
 
 @Module({
@@ -101,6 +104,9 @@ import { CleanupService } from './cleanup/providers/cleanup.service';
     PromoCodeModule,
     ScheduleModule,
     CleanupModule,
+    PreviewPuzzleModule,
+    PuzzleMatchingModule,
+    UserEventsModule,
   ],
   controllers: [AppController],
   providers: [
