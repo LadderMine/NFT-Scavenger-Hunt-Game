@@ -47,6 +47,7 @@ import { PreviewPuzzleModule } from './preview-puzzle/preview-puzzle.module';
 import { PuzzleMatchingModule } from './puzzle-matching/puzzle-matching.module';
 import { UserEventsModule } from './user-events/user-events.module';
 import { DailyPuzzleModule } from './daily-puzzle/daily-puzzle.module';
+import { LocationModule } from './location/location.module';
 
 
 @Module({
@@ -110,6 +111,7 @@ import { DailyPuzzleModule } from './daily-puzzle/daily-puzzle.module';
     PuzzleMatchingModule,
     UserEventsModule,
     DailyPuzzleModule,
+    LocationModule,
   ],
   controllers: [AppController],
   providers: [
