@@ -48,6 +48,7 @@ import { PuzzleMatchingModule } from './puzzle-matching/puzzle-matching.module';
 import { UserEventsModule } from './user-events/user-events.module';
 import { DailyPuzzleModule } from './daily-puzzle/daily-puzzle.module';
 import { LocationModule } from './location/location.module';
+import { InAppNotificationsModule } from './in-app-notifications/in-app-notifications.module';
 
 
 @Module({
@@ -112,6 +113,7 @@ import { LocationModule } from './location/location.module';
     UserEventsModule,
     DailyPuzzleModule,
     LocationModule,
+    InAppNotificationsModule,
   ],
   controllers: [AppController],
   providers: [
