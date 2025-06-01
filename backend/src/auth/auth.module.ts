@@ -1,5 +1,5 @@
 /* eslint-disable prettier/prettier */
-import { Module, forwardRef } from '@nestjs/common';
+import { MiddlewareConsumer, Module, NestModule, forwardRef } from '@nestjs/common';
 import { JwtModule } from '@nestjs/jwt';
 import { ConfigModule } from '@nestjs/config';
 import { APP_GUARD } from '@nestjs/core';
@@ -15,6 +15,7 @@ import { RolesGuard } from './guard/roles.guard';
 import jwtConfig from './config/jwt.config';
 import databaseConfig from '../config/database.config';
 import { AuditLogsModule } from '../audit-logs/audit-logs.module';
+import { IPLocationMiddleware } from '../location/ip-location.middleware';
 
 @Module({
   imports: [
@@ -22,7 +23,7 @@ import { AuditLogsModule } from '../audit-logs/audit-logs.module';
     ConfigModule.forFeature(databaseConfig),
     ConfigModule.forFeature(jwtConfig),
     JwtModule.registerAsync(jwtConfig.asProvider()),
-    AuditLogsModule, // Add AuditLogsModule here
+    AuditLogsModule,
   ],
   controllers: [AuthController],
   providers: [
@@ -41,4 +42,8 @@ import { AuditLogsModule } from '../audit-logs/audit-logs.module';
   ],
   exports: [AuthService, HashingProvider, AccessTokenGuard],
 })
-export class AuthModule {}
+export class AuthModule implements NestModule {
+  configure(consumer: MiddlewareConsumer) {
+    consumer.apply(IPLocationMiddleware).forRoutes('auth/login');
+  }
+}
