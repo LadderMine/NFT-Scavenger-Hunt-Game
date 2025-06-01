@@ -31,7 +31,7 @@ import { ApiBearerAuth, ApiOperation, ApiResponse } from '@nestjs/swagger';
       if (errors.length > 0) {
         throw new BadRequestException(errors);
       }
-      return this.puzzleService.createPuzzle(createPuzzleDto.level);
+      return this.puzzleService.createPuzzle(createPuzzleDto);
     }
   
     @Patch(':id')
