@@ -9,6 +9,8 @@ import { forwardRef, Inject, Injectable } from '@nestjs/common';
 import { FindByUsername } from './providers/find-by-username.provider';
 import { Leaderboard } from 'src/leaderboard/entities/leaderboard.entity';
 import { CreateUserProvider } from './providers/create-user-provider.provider';
+import { InAppNotificationsService } from '../in-app-notifications/in-app-notifications.service';
+import { InAppNotificationType } from '../in-app-notifications/entities/in-app-notification.entity';
 
 @Injectable()
 export class UsersService {  
@@ -25,6 +27,8 @@ export class UsersService {
     private readonly createUserProvider: CreateUserProvider, // Dependency injection of CreateUserProvider
 
     private readonly findByUsername: FindByUsername, // Dependency injection of FindByUsername
+
+    private readonly inAppNotificationsService: InAppNotificationsService,
 
   ) {}
 
@@ -70,4 +74,57 @@ export class UsersService {
   public async FindByUsername(username: string) {
     return await this.findByUsername.FindOneByUsername(username);
   }
+
+  async updateUserProfile(userId: number, updateData: Partial<User>): Promise<User> {
+    const user = await this.usersRepository.findOne({ where: { id: userId } });
+    if (!user) {
+      throw new Error('User not found');
+    }
+
+    // Update user profile
+    Object.assign(user, updateData);
+    await this.usersRepository.save(user);
+
+    // Send notification about profile update
+    await this.inAppNotificationsService.create({
+      userId,
+      title: 'Profile Updated',
+      message: 'Your profile has been successfully updated',
+      type: InAppNotificationType.PROFILE_UPDATE,
+      metadata: {
+        updatedFields: Object.keys(updateData),
+      },
+    });
+
+    return user;
+  }
+
+  async completeAchievement(userId: number, achievementName: string): Promise<void> {
+    // ... achievement completion logic ...
+
+    // Send achievement notification
+    await this.inAppNotificationsService.create({
+      userId,
+      title: 'Achievement Unlocked!',
+      message: `Congratulations! You've unlocked the "${achievementName}" achievement`,
+      type: InAppNotificationType.ACHIEVEMENT,
+      metadata: {
+        achievementName,
+        unlockedAt: new Date().toISOString(),
+      },
+    });
+  }
+
+  async sendWelcomeNotification(userId: number): Promise<void> {
+    await this.inAppNotificationsService.create({
+      userId,
+      title: 'Welcome to NFT Scavenger Hunt!',
+      message: 'Get ready for an exciting adventure in the world of NFTs',
+      type: InAppNotificationType.WELCOME,
+      priority: 5,
+    });
+  }
+  async findAll(): Promise<User[]> {
+  return this.usersRepository.find();
+}
 }
