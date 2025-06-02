@@ -1,25 +1,70 @@
 /* eslint-disable prettier/prettier */
-import { Injectable } from '@nestjs/common';
-import { forwardRef, Inject } from '@nestjs/common';
-import { UsersService } from 'src/users/users.service';
-import { LogInProvider } from './providers/log-in.provider';
-import { LogInDto } from './dto/log-in.dto';
-import { BcryptProvider } from './providers/bcrypt.provider';
-import { GenerateTokenProvider } from './providers/generate-token.provider';
+import { Injectable, UnauthorizedException } from '@nestjs/common';
+import { UserService } from '../user/user.service';
+import * as bcrypt from 'bcrypt';
+
+export interface LoginDto {
+  username: string;
+  password: string;
+}
 
 @Injectable()
 export class AuthService {
-  constructor(
-    //circular dependency injection of user service
-    @Inject(forwardRef(() => UsersService))  
-    private readonly userService: UsersService,
+  constructor(private userService: UserService) {}
 
-     //dependency injection of logInProvider service
-    private readonly logInProvider: LogInProvider,  
-    
-  ) {}
+  async validateUser(username: string, password: string): Promise<any> {
+    const user = await this.userService.findByUsername(username);
+    if (user && await bcrypt.compare(password, user.password)) {
+      const { password, ...result } = user;
+      return result;
+    }
+    return null;
+  }
 
-  public async LogIn(logInDto: LogInDto) {
-    return this.logInProvider.LogInToken(logInDto);
+  async login(loginDto: LoginDto, session: any) {
+    const user = await this.validateUser(loginDto.username, loginDto.password);
+    if (!user) {
+      throw new UnauthorizedException('Invalid credentials');
+    }
+
+    // Store user data in session
+    session.userId = user.id;
+    session.username = user.username;
+    session.isAuthenticated = true;
+
+    return {
+      message: 'Login successful',
+      user: {
+        id: user.id,
+        username: user.username,
+      },
+    };
+  }
+
+  async logout(session: any) {
+    return new Promise((resolve, reject) => {
+      session.destroy((err: any) => {
+        if (err) {
+          reject(err);
+        } else {
+          resolve({ message: 'Logout successful' });
+        }
+      });
+    });
+  }
+
+  getSessionInfo(session: any) {
+    if (!session.isAuthenticated) {
+      throw new UnauthorizedException('Not authenticated');
+    }
+
+    return {
+      isAuthenticated: true,
+      user: {
+        id: session.userId,
+        username: session.username,
+      },
+      sessionId: session.id,
+    };
   }
 }
