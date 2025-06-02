@@ -48,8 +48,7 @@ import { PuzzleMatchingModule } from './puzzle-matching/puzzle-matching.module';
 import { UserEventsModule } from './user-events/user-events.module';
 import { DailyPuzzleModule } from './daily-puzzle/daily-puzzle.module';
 import { LocationModule } from './location/location.module';
-import { InAppNotificationsModule } from './in-app-notifications/in-app-notifications.module';
-
+import { GameStateModule } from './game-state/game-state.module';
 
 @Module({
   imports: [
@@ -58,7 +57,7 @@ import { InAppNotificationsModule } from './in-app-notifications/in-app-notifica
       isGlobal: true,
       envFilePath: ['.env'],
       load: [appConfig, databaseConfig],
-      cache: true
+      cache: true,
     }),
     ScheduleModule.forRoot(),
     CleanupModule,
@@ -98,7 +97,7 @@ import { InAppNotificationsModule } from './in-app-notifications/in-app-notifica
     AuditLogsModule,
     ApiTrackingModule,
     DailyPuzzleModule,
-   
+
     // JWT configuration
     ConfigModule.forFeature(jwtConfig),
     JwtModule.registerAsync(jwtConfig.asProvider()),
@@ -113,7 +112,7 @@ import { InAppNotificationsModule } from './in-app-notifications/in-app-notifica
     UserEventsModule,
     DailyPuzzleModule,
     LocationModule,
-    InAppNotificationsModule,
+    GameStateModule,
   ],
   controllers: [AppController],
   providers: [
