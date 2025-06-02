@@ -1,0 +1,54 @@
+### Variables
+@baseUrl = http://localhost:3000
+@authToken = your-jwt-token-here
+@adminToken = your-admin-jwt-token-here
+@userId = 123e4567-e89b-12d3-a456-426614174000
+@challengeId = 123e4567-e89b-12d3-a456-426614174001
+
+### Create Feedback
+POST {{baseUrl}}/feedback
+Authorization: Bearer {{authToken}}
+Content-Type: application/json
+
+{
+  "userId": "{{userId}}",
+  "challengeId": "{{challengeId}}",
+  "rating": 4,
+  "comment": "This challenge was really engaging! The clues were well-crafted and the difficulty level was just right. I particularly enjoyed the creative use of QR codes and the way the story unfolded throughout the hunt."
+}
+
+### Create Feedback - Invalid (too short comment)
+POST {{baseUrl}}/feedback
+Authorization: Bearer {{authToken}}
+Content-Type: application/json
+
+{
+  "userId": "{{userId}}",
+  "challengeId": "{{challengeId}}",
+  "rating": 3,
+  "comment": "Good"
+}
+
+### Create Feedback - Invalid rating
+POST {{baseUrl}}/feedback
+Authorization: Bearer {{authToken}}
+Content-Type: application/json
+
+{
+  "userId": "{{userId}}",
+  "challengeId": "{{challengeId}}",
+  "rating": 6,
+  "comment": "This challenge was amazing and I really enjoyed every part of it!"
+}
+
+### Get Feedback for Challenge (Admin only)
+GET {{baseUrl}}/feedback/challenge/{{challengeId}}
+Authorization: Bearer {{adminToken}}
+
+### Get Feedback Statistics for Challenge (Admin only)
+GET {{baseUrl}}/feedback/challenge/{{challengeId}}/stats
+Authorization: Bearer {{adminToken}}
+
+### Test unauthorized access
+GET {{baseUrl}}/feedback/challenge/{{challengeId}}
+Authorization: Bearer {{authToken}}

@@ -32,6 +32,7 @@ export class AuthTokenGuard implements CanActivate {
       this.reflector.getAllAndOverride<AuthType[]>(AUTH_TYPE_KEY, [
         context.getHandler(),
         context.getClass(),
+        
       ]) ?? [AuthTokenGuard.defaultAuthType];
 
     // Ensure we work with an array.

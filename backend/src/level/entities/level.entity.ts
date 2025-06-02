@@ -1,14 +1,9 @@
-import { InjectRepository } from '@nestjs/typeorm';
-import { LevelEnum } from 'src/enums/LevelEnum';
 import { Puzzles } from 'src/puzzles/puzzles.entity';
-import { Entity, PrimaryGeneratedColumn, Column, OneToMany, CreateDateColumn, UpdateDateColumn, Repository } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, OneToMany, CreateDateColumn, UpdateDateColumn } from 'typeorm';
+import { LevelEnum } from 'src/enums/LevelEnum';
 
 @Entity()
 export class Level {
-  constructor(
-    @InjectRepository(Level)
-    private readonly levelRepository: Repository<Level>
-  ) {}
   @PrimaryGeneratedColumn()
   id: number;
 
@@ -54,25 +49,4 @@ export class Level {
     unique: true,
   })
   level: LevelEnum;
-
-  public  async incrementCount(level: LevelEnum) {
-    let levelRecord = await this.levelRepository.findOne({ where: { level } });
-this.levelRepository
-    if (!levelRecord) {
-      levelRecord = this.levelRepository.create({ level, count: 1 });
-    } else {
-      levelRecord.count += 1;
-    }
-
-    await this.levelRepository.save(levelRecord);
-  }
-
-  public async decrementCount(level: LevelEnum) {
-    const levelRecord = await this.levelRepository.findOne({ where: { level } });
-
-    if (levelRecord) {
-      levelRecord.count = Math.max(0, levelRecord.count - 1);
-      await this.levelRepository.save(levelRecord);
-    }
-  }
 }

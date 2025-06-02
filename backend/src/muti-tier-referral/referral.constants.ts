@@ -1,0 +1,12 @@
+export const REFERRAL_TIERS = {
+  TIER_1: 1,
+  TIER_2: 2,
+  TIER_3: 3,
+}
+
+export const DEFAULT_REFERRAL_PERCENTAGES = {
+  [REFERRAL_TIERS.TIER_1]: 10, // 10%
+  [REFERRAL_TIERS.TIER_2]: 5, // 5%
+  [REFERRAL_TIERS.TIER_3]: 2, // 2%
+}
+

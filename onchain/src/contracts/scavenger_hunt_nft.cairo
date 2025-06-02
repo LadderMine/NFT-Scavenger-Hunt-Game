@@ -1,5 +1,5 @@
+use onchain::interface::Levels;
 use starknet::ContractAddress;
-use onchain::interface::{Levels};
 
 #[starknet::interface]
 pub trait IScavengerHuntNFT<TContractState> {
@@ -14,13 +14,13 @@ pub trait IScavengerHuntNFT<TContractState> {
 
 #[starknet::contract]
 pub mod ScavengerHuntNFT {
+    use AccessControlComponent::InternalTrait;
+    use core::felt252;
+    use openzeppelin::access::accesscontrol::AccessControlComponent;
     use openzeppelin::introspection::src5::SRC5Component;
     use openzeppelin::token::erc1155::{ERC1155Component, ERC1155HooksEmptyImpl};
-    use openzeppelin::access::accesscontrol::AccessControlComponent;
-    use AccessControlComponent::InternalTrait;
     use starknet::ContractAddress;
-    use super::{Levels};
-    use core::felt252;
+    use super::Levels;
 
     // Define role constants
     const MINTER_ROLE: felt252 = selector!("MINTER_ROLE");
@@ -42,7 +42,7 @@ pub mod ScavengerHuntNFT {
 
     #[event]
     #[derive(Drop, starknet::Event)]
-    enum Event {
+    pub enum Event {
         #[flat]
         ERC1155Event: ERC1155Component::Event,
         #[flat]
@@ -53,7 +53,7 @@ pub mod ScavengerHuntNFT {
 
     #[constructor]
     fn constructor(
-        ref self: ContractState, token_uri: ByteArray, scavenger_hunt_contract: ContractAddress
+        ref self: ContractState, token_uri: ByteArray, scavenger_hunt_contract: ContractAddress,
     ) {
         // Initialize ERC-1155 with metadata URI
         self.erc1155.initializer(token_uri);

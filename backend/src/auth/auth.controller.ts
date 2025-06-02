@@ -1,5 +1,4 @@
 /* eslint-disable prettier/prettier */
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import { 
   Controller, 
   Post, 
@@ -8,10 +7,13 @@ import {
   Session, 
   UseGuards,
   HttpCode,
+  Req,
   HttpStatus 
 } from '@nestjs/common';
 import { AuthService, LoginDto } from './auth.service';
 import { SessionGuard } from './guards/session.guard';
+import { LogInDto } from './dto/Log-in.dto';
+import { Request } from 'express';
 
 @Controller('auth')
 export class AuthController {

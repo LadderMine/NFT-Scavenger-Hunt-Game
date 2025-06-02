@@ -4,7 +4,7 @@ pub mod MockERC1155Receiver {
     use openzeppelin::token::erc1155::ERC1155ReceiverComponent;
 
     component!(
-        path: ERC1155ReceiverComponent, storage: erc1155_receiver, event: ERC1155ReceiverEvent
+        path: ERC1155ReceiverComponent, storage: erc1155_receiver, event: ERC1155ReceiverEvent,
     );
     component!(path: SRC5Component, storage: src5, event: SRC5Event);
 
@@ -19,7 +19,7 @@ pub mod MockERC1155Receiver {
         #[substorage(v0)]
         erc1155_receiver: ERC1155ReceiverComponent::Storage,
         #[substorage(v0)]
-        src5: SRC5Component::Storage
+        src5: SRC5Component::Storage,
     }
 
     #[event]
@@ -28,7 +28,7 @@ pub mod MockERC1155Receiver {
         #[flat]
         ERC1155ReceiverEvent: ERC1155ReceiverComponent::Event,
         #[flat]
-        SRC5Event: SRC5Component::Event
+        SRC5Event: SRC5Component::Event,
     }
 
     #[constructor]

@@ -1,13 +1,13 @@
-use snforge_std::DeclareResultTrait;
-use starknet::ContractAddress;
-use snforge_std::{
-    declare, ContractClassTrait, start_cheat_caller_address, stop_cheat_caller_address
-};
-use openzeppelin::token::{erc1155::interface::{IERC1155Dispatcher, IERC1155DispatcherTrait}};
 use onchain::contracts::scavenger_hunt_nft::{
-    IScavengerHuntNFTDispatcher, IScavengerHuntNFTDispatcherTrait
+    IScavengerHuntNFTDispatcher, IScavengerHuntNFTDispatcherTrait,
 };
-use onchain::interface::{Levels};
+use onchain::interface::Levels;
+use openzeppelin::token::erc1155::interface::{IERC1155Dispatcher, IERC1155DispatcherTrait};
+use snforge_std::{
+    ContractClassTrait, DeclareResultTrait, declare, start_cheat_caller_address,
+    stop_cheat_caller_address,
+};
+use starknet::ContractAddress;
 
 // Define for testing
 const MINTER_ROLE: felt252 = selector!("MINTER_ROLE");
@@ -69,11 +69,11 @@ fn test_mint_single_badge() {
 
     // Verify recipient doesn't have other badges
     assert(
-        !scavenger_hunt.has_level_badge(recipient, Levels::Medium), 'Should not have Medium badge'
+        !scavenger_hunt.has_level_badge(recipient, Levels::Medium), 'Should not have Medium badge',
     );
     assert(!scavenger_hunt.has_level_badge(recipient, Levels::Hard), 'Should not have Hard badge');
     assert(
-        !scavenger_hunt.has_level_badge(recipient, Levels::Master), 'Should not have Master badge'
+        !scavenger_hunt.has_level_badge(recipient, Levels::Master), 'Should not have Master badge',
     );
 }
 
@@ -104,7 +104,7 @@ fn test_mint_multiple_badges() {
     assert(scavenger_hunt.has_level_badge(recipient, Levels::Medium), 'Should have Medium badge');
     assert(scavenger_hunt.has_level_badge(recipient, Levels::Hard), 'Should have Hard badge');
     assert(
-        !scavenger_hunt.has_level_badge(recipient, Levels::Master), 'Should not have Master badge'
+        !scavenger_hunt.has_level_badge(recipient, Levels::Master), 'Should not have Master badge',
     );
 }
 
@@ -136,18 +136,20 @@ fn test_mint_to_different_recipients() {
     // Check recipient1's badges
     assert(scavenger_hunt.has_level_badge(recipient1, Levels::Easy), 'Recipient1 should have Easy');
     assert(
-        scavenger_hunt.has_level_badge(recipient1, Levels::Medium), 'Recipient1 should have Medium'
+        scavenger_hunt.has_level_badge(recipient1, Levels::Medium), 'Recipient1 should have Medium',
     );
     assert(
-        !scavenger_hunt.has_level_badge(recipient1, Levels::Hard), 'Recipient1 should not have Hard'
+        !scavenger_hunt.has_level_badge(recipient1, Levels::Hard),
+        'Recipient1 should not have Hard',
     );
 
     // Check recipient2's badges
     assert(
-        !scavenger_hunt.has_level_badge(recipient2, Levels::Easy), 'Recipient2 should not have Easy'
+        !scavenger_hunt.has_level_badge(recipient2, Levels::Easy),
+        'Recipient2 should not have Easy',
     );
     assert(
-        scavenger_hunt.has_level_badge(recipient2, Levels::Medium), 'Recipient2 should have Medium'
+        scavenger_hunt.has_level_badge(recipient2, Levels::Medium), 'Recipient2 should have Medium',
     );
     assert(scavenger_hunt.has_level_badge(recipient2, Levels::Hard), 'Recipient2 should have Hard');
 }
@@ -195,7 +197,7 @@ fn test_erc1155_compliance() {
     // Check initial balance is zero
     assert(
         erc1155.balance_of(recipient, token_id) == u256 { low: 0, high: 0 },
-        'Initial balance should be 0'
+        'Initial balance should be 0',
     );
 
     // Set caller address to scavenger_hunt_address to simulate call from ScavengerHunt contract
@@ -209,7 +211,7 @@ fn test_erc1155_compliance() {
     // Check balance is now one
     assert(
         erc1155.balance_of(recipient, token_id) == u256 { low: 1, high: 0 },
-        'Balance should be 1 after mint'
+        'Balance should be 1 after mint',
     );
 }
 
@@ -265,7 +267,7 @@ fn test_scavenger_hunt_has_minter_role() {
 
     // Check if ScavengerHunt contract has minter role
     assert(
-        scavenger_hunt.has_minter_role(scavenger_hunt_address), 'ScavengerHunt should have role'
+        scavenger_hunt.has_minter_role(scavenger_hunt_address), 'ScavengerHunt should have role',
     );
 }
 

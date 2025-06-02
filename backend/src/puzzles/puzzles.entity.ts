@@ -3,9 +3,7 @@ import { Hints } from 'src/hints/hints.entity';
 import { Level } from 'src/level/entities/level.entity';
 import { NFTs } from 'src/nfts/nfts.entity';
 import { UserProgress } from 'src/user-progress/User-Progress.entity';
-import { User } from 'src/users/users.entity';
 import { Scores } from 'src/scores/scores.entity';
-import { Answer } from 'src/answers/answers.entity';
 import { 
   Entity,
   PrimaryGeneratedColumn,
@@ -13,20 +11,37 @@ import {
   OneToMany,
   ManyToOne,
   OneToOne,
-  BeforeInsert
+  DeleteDateColumn,
+  Index,
 } from 'typeorm';
-import { Answers } from "src/answers/answers.entity";
-import { Hints } from 'src/hints/hints.entity';
-import { Level } from 'src/level/entities/level.entity';
-import { NFTs } from 'src/nfts/nfts.entity';
-import { Scores } from 'src/scores/scores.entity';
-import { UserProgress } from 'src/user-progress/user-progress.entity';
 import { LevelEnum } from 'src/enums/LevelEnum';
 
 @Entity()
 export class Puzzles {
   @PrimaryGeneratedColumn()
   id: number;
+
+  @Column({nullable: true})
+  title: string;
+
+  // --- Versioning Fields ---
+  @Column({ type: 'int', default: 1 })
+  version: number;
+
+  @Index() 
+  @Column({ type: 'int', nullable: true })
+  originalPuzzleId: number | null; 
+
+  @ManyToOne(() => Puzzles, { nullable: true, createForeignKeyConstraints: false })
+  originalPuzzle: Puzzles | null;
+
+  @OneToMany(() => Puzzles, puzzle => puzzle.originalPuzzle)
+  versions: Puzzles[];
+
+  @Index() 
+  @Column({ type: 'boolean', default: true })
+  isLatest: boolean;
+  // --- End Versioning Fields ---
 
   @OneToMany(() => Hints, (hints) => hints.puzzles)
   hints: Hints[];
@@ -41,14 +56,14 @@ export class Puzzles {
   })
   updatedAt: Date;
 
+  @DeleteDateColumn({ nullable: true })
+  deletedAt?: Date; // Soft delete column
+
   @Column({ type: 'int' })
   pointValue: number;
 
   @OneToOne(() => NFTs, (nfts) => nfts.puzzles, { nullable: true })
   nfts: NFTs;
-
-  @ManyToOne(() => UserProgress, (userProgress) => userProgress.puzzles)
-  userProgress: UserProgress;
 
   @ManyToOne(() => Level, (level) => level.puzzles)
   level: Level;
@@ -59,13 +74,6 @@ export class Puzzles {
   @OneToMany(() => Scores, (score) => score.puzzle, { onDelete: 'SET NULL' }) 
   scores: Scores[];
 
-  @OneToMany(() => Answers, (answer) => answer.puzzle)
+  @OneToMany(() => Answers, (answer) => answer.puzzles)
   answers: Answers[];
-
-  @BeforeInsert()
-  async updateLevelCount() {
-      if (this.level) {
-          await Level.incrementCount(this.levelEnum);
-      }
-  }
 }

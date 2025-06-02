@@ -12,10 +12,9 @@ pub trait IScavengerHunt<TContractState> {
     fn get_question(self: @TContractState, question_id: u64) -> Question;
     fn set_question_per_level(ref self: TContractState, amount: u8);
     fn get_question_per_level(self: @TContractState) -> u8;
-    fn initialize_player_progress(ref self: TContractState, player_address: ContractAddress);
     fn submit_answer(ref self: TContractState, question_id: u64, answer: ByteArray) -> bool;
     fn request_hint(
-        self: @TContractState, question_id: u64,
+        ref self: TContractState, question_id: u64,
     ) -> ByteArray; // request hint for a question
     fn get_question_in_level(self: @TContractState, level: Levels, index: u8) -> ByteArray;
     fn update_question(
@@ -28,6 +27,12 @@ pub trait IScavengerHunt<TContractState> {
     );
     fn next_level(self: @TContractState, level: Levels) -> Levels;
     fn get_player_level(self: @TContractState, player: ContractAddress) -> Levels;
+    fn set_nft_contract_address(ref self: TContractState, new_address: ContractAddress);
+    fn get_nft_contract_address(self: @TContractState) -> ContractAddress;
+    fn claim_level_completion_nft(ref self: TContractState, level: Levels);
+    fn get_player_level_progress(
+        self: @TContractState, player: ContractAddress, level: Levels
+    ) -> LevelProgress;
 }
 
 #[derive(Drop, Debug, Serde, starknet::Store)]
