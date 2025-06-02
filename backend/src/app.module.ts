@@ -48,7 +48,7 @@ import { PuzzleMatchingModule } from './puzzle-matching/puzzle-matching.module';
 import { UserEventsModule } from './user-events/user-events.module';
 import { DailyPuzzleModule } from './daily-puzzle/daily-puzzle.module';
 import { LocationModule } from './location/location.module';
-
+import { GameStateModule } from './game-state/game-state.module';
 
 @Module({
   imports: [
@@ -57,7 +57,7 @@ import { LocationModule } from './location/location.module';
       isGlobal: true,
       envFilePath: ['.env'],
       load: [appConfig, databaseConfig],
-      cache: true
+      cache: true,
     }),
     ScheduleModule.forRoot(),
     CleanupModule,
@@ -97,7 +97,7 @@ import { LocationModule } from './location/location.module';
     AuditLogsModule,
     ApiTrackingModule,
     DailyPuzzleModule,
-   
+
     // JWT configuration
     ConfigModule.forFeature(jwtConfig),
     JwtModule.registerAsync(jwtConfig.asProvider()),
@@ -112,6 +112,7 @@ import { LocationModule } from './location/location.module';
     UserEventsModule,
     DailyPuzzleModule,
     LocationModule,
+    GameStateModule,
   ],
   controllers: [AppController],
   providers: [
