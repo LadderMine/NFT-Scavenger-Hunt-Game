@@ -1,69 +1,69 @@
-/* eslint-disable prettier/prettier */
-import { Injectable, Inject, forwardRef } from '@nestjs/common';
-import { UsersService } from '../users/users.service';
-import { LogInProvider } from './providers/log-in.provider';
-import { LogInDto } from './dto/log-in.dto';
-import { AuditLogsService } from '../audit-logs/audit-logs.service';
-import { Request } from 'express';
+import { Injectable, UnauthorizedException } from '@nestjs/common';
+import { UserService } from '../user/user.service';
+import * as bcrypt from 'bcrypt';
+
+export interface LoginDto {
+  username: string;
+  password: string;
+}
 
 @Injectable()
 export class AuthService {
-  constructor(
-    @Inject(forwardRef(() => UsersService))
-    private readonly userService: UsersService,
-    private readonly logInProvider: LogInProvider,
-    private readonly auditLogsService: AuditLogsService,
-  ) {}
+  constructor(private userService: UserService) {}
 
-  public async LogIn(logInDto: LogInDto, req: Request) {
-    try {
-      const result = await this.logInProvider.LogInToken(logInDto);
-
-      // Log successful login
-      if (typeof result === 'object' && 'user' in result) {
-        await this.auditLogsService.logUserLogin(
-          result.user.id.toString(),
-          result.user.username,
-          req.ip,
-          true,
-          { userAgent: req.headers['user-agent'] },
-        );
-      }
-
+  async validateUser(username: string, password: string): Promise<any> {
+    const user = await this.userService.findByUsername(username);
+    if (user && await bcrypt.compare(password, user.password)) {
+      const { password, ...result } = user;
       return result;
-    } catch (error) {
-      // Log failed login attempt
-      if (logInDto.username) {
-        const user = await this.userService.FindByUsername(logInDto.username);
-        if (user) {
-          await this.auditLogsService.logUserLogin(
-            user.id.toString(),
-            user.username,
-            req.ip,
-            false,
-            {
-              error: error.message,
-              userAgent: req.headers['user-agent'],
-            },
-          );
-        } else {
-          // Log attempt with non-existent username
-          await this.auditLogsService.create({
-            eventType: 'USER_AUTHENTICATION',
-            username: logInDto.username,
-            ipAddress: req.ip,
-            action: 'LOGIN',
-            status: 'FAILURE',
-            resource: 'USER',
-            metadata: {
-              error: 'User not found',
-              userAgent: req.headers['user-agent'],
-            },
-          });
-        }
-      }
-
-      throw error;
     }
+    return null;
+  }
+
+  async login(loginDto: LoginDto, session: any) {
+    const user = await this.validateUser(loginDto.username, loginDto.password);
+    if (!user) {
+      throw new UnauthorizedException('Invalid credentials');
+    }
+
+    // Store user data in session
+    session.userId = user.id;
+    session.username = user.username;
+    session.isAuthenticated = true;
+
+    return {
+      message: 'Login successful',
+      user: {
+        id: user.id,
+        username: user.username,
+      },
+    };
+  }
+
+  async logout(session: any) {
+    return new Promise((resolve, reject) => {
+      session.destroy((err: any) => {
+        if (err) {
+          reject(err);
+        } else {
+          resolve({ message: 'Logout successful' });
+        }
+      });
+    });
+  }
+
+  getSessionInfo(session: any) {
+    if (!session.isAuthenticated) {
+      throw new UnauthorizedException('Not authenticated');
+    }
+
+    return {
+      isAuthenticated: true,
+      user: {
+        id: session.userId,
+        username: session.username,
+      },
+      sessionId: session.id,
+    };
   }
 }
