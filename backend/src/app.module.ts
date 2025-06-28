@@ -40,6 +40,7 @@ import { ErrorLoggingInterceptor } from './error-logging/interceptors/error-logg
 import { RefundsModule } from './refunds/refunds.module';
 import { PromoCodeModule } from './promo-code/promo-code.module';
 import { PreviewPuzzleModule } from './preview-puzzle/preview-puzzle.module';
+import { AchievementsModule } from './achievements/achievements.module';
 
 
 @Module({
@@ -95,6 +96,7 @@ import { PreviewPuzzleModule } from './preview-puzzle/preview-puzzle.module';
     RefundsModule,
     PromoCodeModule,
     PreviewPuzzleModule,
+    AchievementsModule,
   ],
   controllers: [AppController],
   providers: [
