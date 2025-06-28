@@ -1,4 +1,3 @@
-// src/achievements/entities/achievement.entity.ts
 import {
   Entity,
   PrimaryGeneratedColumn,

@@ -1,17 +1,17 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { AchievementsController } from './achievements.controller';
-import { AchievementsService } from './achievements.service';
+import { AchievementController } from './achievements.controller';
+import { AchievementService } from './achievements.service';
 
 describe('AchievementsController', () => {
-  let controller: AchievementsController;
+  let controller: AchievementController;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      controllers: [AchievementsController],
-      providers: [AchievementsService],
+      controllers: [AchievementController],
+      providers: [AchievementService],
     }).compile();
 
-    controller = module.get<AchievementsController>(AchievementsController);
+    controller = module.get<AchievementController>(AchievementController);
   });
 
   it('should be defined', () => {

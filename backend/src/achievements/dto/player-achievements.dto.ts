@@ -1,4 +1,3 @@
-// src/achievements/dto/player-achievement.dto.ts
 import { ApiProperty } from '@nestjs/swagger';
 
 export class PlayerAchievementDto {

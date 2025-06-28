@@ -1,4 +1,3 @@
-// src/achievements/controllers/achievement.controller.ts
 import {
   Controller,
   Get,

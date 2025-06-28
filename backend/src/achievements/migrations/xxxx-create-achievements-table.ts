@@ -1,4 +1,3 @@
-// src/achievements/migrations/xxxx-create-achievements-table.ts
 import { MigrationInterface, QueryRunner, Table } from 'typeorm';
 
 export class CreateAchievementsTable1234567890123
