@@ -1,0 +1,116 @@
+### Test RewardModule API Endpoints
+
+### 1. Create a new reward
+POST http://localhost:4000/rewards
+Content-Type: application/json
+
+{
+  "name": "StarkNet Beginner Badge",
+  "description": "Awarded for completing the Easy level challenges",
+  "type": "badge",
+  "challengeId": "challenge-easy-001",
+  "metadata": {
+    "imageUrl": "https://example.com/badge.png",
+    "rarity": "common"
+  },
+  "isActive": true,
+  "maxClaims": 1000
+}
+
+### 2. Create another reward for testing
+POST http://localhost:4000/rewards
+Content-Type: application/json
+
+{
+  "name": "StarkNet Master NFT",
+  "description": "Exclusive NFT for completing Master level challenges",
+  "type": "nft",
+  "challengeId": "challenge-master-001",
+  "metadata": {
+    "imageUrl": "https://example.com/master-nft.png",
+    "rarity": "legendary",
+    "contractAddress": "0x1234567890abcdef"
+  },
+  "isActive": true,
+  "maxClaims": 100
+}
+
+### 3. Get all rewards
+GET http://localhost:4000/rewards
+
+### 4. Get reward by ID (replace with actual ID from step 1)
+GET http://localhost:4000/rewards/{{rewardId}}
+
+### 5. Get reward by challenge ID
+GET http://localhost:4000/rewards/challenge/challenge-easy-001
+
+### 6. Claim a reward (first time - should succeed)
+POST http://localhost:4000/rewards/claim
+Content-Type: application/json
+
+{
+  "userId": "user-123",
+  "challengeId": "challenge-easy-001"
+}
+
+### 7. Try to claim the same reward again (should fail with 409)
+POST http://localhost:4000/rewards/claim
+Content-Type: application/json
+
+{
+  "userId": "user-123",
+  "challengeId": "challenge-easy-001"
+}
+
+### 8. Claim reward with different user (should succeed)
+POST http://localhost:4000/rewards/claim
+Content-Type: application/json
+
+{
+  "userId": "user-456",
+  "challengeId": "challenge-easy-001"
+}
+
+### 9. Get all claims for a user
+GET http://localhost:4000/rewards/user/user-123/claims
+
+### 10. Get claim by ID (replace with actual claim ID)
+GET http://localhost:4000/rewards/claims/{{claimId}}
+
+### 11. Get reward statistics
+GET http://localhost:4000/rewards/{{rewardId}}/stats
+
+### 12. Try to claim non-existent challenge (should fail with 404)
+POST http://localhost:4000/rewards/claim
+Content-Type: application/json
+
+{
+  "userId": "user-789",
+  "challengeId": "non-existent-challenge"
+}
+
+### 13. Test invalid claim data (should fail with 400)
+POST http://localhost:4000/rewards/claim
+Content-Type: application/json
+
+{
+  "userId": "",
+  "challengeId": "challenge-easy-001"
+}
+
+### 14. Test invalid reward creation (should fail with 400)
+POST http://localhost:4000/rewards
+Content-Type: application/json
+
+{
+  "name": "",
+  "description": "Test",
+  "type": "invalid_type",
+  "challengeId": "challenge-test"
+}
+
+### 15. Delete a reward (replace with actual reward ID)
+DELETE http://localhost:4000/rewards/{{rewardId}}
+
+### 16. Try to delete reward with claims (should fail with 400)
+DELETE http://localhost:4000/rewards/{{rewardIdWithClaims}} 

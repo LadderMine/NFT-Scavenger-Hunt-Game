@@ -67,7 +67,7 @@
     "@types/cors": "^2.8.18",
     "@types/express": "^5.0.2",
     "@types/ioredis": "^4.28.10",
-    "@types/jest": "^29.5.2",
+    "@types/jest": "^29.5.14",
     "@types/multer": "^1.4.12",
     "@types/node": "^20.17.57",
     "@types/passport-jwt": "^4.0.1",
