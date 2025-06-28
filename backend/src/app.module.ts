@@ -4,6 +4,8 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule, ConfigService } from '@nestjs/config';
+import { AuthModule } from './auth/auth.module';
+import { UserInventoryModule } from './user-inventory/user-inventory.module';
 import appConfig from 'config/app.config';
 import databaseConfig from 'config/database.config';
 
@@ -31,6 +33,8 @@ import databaseConfig from 'config/database.config';
         autoLoadEntities: configService.get('database.autoload'),
       }),
     }),
+    AuthModule,
+    UserInventoryModule,
   ],
   controllers: [AppController],
   providers: [
