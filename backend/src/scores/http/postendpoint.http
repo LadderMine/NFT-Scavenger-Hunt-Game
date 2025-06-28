@@ -1,6 +1,0 @@
-POST http://localhost:3000/leaderboard/update-score
-Content-Type: application/json
-{
-  "username": "Agbo Ojo Ekere",
-   "score": 1000
-  }

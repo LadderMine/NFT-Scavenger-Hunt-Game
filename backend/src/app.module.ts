@@ -3,17 +3,10 @@ import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { UsersModule } from './users/users.module';
-import { PuzzlesModule } from './puzzles/puzzles.module';
-import { NftsModule } from './nfts/nfts.module';
-import { ScoresModule } from './scores/scores.module';
-import { AnswersModule } from './answers/answers.module';
-import { HintsModule } from './hints/hints.module';
-import { UserProgressModule } from './user-progress/user-progress.module';
 import { ConfigModule, ConfigService } from '@nestjs/config';
-import { AuthModule } from './auth/auth.module';
 import appConfig from 'config/app.config';
 import databaseConfig from 'config/database.config';
+
 import { JwtModule } from '@nestjs/jwt';
 import jwtConfig from './auth/config/jwt.config';
 import { APP_GUARD, APP_INTERCEPTOR } from '@nestjs/core';
@@ -43,9 +36,9 @@ import { PreviewPuzzleModule } from './preview-puzzle/preview-puzzle.module';
 import { AchievementsModule } from './achievements/achievements.module';
 
 
+
 @Module({
   imports: [
-    StripeModule,
     ConfigModule.forRoot({
       isGlobal: true,
       envFilePath: ['.env'],
@@ -67,7 +60,7 @@ import { AchievementsModule } from './achievements/achievements.module';
         synchronize: configService.get('database.synchronize'),
         autoLoadEntities: configService.get('database.autoload'),
       }),
-    }),
+
     UsersModule,
     PuzzlesModule,
     NftsModule,
@@ -97,25 +90,13 @@ import { AchievementsModule } from './achievements/achievements.module';
     PromoCodeModule,
     PreviewPuzzleModule,
     AchievementsModule,
+
   ],
   controllers: [AppController],
   providers: [
-    PuzzleSubscriber,
+    
     AppService,
-    RankService,
-    RankJob,
-    {
-      provide: APP_GUARD,
-      useClass: AuthTokenGuard,
-    },
-    {
-      provide: APP_INTERCEPTOR,
-      useClass: ApiTrackingInterceptor,
-    },
-    {
-      provide: APP_INTERCEPTOR,
-      useClass: ErrorLoggingInterceptor,
-    },
+    
   ],
 })
 export class AppModule {}

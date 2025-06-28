@@ -1,2 +1,0 @@
-GET  http://localhost:3000/leaderboard?page=1&limit=5
-        
