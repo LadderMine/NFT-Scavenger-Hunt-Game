@@ -1,9 +1,9 @@
-/* eslint-disable prettier/prettier */
 import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule, ConfigService } from '@nestjs/config';
+import { QuizModule } from './quiz/quiz.module';
 import appConfig from 'config/app.config';
 import databaseConfig from 'config/database.config';
 
@@ -31,6 +31,7 @@ import databaseConfig from 'config/database.config';
         autoLoadEntities: configService.get('database.autoload'),
       }),
     }),
+    QuizModule,
   ],
   controllers: [AppController],
   providers: [
