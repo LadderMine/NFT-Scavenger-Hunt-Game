@@ -7,6 +7,8 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import appConfig from 'config/app.config';
 import databaseConfig from 'config/database.config';
 import { AdminModule } from './admin/admin.module';
+import { PuzzleModule } from './puzzle/puzzle.module';
+import { PuzzleSubmissionModule } from './puzzle-submission/puzzle-submission.module';
 
 @Module({
   imports: [
@@ -32,7 +34,10 @@ import { AdminModule } from './admin/admin.module';
         autoLoadEntities: configService.get('database.autoload'),
       }),
     }),
+
     AdminModule,
+    PuzzleModule,
+    PuzzleSubmissionModule,
   ],
   controllers: [AppController],
   providers: [
