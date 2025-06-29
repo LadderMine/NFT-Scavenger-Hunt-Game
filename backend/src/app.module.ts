@@ -8,6 +8,7 @@ import appConfig from 'config/app.config';
 import databaseConfig from 'config/database.config';
 import { PuzzleModule } from './puzzle/puzzle.module';
 import { PuzzleSubmissionModule } from './puzzle-submission/puzzle-submission.module';
+import { UserReportCardModule } from './user-report-card/user-report-card.module';
 
 @Module({
   imports: [
@@ -35,6 +36,7 @@ import { PuzzleSubmissionModule } from './puzzle-submission/puzzle-submission.mo
     }),
     PuzzleModule,
     PuzzleSubmissionModule,
+    UserReportCardModule,
   ],
   controllers: [AppController],
   providers: [
