@@ -6,6 +6,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import appConfig from 'config/app.config';
 import databaseConfig from 'config/database.config';
+import { PuzzleModule } from './puzzle/puzzle.module';
 import { PuzzleSubmissionModule } from './puzzle-submission/puzzle-submission.module';
 
 @Module({
@@ -32,6 +33,7 @@ import { PuzzleSubmissionModule } from './puzzle-submission/puzzle-submission.mo
         autoLoadEntities: configService.get('database.autoload'),
       }),
     }),
+    PuzzleModule,
     PuzzleSubmissionModule,
   ],
   controllers: [AppController],
