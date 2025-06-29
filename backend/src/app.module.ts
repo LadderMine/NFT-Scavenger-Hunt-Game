@@ -6,6 +6,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import appConfig from 'config/app.config';
 import databaseConfig from 'config/database.config';
+import { SessionModule } from './session/session.module';
 
 @Module({
   imports: [
@@ -31,12 +32,9 @@ import databaseConfig from 'config/database.config';
         autoLoadEntities: configService.get('database.autoload'),
       }),
     }),
+    SessionModule,
   ],
   controllers: [AppController],
-  providers: [
-    
-    AppService,
-    
-  ],
+  providers: [AppService],
 })
 export class AppModule {}
