@@ -4,11 +4,12 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule, ConfigService } from '@nestjs/config';
-import appConfig from 'config/app.config';
-import databaseConfig from 'config/database.config';
+import appConfig from '../config/app.config';
+import databaseConfig from '../config/database.config';
 import { RewardsModule } from './rewards/rewards.module';
 import { PuzzleModule } from './puzzle/puzzle.module';
 import { PuzzleSubmissionModule } from './puzzle-submission/puzzle-submission.module';
+import { ContentModule } from './content/content.module';
 
 @Module({
   imports: [
@@ -37,6 +38,7 @@ import { PuzzleSubmissionModule } from './puzzle-submission/puzzle-submission.mo
     RewardsModule,
     PuzzleModule,
     PuzzleSubmissionModule,
+    ContentModule,
   ],
   controllers: [AppController],
   providers: [
