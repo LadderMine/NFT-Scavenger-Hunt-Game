@@ -8,6 +8,7 @@ import appConfig from 'config/app.config';
 import databaseConfig from 'config/database.config';
 import { PuzzleModule } from './puzzle/puzzle.module';
 import { PuzzleSubmissionModule } from './puzzle-submission/puzzle-submission.module';
+import { TimeTrialModule } from './time-trial/time-trial.module';
 
 @Module({
   imports: [
@@ -35,6 +36,7 @@ import { PuzzleSubmissionModule } from './puzzle-submission/puzzle-submission.mo
     }),
     PuzzleModule,
     PuzzleSubmissionModule,
+    TimeTrialModule,
   ],
   controllers: [AppController],
   providers: [
