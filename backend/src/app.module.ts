@@ -7,6 +7,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import appConfig from 'config/app.config';
 import databaseConfig from 'config/database.config';
 import { PuzzleModule } from './puzzle/puzzle.module';
+import { PuzzleSubmissionModule } from './puzzle-submission/puzzle-submission.module';
 
 @Module({
   imports: [
@@ -33,6 +34,7 @@ import { PuzzleModule } from './puzzle/puzzle.module';
       }),
     }),
     PuzzleModule,
+    PuzzleSubmissionModule,
   ],
   controllers: [AppController],
   providers: [
