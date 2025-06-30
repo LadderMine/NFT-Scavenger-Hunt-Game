@@ -6,9 +6,11 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import appConfig from 'config/app.config';
 import databaseConfig from 'config/database.config';
+import { RewardsModule } from './rewards/rewards.module';
 import { PuzzleModule } from './puzzle/puzzle.module';
 import { PuzzleSubmissionModule } from './puzzle-submission/puzzle-submission.module';
 import { PuzzleDependencyModule } from './puzzle-dependency/puzzle-dependency.module';
+import { TimeTrialModule } from './time-trial/time-trial.module';
 
 @Module({
   imports: [
@@ -34,9 +36,11 @@ import { PuzzleDependencyModule } from './puzzle-dependency/puzzle-dependency.mo
         autoLoadEntities: configService.get('database.autoload'),
       }),
     }),
+    RewardsModule,
     PuzzleModule,
     PuzzleSubmissionModule,
     PuzzleDependencyModule,
+    TimeTrialModule,
   ],
   controllers: [AppController],
   providers: [
