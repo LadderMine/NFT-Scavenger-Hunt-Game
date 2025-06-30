@@ -192,4 +192,4 @@ describe('InAppNotificationsController (e2e)', () => {
         .expect(404);
     });
   });
-}); 
+});
