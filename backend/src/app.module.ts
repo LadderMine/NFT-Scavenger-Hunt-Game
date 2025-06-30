@@ -4,6 +4,8 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule, ConfigService } from '@nestjs/config';
+import { AuthModule } from './auth/auth.module';
+import { UserInventoryModule } from './user-inventory/user-inventory.module';
 import appConfig from 'config/app.config';
 import databaseConfig from 'config/database.config';
 import { SessionModule } from './session/session.module';
@@ -14,6 +16,7 @@ import { PuzzleSubmissionModule } from './puzzle-submission/puzzle-submission.mo
 import { UserReportCardModule } from './user-report-card/user-report-card.module';
 import { PuzzleDependencyModule } from './puzzle-dependency/puzzle-dependency.module';
 import { TimeTrialModule } from './time-trial/time-trial.module';
+import { InAppNotificationsModule } from './in-app-notifications/in-app-notifications.module';
 
 @Module({
   imports: [
@@ -40,13 +43,17 @@ import { TimeTrialModule } from './time-trial/time-trial.module';
       }),
     }),
     SessionModule,
+    AuthModule,
+    UserInventoryModule,
     PuzzleCategoryModule,
     RewardsModule,
     PuzzleModule,
     PuzzleSubmissionModule,
+    ContentModule,
     UserReportCardModule,
     PuzzleDependencyModule,
     TimeTrialModule,
+    InAppNotificationsModule,
   ],
   controllers: [AppController],
   providers: [AppService],
