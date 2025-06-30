@@ -5,19 +5,26 @@ import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { ConfigService } from '@nestjs/config';
 import { GlobalExceptionFilter } from './common/exceptions/global-exception.filter';
 import * as dotenv from 'dotenv';
+import { AuditLogInterceptor } from './audit-log/interceptor/audit-log.interceptor';
+import { AuditLogService } from './audit-log/audit-log.service';
+
 dotenv.config();
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
-  app.useGlobalPipes(new ValidationPipe({ whitelist: true }));
-  const configService = app.get(ConfigService);
-  app.useGlobalFilters(new GlobalExceptionFilter());
 
-  // Enable CORS with config
+  const configService = app.get(ConfigService);
+
+  // Enable global validation, exception filter, and interceptor for audit logging
+  app.useGlobalPipes(new ValidationPipe({ whitelist: true }));
+  app.useGlobalFilters(new GlobalExceptionFilter());
+  app.useGlobalInterceptors(new AuditLogInterceptor(app.get(AuditLogService)));
+
+  // Enable CORS (reads from configService if set)
   app.enableCors(configService.get('appConfig.cors'));
 
-  //Swagger configuration
-  const config = new DocumentBuilder()
+  // Swagger configuration
+  const swaggerConfig = new DocumentBuilder()
     .setTitle('NFT-Scavengers Hunt-Game API')
     .setDescription(
       "The NFT Scavengers Hunt game API provides endpoints for managing users, puzzles, NFTs, scores, answers, hints, and user progress. This API allows developers to build and integrate the game's functionality into their applications.",
@@ -33,7 +40,6 @@ async function bootstrap() {
       'scavengers_hunt@game.com',
     )
     .setVersion('1.0')
-    // Adding a JWT authentication scheme to the Swagger configuration
     .addBearerAuth({
       type: 'apiKey',
       in: 'header',
@@ -41,9 +47,9 @@ async function bootstrap() {
       description: 'Enter your JWT token in the format: "Bearer {your_token}"',
     })
     .build();
-  // Applying Swagger to the application
-  const document = SwaggerModule.createDocument(app, config);
-  SwaggerModule.setup('doc', app, document);
+
+  const document = SwaggerModule.createDocument(app, swaggerConfig);
+  SwaggerModule.setup('doc', app, document); // Swagger UI available at /doc
 
   await app.listen(process.env.PORT ?? 4000);
 }
