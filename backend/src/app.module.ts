@@ -46,6 +46,7 @@ import { TimeTrialModule } from './time-trial/time-trial.module';
     RewardsModule,
     PuzzleModule,
     PuzzleSubmissionModule,
+    ContentModule,
     UserReportCardModule,
     PuzzleDependencyModule,
     TimeTrialModule,
