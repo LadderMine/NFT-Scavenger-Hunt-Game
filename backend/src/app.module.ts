@@ -4,6 +4,8 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule, ConfigService } from '@nestjs/config';
+import { AuthModule } from './auth/auth.module';
+import { UserInventoryModule } from './user-inventory/user-inventory.module';
 import appConfig from 'config/app.config';
 import databaseConfig from 'config/database.config';
 import { PuzzleCategoryModule } from './puzzle-category/puzzle-category.module';
@@ -38,6 +40,8 @@ import { TimeTrialModule } from './time-trial/time-trial.module';
         autoLoadEntities: configService.get('database.autoload'),
       }),
     }),
+    AuthModule,
+    UserInventoryModule,
     PuzzleCategoryModule,
     RewardsModule,
     PuzzleModule,
