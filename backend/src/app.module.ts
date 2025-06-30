@@ -9,6 +9,7 @@ import databaseConfig from 'config/database.config';
 import { RewardsModule } from './rewards/rewards.module';
 import { PuzzleModule } from './puzzle/puzzle.module';
 import { PuzzleSubmissionModule } from './puzzle-submission/puzzle-submission.module';
+import { UserReportCardModule } from './user-report-card/user-report-card.module';
 import { PuzzleDependencyModule } from './puzzle-dependency/puzzle-dependency.module';
 import { TimeTrialModule } from './time-trial/time-trial.module';
 
@@ -39,6 +40,7 @@ import { TimeTrialModule } from './time-trial/time-trial.module';
     RewardsModule,
     PuzzleModule,
     PuzzleSubmissionModule,
+    UserReportCardModule,
     PuzzleDependencyModule,
     TimeTrialModule,
   ],
