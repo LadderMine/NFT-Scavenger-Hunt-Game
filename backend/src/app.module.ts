@@ -8,6 +8,13 @@ import { AuthModule } from './auth/auth.module';
 import { UserInventoryModule } from './user-inventory/user-inventory.module';
 import appConfig from 'config/app.config';
 import databaseConfig from 'config/database.config';
+import { PuzzleCategoryModule } from './puzzle-category/puzzle-category.module';
+import { RewardsModule } from './rewards/rewards.module';
+import { PuzzleModule } from './puzzle/puzzle.module';
+import { PuzzleSubmissionModule } from './puzzle-submission/puzzle-submission.module';
+import { UserReportCardModule } from './user-report-card/user-report-card.module';
+import { PuzzleDependencyModule } from './puzzle-dependency/puzzle-dependency.module';
+import { TimeTrialModule } from './time-trial/time-trial.module';
 
 @Module({
   imports: [
@@ -35,6 +42,13 @@ import databaseConfig from 'config/database.config';
     }),
     AuthModule,
     UserInventoryModule,
+    PuzzleCategoryModule,
+    RewardsModule,
+    PuzzleModule,
+    PuzzleSubmissionModule,
+    UserReportCardModule,
+    PuzzleDependencyModule,
+    TimeTrialModule,
   ],
   controllers: [AppController],
   providers: [
