@@ -16,6 +16,8 @@ import { UserReportCardModule } from './user-report-card/user-report-card.module
 import { PuzzleDependencyModule } from './puzzle-dependency/puzzle-dependency.module';
 import { TimeTrialModule } from './time-trial/time-trial.module';
 import { InAppNotificationsModule } from './in-app-notifications/in-app-notifications.module';
+import { ContentModule } from './content/content.module';
+import { NFTClaimModule } from './nft-claim/nft-claim.module';
 
 @Module({
   imports: [
@@ -52,6 +54,7 @@ import { InAppNotificationsModule } from './in-app-notifications/in-app-notifica
     PuzzleDependencyModule,
     TimeTrialModule,
     InAppNotificationsModule,
+    NFTClaimModule,
   ],
   controllers: [AppController],
   providers: [
