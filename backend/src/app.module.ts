@@ -21,6 +21,7 @@ import { User } from "./auth/entities/user.entity"
 import { TimeTrial } from "./time-trial/time-trial.entity"
 import { Puzzle } from "./puzzle/puzzle.entity"
 import { Category } from "./puzzle-category/entities/category.entity"
+import { RewardShopModule } from './reward-shop/reward-shop.module';
 
 @Module({
   imports: [
@@ -58,6 +59,7 @@ import { Category } from "./puzzle-category/entities/category.entity"
     TimeTrialModule,
     InAppNotificationsModule,
     NFTClaimModule,
+    RewardShopModule,
   ],
   controllers: [AppController],
   providers: [AppService],
