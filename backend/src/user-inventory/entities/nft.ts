@@ -24,8 +24,8 @@ export class NFT {
   @Column({ default: true })
   isActive: boolean;
 
-  @OneToMany(() => Inventory, inventory => inventory.nft)
-  inventoryItems: Inventory[];
+  // @OneToMany(() => Inventory, inventory => inventory.nft)
+  // inventoryItems: Inventory[];
 
   @CreateDateColumn()
   createdAt: Date;

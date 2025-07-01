@@ -1,46 +1,31 @@
-import { Puzzle } from 'src/puzzle/puzzle.entity';
-import { User } from 'src/puzzle/puzzle.entity';
-import {
-  Entity,
-  PrimaryGeneratedColumn,
-  Column,
-  ManyToOne,
-  CreateDateColumn,
-  UpdateDateColumn,
-  Index,
-} from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, Index } from "typeorm"
 
-@Entity()
+@Entity("time_trials")
 export class TimeTrial {
-  @PrimaryGeneratedColumn('uuid')
-  id: string;
+  @PrimaryGeneratedColumn("uuid")
+  id: string
 
-  @Column()
+  @Column("uuid")
   @Index()
-  userId: string;
+  userId: string
 
-  @Column()
+  @Column("uuid")
   @Index()
-  puzzleId: string;
+  puzzleId: string
 
-  @ManyToOne(() => User, user => user.timeTrials)
-  user: User;
+  @Column({ type: "timestamp" })
+  startTime: Date
 
-  @ManyToOne(() => Puzzle, puzzle => puzzle.timeTrials)
-  puzzle: Puzzle;
-
-  @Column({ type: 'timestamp' })
-  startTime: Date;
-
-  @Column({ type: 'timestamp', nullable: true })
-  endTime: Date;
+  @Column({ type: "timestamp", nullable: true })
+  endTime: Date
 
   @Column({ default: false })
-  completed: boolean;
+  completed: boolean
 
   @CreateDateColumn()
-  createdAt: Date;
+  createdAt: Date
 
   @UpdateDateColumn()
-  updatedAt: Date;
+  updatedAt: Date
+
 }
