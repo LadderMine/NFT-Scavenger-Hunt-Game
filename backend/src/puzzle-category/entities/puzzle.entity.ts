@@ -1,52 +1,55 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToMany, CreateDateColumn, UpdateDateColumn } from 'typeorm';
-import { ApiProperty } from '@nestjs/swagger';
+import { Entity, PrimaryGeneratedColumn, Column, ManyToMany, CreateDateColumn, UpdateDateColumn } from "typeorm"
+import { ApiProperty } from "@nestjs/swagger"
 
-@Entity('puzzles')
-export class Puzzle {
-  @ApiProperty({ description: 'Unique identifier for the puzzle' })
-  @PrimaryGeneratedColumn()
-  id: number;
+@Entity("category_puzzles") // Changed table name to avoid conflict
+export class CategoryPuzzle {
+  @ApiProperty({ description: "Unique identifier for the puzzle" })
+  @PrimaryGeneratedColumn("uuid") // Changed to UUID for consistency
+  id: string
 
-  @ApiProperty({ description: 'Title of the puzzle' })
+  @ApiProperty({ description: "Title of the puzzle" })
   @Column({ length: 200 })
-  title: string;
+  title: string
 
-  @ApiProperty({ description: 'Description of the puzzle' })
-  @Column({ type: 'text' })
-  description: string;
+  @ApiProperty({ description: "Description of the puzzle" })
+  @Column({ type: "text" })
+  description: string
 
-  @ApiProperty({ description: 'Difficulty level of the puzzle' })
-  @Column({ 
-    type: 'enum', 
-    enum: ['BEGINNER', 'INTERMEDIATE', 'ADVANCED', 'EXPERT'],
-    default: 'BEGINNER'
+  @ApiProperty({ description: "Difficulty level of the puzzle" })
+  @Column({
+    type: "enum",
+    enum: ["BEGINNER", "INTERMEDIATE", "ADVANCED", "EXPERT"],
+    default: "BEGINNER",
   })
-  difficulty: string;
+  difficulty: string
 
-  @ApiProperty({ description: 'Points awarded for completing the puzzle' })
+  @ApiProperty({ description: "Points awarded for completing the puzzle" })
   @Column({ default: 10 })
-  points: number;
+  points: number
 
-  @ApiProperty({ description: 'Whether the puzzle is active' })
+  @ApiProperty({ description: "Whether the puzzle is active" })
   @Column({ default: true })
-  isActive: boolean;
+  isActive: boolean
 
-  @ApiProperty({ description: 'Estimated time to complete in minutes' })
+  @ApiProperty({ description: "Estimated time to complete in minutes" })
   @Column({ default: 15 })
-  estimatedTime: number;
+  estimatedTime: number
 
-  @ApiProperty({ description: 'Date when the puzzle was created' })
+  @ApiProperty({ description: "Date when the puzzle was created" })
   @CreateDateColumn()
-  createdAt: Date;
+  createdAt: Date
 
-  @ApiProperty({ description: 'Date when the puzzle was last updated' })
+  @ApiProperty({ description: "Date when the puzzle was last updated" })
   @UpdateDateColumn()
-  updatedAt: Date;
+  updatedAt: Date
 
   // Many-to-many relationship with Category entity
-  @ManyToMany(() => Category, category => category.puzzles)
-  categories: Category[];
+  @ManyToMany(
+    () => Category,
+    (category) => category.puzzles,
+  )
+  categories: Category[]
 }
 
 // Import the Category entity
-import { Category } from './category.entity'; 
+import { Category } from "./category.entity"

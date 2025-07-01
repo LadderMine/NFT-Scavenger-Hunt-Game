@@ -1,5 +1,6 @@
 import { Entity, PrimaryGeneratedColumn, Column, OneToMany, CreateDateColumn, UpdateDateColumn } from 'typeorm';
 import { Inventory } from './inventory';
+import { TimeTrial } from 'src/time-trial/time-trial.entity';
 
 @Entity('users')
 export class User {
@@ -14,6 +15,9 @@ export class User {
 
   @Column()
   password: string;
+  
+  // @OneToMany(() => TimeTrial, timeTrial => timeTrial.user)
+  // timeTrials: TimeTrial[];
 
   @OneToMany(() => Inventory, inventory => inventory.user)
   inventory: Inventory[];

@@ -21,8 +21,8 @@ export class Badge {
   @Column({ default: true })
   isActive: boolean;
 
-  @OneToMany(() => Inventory, inventory => inventory.badge)
-  inventoryItems: Inventory[];
+  // @OneToMany(() => Inventory, inventory => inventory.badge)
+  // inventoryItems: Inventory[];
 
   @CreateDateColumn()
   createdAt: Date;
