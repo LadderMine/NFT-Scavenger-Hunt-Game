@@ -17,6 +17,8 @@ import { PuzzleDependencyModule } from './puzzle-dependency/puzzle-dependency.mo
 import { TimeTrialModule } from './time-trial/time-trial.module';
 import { InAppNotificationsModule } from './in-app-notifications/in-app-notifications.module';
 import { ReportsModule } from './reports/reports.module';
+import { RateLimiterModule } from './rate-limiter/rate-limiter.module';
+import { ContentModule } from './content/content.module';
 
 @Module({
   imports: [
@@ -42,6 +44,7 @@ import { ReportsModule } from './reports/reports.module';
         autoLoadEntities: configService.get('database.autoload'),
       }),
     }),
+    RateLimiterModule.forRoot(),
     AuthModule,
     UserInventoryModule,
     PuzzleCategoryModule,
@@ -56,10 +59,6 @@ import { ReportsModule } from './reports/reports.module';
     ReportsModule,
   ],
   controllers: [AppController],
-  providers: [
-    
-    AppService,
-    
-  ],
+  providers: [AppService],
 })
 export class AppModule {}
