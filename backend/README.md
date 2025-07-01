@@ -135,6 +135,7 @@ This repository contains the backend for the **NFT Scavenger Hunt** application,
 - [API Documentation](#api-documentation)
 - [Contribution Guidelines](#contribution-guidelines)
 - [License](#license)
+- [Modules](#modules)
 
 ---
 
@@ -284,3 +285,18 @@ Please ensure your code follows the existing style and passes all linting and te
 ## License
 
 This project is licensed under the [MIT License](LICENSE).
+
+## Modules
+
+- **Achievements**: Manage player achievements and badges.
+- **Content**: Handle educational articles and videos.
+- **In-App Notifications**: Manage notifications within the application.
+- **Puzzle**: Core puzzle management for the scavenger hunt.
+- **Puzzle Category**: Categorization of puzzles.
+- **Puzzle Dependency**: Manage dependencies and eligibility for puzzles.
+- **Puzzle Submission**: Handle player submissions for puzzles.
+- **Rewards**: Manage NFT and other rewards.
+- **Time Trial**: Handle time-based challenges.
+- **User Inventory**: Manage player inventory including NFTs and badges.
+- **User Report Card**: Track player progress and performance.
+- **NFT Claim**: Standalone module for handling NFT claims via StarkNet smart contracts, supporting both mock and real interactions with error handling and retry logic.
