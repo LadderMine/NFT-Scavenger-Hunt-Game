@@ -8,6 +8,7 @@ import { AuthModule } from './auth/auth.module';
 import { UserInventoryModule } from './user-inventory/user-inventory.module';
 import appConfig from 'config/app.config';
 import databaseConfig from 'config/database.config';
+import { SessionModule } from './session/session.module';
 import { PuzzleCategoryModule } from './puzzle-category/puzzle-category.module';
 import { RewardsModule } from './rewards/rewards.module';
 import { PuzzleModule } from './puzzle/puzzle.module';
@@ -41,6 +42,7 @@ import { InAppNotificationsModule } from './in-app-notifications/in-app-notifica
         autoLoadEntities: configService.get('database.autoload'),
       }),
     }),
+    SessionModule,
     AuthModule,
     UserInventoryModule,
     PuzzleCategoryModule,
@@ -54,10 +56,6 @@ import { InAppNotificationsModule } from './in-app-notifications/in-app-notifica
     InAppNotificationsModule,
   ],
   controllers: [AppController],
-  providers: [
-    
-    AppService,
-    
-  ],
+  providers: [AppService],
 })
 export class AppModule {}
