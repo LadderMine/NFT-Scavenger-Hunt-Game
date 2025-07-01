@@ -16,6 +16,7 @@ import { UserReportCardModule } from './user-report-card/user-report-card.module
 import { PuzzleDependencyModule } from './puzzle-dependency/puzzle-dependency.module';
 import { TimeTrialModule } from './time-trial/time-trial.module';
 import { InAppNotificationsModule } from './in-app-notifications/in-app-notifications.module';
+import { ReportsModule } from './reports/reports.module';
 
 @Module({
   imports: [
@@ -52,6 +53,7 @@ import { InAppNotificationsModule } from './in-app-notifications/in-app-notifica
     PuzzleDependencyModule,
     TimeTrialModule,
     InAppNotificationsModule,
+    ReportsModule,
   ],
   controllers: [AppController],
   providers: [
