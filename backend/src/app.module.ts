@@ -21,6 +21,7 @@ import { TimeTrial } from "./time-trial/time-trial.entity"
 import { Puzzle } from "./puzzle/puzzle.entity"
 import { Category } from "./puzzle-category/entities/category.entity"
 import { ApiKeyModule } from './api-key/api-key.module';
+import { UserRankingModule } from './user-ranking/user-ranking.module';
 
 @Module({
   imports: [
@@ -62,6 +63,7 @@ import { ApiKeyModule } from './api-key/api-key.module';
     ApiKeyModule,
     UserReactionModule,
     MultiplayerQueueModule,
+    UserRankingModule,
   ],
   controllers: [AppController],
   providers: [AppService],
