@@ -1,4 +1,3 @@
-/* eslint-disable prettier/prettier */
 import { Module } from "@nestjs/common"
 import { AppController } from "./app.controller"
 import { AppService } from "./app.service"
@@ -27,7 +26,7 @@ import { ApiKeyModule } from './api-key/api-key.module';
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
-      envFilePath: [".env"],
+      envFilePath: ['.env'],
       load: [appConfig, databaseConfig],
       cache: true,
     }),
@@ -35,15 +34,15 @@ import { ApiKeyModule } from './api-key/api-key.module';
       imports: [ConfigModule],
       inject: [ConfigService],
       useFactory: (configService: ConfigService) => ({
-        type: "postgres",
-        host: configService.get("database.host"),
-        port: +configService.get("database.port"),
-        username: configService.get("database.user"),
-        password: configService.get("database.password"),
-        database: configService.get("database.name"),
-        entities: [User, TimeTrial, Puzzle, Category], 
-        synchronize: configService.get("database.synchronize"),
-        autoLoadEntities: configService.get("database.autoload"),
+        type: 'postgres',
+        host: configService.get('database.host'),
+        port: configService.get('database.port'),
+        username: configService.get('database.user'),
+        password: configService.get('database.password'),
+        database: configService.get('database.name'),
+        entities: [User, TimeTrial, Puzzle, Category],
+        synchronize: configService.get('database.synchronize'),
+        autoLoadEntities: configService.get('database.autoload'),
       }),
     }),
     SessionModule,
@@ -58,8 +57,11 @@ import { ApiKeyModule } from './api-key/api-key.module';
     PuzzleDependencyModule,
     TimeTrialModule,
     InAppNotificationsModule,
+    PuzzleTranslationModule,
     NFTClaimModule,
     ApiKeyModule,
+    UserReactionModule,
+    MultiplayerQueueModule,
   ],
   controllers: [AppController],
   providers: [AppService],
