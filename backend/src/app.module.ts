@@ -17,14 +17,6 @@ import { UserReportCardModule } from './user-report-card/user-report-card.module
 import { PuzzleDependencyModule } from './puzzle-dependency/puzzle-dependency.module';
 import { TimeTrialModule } from './time-trial/time-trial.module';
 import { InAppNotificationsModule } from './in-app-notifications/in-app-notifications.module';
-import { User } from './auth/entities/user.entity';
-import { TimeTrial } from './time-trial/time-trial.entity';
-import { Puzzle } from './puzzle/puzzle.entity';
-import { Category } from './puzzle-category/entities/category.entity';
-import { SessionModule } from './session/session.module';
-import { NFTClaimModule } from './nft-claim/nft-claim.module';
-import { UserReactionModule } from './user-reaction/user-reaction.module';
-import { MultiplayerQueueModule } from './multiplayer-queue/multiplayer-queue.module';
 
 @Module({
   imports: [
@@ -61,6 +53,7 @@ import { MultiplayerQueueModule } from './multiplayer-queue/multiplayer-queue.mo
     PuzzleDependencyModule,
     TimeTrialModule,
     InAppNotificationsModule,
+    PuzzleTranslationModule,
     NFTClaimModule,
     UserReactionModule,
     MultiplayerQueueModule,
