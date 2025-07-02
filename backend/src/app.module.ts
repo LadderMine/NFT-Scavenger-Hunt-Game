@@ -24,6 +24,7 @@ import { Category } from './puzzle-category/entities/category.entity';
 import { SessionModule } from './session/session.module';
 import { NFTClaimModule } from './nft-claim/nft-claim.module';
 import { UserReactionModule } from './user-reaction/user-reaction.module';
+import { MultiplayerQueueModule } from './multiplayer-queue/multiplayer-queue.module';
 
 @Module({
   imports: [
@@ -62,6 +63,7 @@ import { UserReactionModule } from './user-reaction/user-reaction.module';
     InAppNotificationsModule,
     NFTClaimModule,
     UserReactionModule,
+    MultiplayerQueueModule,
   ],
   controllers: [AppController],
   providers: [AppService],
