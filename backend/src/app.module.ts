@@ -12,12 +12,11 @@ import { PuzzleCategoryModule } from './puzzle-category/puzzle-category.module';
 import { RewardsModule } from './rewards/rewards.module';
 import { PuzzleModule } from './puzzle/puzzle.module';
 import { PuzzleSubmissionModule } from './puzzle-submission/puzzle-submission.module';
+import { ContentModule } from './content/content.module';
 import { UserReportCardModule } from './user-report-card/user-report-card.module';
 import { PuzzleDependencyModule } from './puzzle-dependency/puzzle-dependency.module';
 import { TimeTrialModule } from './time-trial/time-trial.module';
 import { InAppNotificationsModule } from './in-app-notifications/in-app-notifications.module';
-import { PuzzleTranslationModule } from './puzzle-translation/puzzle-translation.module';
-import { ContentModule } from './content/content.module';
 
 @Module({
   imports: [
@@ -28,21 +27,21 @@ import { ContentModule } from './content/content.module';
       cache: true,
     }),
     TypeOrmModule.forRootAsync({
-      //end
       imports: [ConfigModule],
       inject: [ConfigService],
       useFactory: (configService: ConfigService) => ({
         type: 'postgres',
         host: configService.get('database.host'),
-        port: +configService.get('database.port'),
+        port: configService.get('database.port'),
         username: configService.get('database.user'),
         password: configService.get('database.password'),
         database: configService.get('database.name'),
-        blog: configService.get('database.blog'),
+        entities: [User, TimeTrial, Puzzle, Category],
         synchronize: configService.get('database.synchronize'),
         autoLoadEntities: configService.get('database.autoload'),
       }),
     }),
+    SessionModule,
     AuthModule,
     UserInventoryModule,
     PuzzleCategoryModule,
@@ -55,12 +54,11 @@ import { ContentModule } from './content/content.module';
     TimeTrialModule,
     InAppNotificationsModule,
     PuzzleTranslationModule,
+    NFTClaimModule,
+    UserReactionModule,
+    MultiplayerQueueModule,
   ],
   controllers: [AppController],
-  providers: [
-    
-    AppService,
-    
-  ],
+  providers: [AppService],
 })
 export class AppModule {}
