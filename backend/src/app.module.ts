@@ -47,6 +47,7 @@ import { ApiKeyModule } from './api-key/api-key.module';
         autoLoadEntities: configService.get('database.autoload'),
       }),
     }),
+    QuizModule,
     PuzzleModule,
     PuzzleSubmissionModule,
     ContentModule,
