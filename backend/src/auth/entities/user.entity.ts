@@ -40,6 +40,7 @@ export class User {
   @UpdateDateColumn()
   updatedAt: Date
 
+
   @BeforeInsert()
   async hashPasswordBeforeInsert() {
     if (this.password) {
