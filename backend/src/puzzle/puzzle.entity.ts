@@ -1,34 +1,34 @@
-import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn } from "typeorm"
 
-@Entity('puzzles')
+@Entity("puzzles")
 export class Puzzle {
-  @PrimaryGeneratedColumn('uuid')
-  id: string;
+  @PrimaryGeneratedColumn("uuid") // Changed from auto-increment to UUID
+  id: string
 
   @Column({ length: 255 })
-  title: string;
+  title: string
 
-  @Column('text')
-  description: string;
+  @Column("text")
+  description: string
 
   @Column({ length: 50 })
-  difficulty: string;
+  difficulty: string
 
   @Column({ nullable: true })
-  hint?: string;
+  hint?: string
 
-  @Column('text')
-  solution: string;
+  @Column("text")
+  solution: string
 
   @Column({ nullable: true })
-  rewardId?: string;
+  rewardId?: string
 
   @Column({ default: true })
-  isActive: boolean;
+  isActive: boolean
 
   @CreateDateColumn()
-  createdAt: Date;
+  createdAt: Date
 
   @UpdateDateColumn()
-  updatedAt: Date;
+  updatedAt: Date
 }
