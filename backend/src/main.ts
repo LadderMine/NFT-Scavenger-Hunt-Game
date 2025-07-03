@@ -1,81 +1,68 @@
-import { NestFactory } from "@nestjs/core"
-import { AppModule } from "./app.module"
-import { ValidationPipe, ClassSerializerInterceptor } from "@nestjs/common"
-import { DocumentBuilder, SwaggerModule } from "@nestjs/swagger"
-import { ConfigService } from "@nestjs/config"
-import { GlobalExceptionFilter } from "./common/exceptions/global-exception.filter"
-import { Reflector } from "@nestjs/core"
-import * as dotenv from "dotenv"
-dotenv.config()
+import { Module } from "@nestjs/common"
+import { AppController } from "./app.controller"
+import { AppService } from "./app.service"
+import { TypeOrmModule } from "@nestjs/typeorm"
+import { ConfigModule, ConfigService } from "@nestjs/config"
+import { AuthModule } from "./auth/auth.module"
+import { UserInventoryModule } from "./user-inventory/user-inventory.module"
+import appConfig from "config/app.config"
+import databaseConfig from "config/database.config"
+import { PuzzleCategoryModule } from "./puzzle-category/puzzle-category.module"
+import { RewardsModule } from "./rewards/rewards.module"
+import { PuzzleModule } from "./puzzle/puzzle.module"
+import { PuzzleSubmissionModule } from "./puzzle-submission/puzzle-submission.module"
+import { ContentModule } from "./content/content.module"
+import { UserReportCardModule } from "./user-report-card/user-report-card.module"
+import { PuzzleDependencyModule } from "./puzzle-dependency/puzzle-dependency.module"
+import { TimeTrialModule } from "./time-trial/time-trial.module"
+import { InAppNotificationsModule } from "./in-app-notifications/in-app-notifications.module"
+import { User } from "./auth/entities/user.entity"
+import { TimeTrial } from "./time-trial/time-trial.entity"
+import { Puzzle } from "./puzzle/puzzle.entity"
+import { Category } from "./puzzle-category/entities/category.entity"
+import { AnalyticsModule } from './analytics/analytics.module';
+import { RewardShopModule } from './reward-shop/reward-shop.module';
+import { ApiKeyModule } from './api-key/api-key.module';
 
-async function bootstrap() {
-  const app = await NestFactory.create(AppModule)
-  const configService = app.get(ConfigService)
-  const reflector = app.get(Reflector)
-
-  // Global validation pipe with enhanced options
-  app.useGlobalPipes(
-    new ValidationPipe({
-      whitelist: true,
-      forbidNonWhitelisted: true,
-      transform: true,
-      transformOptions: {
-        enableImplicitConversion: true,
-      },
-      // Add detailed error messages
-      exceptionFactory: (errors) => {
-        console.log("Validation errors:", errors)
-        return errors
-      },
+@Module({
+  imports: [
+    ConfigModule.forRoot({
+      isGlobal: true,
+      envFilePath: ['.env'],
+      load: [appConfig, databaseConfig],
+      cache: true,
     }),
-  )
-
-  // Global serialization interceptor to exclude sensitive fields
-  app.useGlobalInterceptors(new ClassSerializerInterceptor(reflector))
-
-  // Global exception filter
-  app.useGlobalFilters(new GlobalExceptionFilter())
-
-  // Enable CORS with config
-  app.enableCors(configService.get("appConfig.cors"))
-
-  // Swagger configuration
-  const config = new DocumentBuilder()
-    .setTitle("NFT-Scavengers Hunt-Game API")
-    .setDescription(
-      "The NFT Scavengers Hunt game API provides endpoints for managing users, puzzles, NFTs, scores, answers, hints, and user progress. This API allows developers to build and integrate the game's functionality into their applications.",
-    )
-    .addServer("http://localhost:4000")
-    .addTag("NFT-Scavengers Hunt-Game")
-    .setBasePath("/api")
-    .setTermsOfService("http://localhost:4000/terms-of-service")
-    .setLicense("Apache 2.0", "http://www.apache.org/licenses/LICENSE-2.0.html")
-    .setContact("Yusuf Tomilola", "http://localhost:4000/contact", "scavengers_hunt@game.com")
-    .setVersion("1.0")
-    // Adding a JWT authentication scheme to the Swagger configuration
-    .addBearerAuth({
-      type: "http",
-      scheme: "bearer",
-      bearerFormat: "JWT",
-      name: "JWT",
-      description: "Enter JWT token",
-      in: "header",
-    })
-    .build()
-  // Applying Swagger to the application
-  const document = SwaggerModule.createDocument(app, config)
-  SwaggerModule.setup("doc", app, document)
-
-  // Add some startup logging
-  console.log("🚀 Starting NFT Scavenger Hunt API...")
-  console.log("📊 Database config:", {
-    host: configService.get("database.host"),
-    port: configService.get("database.port"),
-    database: configService.get("database.name"),
-  })
-
-  await app.listen(process.env.PORT ?? 4000)
-  console.log(`🎯 Application is running on: http://localhost:${process.env.PORT ?? 4000}`)
-  console.log(`📚 Swagger documentation: http://localhost:${process.env.PORT ?? 4000}/doc`)
-}
-bootstrap()
+    TypeOrmModule.forRootAsync({
+      imports: [ConfigModule],
+      inject: [ConfigService],
+      useFactory: (configService: ConfigService) => ({
+        type: 'postgres',
+        host: configService.get('database.host'),
+        port: configService.get('database.port'),
+        username: configService.get('database.user'),
+        password: configService.get('database.password'),
+        database: configService.get('database.name'),
+        entities: [User, TimeTrial, Puzzle, Category],
+        synchronize: configService.get('database.synchronize'),
+        autoLoadEntities: configService.get('database.autoload'),
+      }),
+    }),
+    PuzzleModule,
+    PuzzleSubmissionModule,
+    ContentModule,
+    UserReportCardModule,
+    PuzzleDependencyModule,
+    TimeTrialModule,
+    InAppNotificationsModule,
+    PuzzleTranslationModule,
+    NFTClaimModule,
+    AnalyticsModule,
+    RewardShopModule,
+    ApiKeyModule,
+    UserReactionModule,
+    MultiplayerQueueModule,
+  ],
+  controllers: [AppController],
+  providers: [AppService],
+})
+export class AppModule {}
