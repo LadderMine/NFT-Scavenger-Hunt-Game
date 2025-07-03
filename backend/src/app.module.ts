@@ -1,4 +1,3 @@
-/* eslint-disable prettier/prettier */
 import { Module } from "@nestjs/common"
 import { AppController } from "./app.controller"
 import { AppService } from "./app.service"
@@ -22,12 +21,14 @@ import { TimeTrial } from "./time-trial/time-trial.entity"
 import { Puzzle } from "./puzzle/puzzle.entity"
 import { Category } from "./puzzle-category/entities/category.entity"
 import { AnalyticsModule } from './analytics/analytics.module';
+import { RewardShopModule } from './reward-shop/reward-shop.module';
+import { ApiKeyModule } from './api-key/api-key.module';
 
 @Module({
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
-      envFilePath: [".env"],
+      envFilePath: ['.env'],
       load: [appConfig, databaseConfig],
       cache: true,
     }),
@@ -35,15 +36,15 @@ import { AnalyticsModule } from './analytics/analytics.module';
       imports: [ConfigModule],
       inject: [ConfigService],
       useFactory: (configService: ConfigService) => ({
-        type: "postgres",
-        host: configService.get("database.host"),
-        port: +configService.get("database.port"),
-        username: configService.get("database.user"),
-        password: configService.get("database.password"),
-        database: configService.get("database.name"),
-        entities: [User, TimeTrial, Puzzle, Category], 
-        synchronize: configService.get("database.synchronize"),
-        autoLoadEntities: configService.get("database.autoload"),
+        type: 'postgres',
+        host: configService.get('database.host'),
+        port: configService.get('database.port'),
+        username: configService.get('database.user'),
+        password: configService.get('database.password'),
+        database: configService.get('database.name'),
+        entities: [User, TimeTrial, Puzzle, Category],
+        synchronize: configService.get('database.synchronize'),
+        autoLoadEntities: configService.get('database.autoload'),
       }),
     }),
     SessionModule,
@@ -58,8 +59,13 @@ import { AnalyticsModule } from './analytics/analytics.module';
     PuzzleDependencyModule,
     TimeTrialModule,
     InAppNotificationsModule,
+    PuzzleTranslationModule,
     NFTClaimModule,
     AnalyticsModule,
+    RewardShopModule,
+    ApiKeyModule,
+    UserReactionModule,
+    MultiplayerQueueModule,
   ],
   controllers: [AppController],
   providers: [AppService],
