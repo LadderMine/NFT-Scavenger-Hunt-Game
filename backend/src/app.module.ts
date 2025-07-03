@@ -23,6 +23,7 @@ import { Category } from "./puzzle-category/entities/category.entity"
 import { AnalyticsModule } from './analytics/analytics.module';
 import { RewardShopModule } from './reward-shop/reward-shop.module';
 import { ApiKeyModule } from './api-key/api-key.module';
+import { UserRankingModule } from './user-ranking/user-ranking.module';
 
 @Module({
   imports: [
@@ -62,6 +63,7 @@ import { ApiKeyModule } from './api-key/api-key.module';
     ApiKeyModule,
     UserReactionModule,
     MultiplayerQueueModule,
+    UserRankingModule,
   ],
   controllers: [AppController],
   providers: [AppService],
