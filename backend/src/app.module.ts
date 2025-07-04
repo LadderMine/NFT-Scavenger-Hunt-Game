@@ -56,6 +56,7 @@ import { UserRankingModule } from './user-ranking/user-ranking.module';
     PuzzleDependencyModule,
     TimeTrialModule,
     InAppNotificationsModule,
+    ReportsModule,
     PuzzleTranslationModule,
     NFTClaimModule,
     AnalyticsModule,
