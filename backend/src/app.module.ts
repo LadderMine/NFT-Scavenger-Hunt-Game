@@ -48,7 +48,6 @@ import { UserRankingModule } from './user-ranking/user-ranking.module';
         autoLoadEntities: configService.get('database.autoload'),
       }),
     }),
-    QuizModule,
     PuzzleModule,
     PuzzleSubmissionModule,
     ContentModule,
