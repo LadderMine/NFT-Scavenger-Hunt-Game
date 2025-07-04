@@ -1,0 +1,61 @@
+### Variables
+@baseUrl = http://localhost:4000
+@userEmail = john.doe@example.com
+@userPassword = SecurePass123!
+
+### Register a new user
+POST {{baseUrl}}/auth/register
+Content-Type: application/json
+
+{
+  "name": "John Doe",
+  "email": "{{userEmail}}",
+  "password": "{{userPassword}}",
+  "username": "john_doe"
+}
+
+### Login with registered user
+POST {{baseUrl}}/auth/login
+Content-Type: application/json
+
+{
+  "email": "{{userEmail}}",
+  "password": "{{userPassword}}"
+}
+
+### Get user profile (requires JWT token from login response)
+GET {{baseUrl}}/auth/profile
+Authorization: Bearer YOUR_JWT_TOKEN_HERE
+
+### Validate JWT token
+POST {{baseUrl}}/auth/validate-token
+Authorization: Bearer YOUR_JWT_TOKEN_HERE
+
+### Test registration with invalid data
+POST {{baseUrl}}/auth/register
+Content-Type: application/json
+
+{
+  "name": "Jo",
+  "email": "invalid-email",
+  "password": "weak"
+}
+
+### Test login with invalid credentials
+POST {{baseUrl}}/auth/login
+Content-Type: application/json
+
+{
+  "email": "nonexistent@example.com",
+  "password": "wrongpassword"
+}
+
+### Test duplicate registration
+POST {{baseUrl}}/auth/register
+Content-Type: application/json
+
+{
+  "name": "Jane Doe",
+  "email": "{{userEmail}}",
+  "password": "AnotherPass123!"
+}

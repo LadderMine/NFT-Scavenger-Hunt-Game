@@ -13,6 +13,6 @@ import { Badge } from './entities/badge';
   ],
   controllers: [UserInventoryController],
   providers: [UserInventoryService],
-  exports: [UserInventoryService], // Export for use in other modules
+  exports: [UserInventoryService], 
 })
 export class UserInventoryModule {}
