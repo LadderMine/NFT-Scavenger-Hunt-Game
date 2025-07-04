@@ -1,244 +1,244 @@
-import { ApiProperty } from '@nestjs/swagger';
-import { IsString, IsOptional, IsNumber, IsBoolean, IsEnum, IsArray, Min, MaxLength } from 'class-validator';
+import { ApiProperty } from "@nestjs/swagger"
+import { IsString, IsOptional, IsNumber, IsBoolean, IsEnum, IsArray, Min, MaxLength, IsUUID } from "class-validator"
 
 export class CreateCategoryDto {
-  @ApiProperty({ description: 'Name of the category' })
+  @ApiProperty({ description: "Name of the category" })
   @IsString()
   @MaxLength(100)
-  name: string;
+  name: string
 
-  @ApiProperty({ description: 'Description of the category', required: false })
+  @ApiProperty({ description: "Description of the category", required: false })
   @IsOptional()
   @IsString()
-  description?: string;
+  description?: string
 
-  @ApiProperty({ description: 'Slug for URL-friendly category names' })
+  @ApiProperty({ description: "Slug for URL-friendly category names" })
   @IsString()
   @MaxLength(100)
-  slug: string;
+  slug: string
 
-  @ApiProperty({ description: 'Icon or emoji for the category', required: false })
+  @ApiProperty({ description: "Icon or emoji for the category", required: false })
   @IsOptional()
   @IsString()
   @MaxLength(10)
-  icon?: string;
+  icon?: string
 
-  @ApiProperty({ description: 'Color code for the category', required: false })
+  @ApiProperty({ description: "Color code for the category", required: false })
   @IsOptional()
   @IsString()
   @MaxLength(7)
-  color?: string;
+  color?: string
 
-  @ApiProperty({ description: 'Order for sorting categories', required: false })
+  @ApiProperty({ description: "Order for sorting categories", required: false })
   @IsOptional()
   @IsNumber()
-  sortOrder?: number;
+  sortOrder?: number
 }
 
 export class UpdateCategoryDto {
-  @ApiProperty({ description: 'Name of the category', required: false })
+  @ApiProperty({ description: "Name of the category", required: false })
   @IsOptional()
   @IsString()
   @MaxLength(100)
-  name?: string;
+  name?: string
 
-  @ApiProperty({ description: 'Description of the category', required: false })
+  @ApiProperty({ description: "Description of the category", required: false })
   @IsOptional()
   @IsString()
-  description?: string;
+  description?: string
 
-  @ApiProperty({ description: 'Slug for URL-friendly category names', required: false })
+  @ApiProperty({ description: "Slug for URL-friendly category names", required: false })
   @IsOptional()
   @IsString()
   @MaxLength(100)
-  slug?: string;
+  slug?: string
 
-  @ApiProperty({ description: 'Icon or emoji for the category', required: false })
+  @ApiProperty({ description: "Icon or emoji for the category", required: false })
   @IsOptional()
   @IsString()
   @MaxLength(10)
-  icon?: string;
+  icon?: string
 
-  @ApiProperty({ description: 'Color code for the category', required: false })
+  @ApiProperty({ description: "Color code for the category", required: false })
   @IsOptional()
   @IsString()
   @MaxLength(7)
-  color?: string;
+  color?: string
 
-  @ApiProperty({ description: 'Whether the category is active', required: false })
+  @ApiProperty({ description: "Whether the category is active", required: false })
   @IsOptional()
   @IsBoolean()
-  isActive?: boolean;
+  isActive?: boolean
 
-  @ApiProperty({ description: 'Order for sorting categories', required: false })
+  @ApiProperty({ description: "Order for sorting categories", required: false })
   @IsOptional()
   @IsNumber()
-  sortOrder?: number;
+  sortOrder?: number
 }
 
 export class CreatePuzzleDto {
-  @ApiProperty({ description: 'Title of the puzzle' })
+  @ApiProperty({ description: "Title of the puzzle" })
   @IsString()
   @MaxLength(200)
-  title: string;
+  title: string
 
-  @ApiProperty({ description: 'Description of the puzzle' })
+  @ApiProperty({ description: "Description of the puzzle" })
   @IsString()
-  description: string;
+  description: string
 
-  @ApiProperty({ description: 'Difficulty level of the puzzle' })
-  @IsEnum(['BEGINNER', 'INTERMEDIATE', 'ADVANCED', 'EXPERT'])
-  difficulty: string;
+  @ApiProperty({ description: "Difficulty level of the puzzle" })
+  @IsEnum(["BEGINNER", "INTERMEDIATE", "ADVANCED", "EXPERT"])
+  difficulty: string
 
-  @ApiProperty({ description: 'Points awarded for completing the puzzle', required: false })
+  @ApiProperty({ description: "Points awarded for completing the puzzle", required: false })
   @IsOptional()
   @IsNumber()
   @Min(0)
-  points?: number;
+  points?: number
 
-  @ApiProperty({ description: 'Estimated time to complete in minutes', required: false })
+  @ApiProperty({ description: "Estimated time to complete in minutes", required: false })
   @IsOptional()
   @IsNumber()
   @Min(1)
-  estimatedTime?: number;
+  estimatedTime?: number
 
-  @ApiProperty({ description: 'Array of category IDs', required: false })
+  @ApiProperty({ description: "Array of category IDs", required: false })
   @IsOptional()
   @IsArray()
-  @IsNumber({}, { each: true })
-  categoryIds?: number[];
+  @IsUUID("4", { each: true }) // Changed to UUID validation
+  categoryIds?: string[]
 }
 
 export class UpdatePuzzleDto {
-  @ApiProperty({ description: 'Title of the puzzle', required: false })
+  @ApiProperty({ description: "Title of the puzzle", required: false })
   @IsOptional()
   @IsString()
   @MaxLength(200)
-  title?: string;
+  title?: string
 
-  @ApiProperty({ description: 'Description of the puzzle', required: false })
+  @ApiProperty({ description: "Description of the puzzle", required: false })
   @IsOptional()
   @IsString()
-  description?: string;
+  description?: string
 
-  @ApiProperty({ description: 'Difficulty level of the puzzle', required: false })
+  @ApiProperty({ description: "Difficulty level of the puzzle", required: false })
   @IsOptional()
-  @IsEnum(['BEGINNER', 'INTERMEDIATE', 'ADVANCED', 'EXPERT'])
-  difficulty?: string;
+  @IsEnum(["BEGINNER", "INTERMEDIATE", "ADVANCED", "EXPERT"])
+  difficulty?: string
 
-  @ApiProperty({ description: 'Points awarded for completing the puzzle', required: false })
+  @ApiProperty({ description: "Points awarded for completing the puzzle", required: false })
   @IsOptional()
   @IsNumber()
   @Min(0)
-  points?: number;
+  points?: number
 
-  @ApiProperty({ description: 'Whether the puzzle is active', required: false })
+  @ApiProperty({ description: "Whether the puzzle is active", required: false })
   @IsOptional()
   @IsBoolean()
-  isActive?: boolean;
+  isActive?: boolean
 
-  @ApiProperty({ description: 'Estimated time to complete in minutes', required: false })
+  @ApiProperty({ description: "Estimated time to complete in minutes", required: false })
   @IsOptional()
   @IsNumber()
   @Min(1)
-  estimatedTime?: number;
+  estimatedTime?: number
 
-  @ApiProperty({ description: 'Array of category IDs', required: false })
+  @ApiProperty({ description: "Array of category IDs", required: false })
   @IsOptional()
   @IsArray()
-  @IsNumber({}, { each: true })
-  categoryIds?: number[];
+  @IsUUID("4", { each: true }) // Changed to UUID validation
+  categoryIds?: string[]
 }
 
 export class PuzzleResponseDto {
   @ApiProperty()
-  id: number;
+  id: string // Changed to string
 
   @ApiProperty()
-  title: string;
+  title: string
 
   @ApiProperty()
-  description: string;
+  description: string
 
   @ApiProperty()
-  difficulty: string;
+  difficulty: string
 
   @ApiProperty()
-  points: number;
+  points: number
 
   @ApiProperty()
-  isActive: boolean;
+  isActive: boolean
 
   @ApiProperty()
-  estimatedTime: number;
+  estimatedTime: number
 
   @ApiProperty()
-  createdAt: Date;
+  createdAt: Date
 
   @ApiProperty()
-  updatedAt: Date;
+  updatedAt: Date
 }
 
 export class CategoryResponseDto {
   @ApiProperty()
-  id: number;
+  id: string // Changed to string
 
   @ApiProperty()
-  name: string;
+  name: string
 
   @ApiProperty()
-  description: string;
+  description: string
 
   @ApiProperty()
-  slug: string;
+  slug: string
 
   @ApiProperty()
-  icon: string;
+  icon: string
 
   @ApiProperty()
-  color: string;
+  color: string
 
   @ApiProperty()
-  isActive: boolean;
+  isActive: boolean
 
   @ApiProperty()
-  sortOrder: number;
+  sortOrder: number
 
   @ApiProperty()
-  createdAt: Date;
+  createdAt: Date
 
   @ApiProperty()
-  updatedAt: Date;
+  updatedAt: Date
 
   @ApiProperty({ type: [PuzzleResponseDto] })
-  puzzles: PuzzleResponseDto[];
+  puzzles: PuzzleResponseDto[]
 }
 
 export class PuzzlesByCategoryResponseDto {
   @ApiProperty()
-  id: number;
+  id: string // Changed to string
 
   @ApiProperty()
-  name: string;
+  name: string
 
   @ApiProperty()
-  description: string;
+  description: string
 
   @ApiProperty()
-  slug: string;
+  slug: string
 
   @ApiProperty()
-  icon: string;
+  icon: string
 
   @ApiProperty()
-  color: string;
+  color: string
 
   @ApiProperty()
-  sortOrder: number;
+  sortOrder: number
 
   @ApiProperty({ type: [PuzzleResponseDto] })
-  puzzles: PuzzleResponseDto[];
+  puzzles: PuzzleResponseDto[]
 
   @ApiProperty()
-  puzzleCount: number;
-} 
+  puzzleCount: number
+}
