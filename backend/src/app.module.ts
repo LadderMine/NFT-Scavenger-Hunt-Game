@@ -24,6 +24,8 @@ import { AnalyticsModule } from './analytics/analytics.module';
 import { RewardShopModule } from './reward-shop/reward-shop.module';
 import { ApiKeyModule } from './api-key/api-key.module';
 import { UserRankingModule } from './user-ranking/user-ranking.module';
+import { ContentRatingModule } from './content-rating/content-rating.module';
+
 
 @Module({
   imports: [
@@ -64,6 +66,7 @@ import { UserRankingModule } from './user-ranking/user-ranking.module';
     UserReactionModule,
     MultiplayerQueueModule,
     UserRankingModule,
+    ContentRatingModule,
   ],
   controllers: [AppController],
   providers: [AppService],
