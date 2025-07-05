@@ -25,6 +25,8 @@ import { RewardShopModule } from './reward-shop/reward-shop.module';
 import { ApiKeyModule } from './api-key/api-key.module';
 import { UserRankingModule } from './user-ranking/user-ranking.module';
 import { ProgressModule } from './progress/progress.module';
+import { ContentRatingModule } from './content-rating/content-rating.module';
+import { UserActivityLogModule } from "./user-activity-log/user-activity-log.module"
 
 @Module({
   imports: [
@@ -65,7 +67,9 @@ import { ProgressModule } from './progress/progress.module';
     UserReactionModule,
     MultiplayerQueueModule,
     UserRankingModule,
-    ProgressModule,
+    ProgressModule,           // <--- ProgressModule is kept
+    ContentRatingModule,
+    UserActivityLogModule,
   ],
   controllers: [AppController],
   providers: [AppService],
