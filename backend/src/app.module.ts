@@ -9,6 +9,7 @@ import databaseConfig from 'config/database.config';
 import { PuzzleModule } from './puzzle/puzzle.module';
 import { PuzzleSubmissionModule } from './puzzle-submission/puzzle-submission.module';
 import { TimeTrialModule } from './time-trial/time-trial.module';
+import { ActivityModule } from './activity/activity.module';
 
 @Module({
   imports: [
@@ -37,6 +38,7 @@ import { TimeTrialModule } from './time-trial/time-trial.module';
     PuzzleModule,
     PuzzleSubmissionModule,
     TimeTrialModule,
+    ActivityModule,
   ],
   controllers: [AppController],
   providers: [
