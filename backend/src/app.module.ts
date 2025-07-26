@@ -1,3 +1,15 @@
+/* eslint-disable prettier/prettier */
+import { Module } from '@nestjs/common';
+import { AppController } from './app.controller';
+import { AppService } from './app.service';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { ConfigModule, ConfigService } from '@nestjs/config';
+import appConfig from 'config/app.config';
+import databaseConfig from 'config/database.config';
+import { PuzzleModule } from './puzzle/puzzle.module';
+import { PuzzleSubmissionModule } from './puzzle-submission/puzzle-submission.module';
+import { TimeTrialModule } from './time-trial/time-trial.module';
+import { ActivityModule } from './activity/activity.module';
 import { Module } from "@nestjs/common"
 import { AppController } from "./app.controller"
 import { AppService } from "./app.service"
@@ -56,7 +68,8 @@ import { UserActivityLogModule } from "./user-activity-log/user-activity-log.mod
     ContentModule,
     UserReportCardModule,
     PuzzleDependencyModule,
-    TimeTrialModule,
+    TimeTrialModule
+    ActivityModule,
     InAppNotificationsModule,
     ReportsModule,
     PuzzleTranslationModule,
