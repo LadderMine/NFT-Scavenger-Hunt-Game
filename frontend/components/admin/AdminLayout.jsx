@@ -1,55 +1,10 @@
 'use client';
 
-import { useEffect, useState } from 'react';
-import { useRouter } from 'next/navigation';
+import { useState } from 'react';
 import { Shield, Users, FileText, Settings, LogOut, Menu, X } from 'lucide-react';
 
 const AdminLayout = ({ children }) => {
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [isLoading, setIsLoading] = useState(true);
   const [sidebarOpen, setSidebarOpen] = useState(false);
-  const router = useRouter();
-
-  useEffect(() => {
-    // Check if admin is authenticated
-    const checkAuth = async () => {
-      const token = localStorage.getItem('adminToken');
-      if (!token) {
-        router.push('/admin/login');
-        return;
-      }
-
-      try {
-        // Verify token with backend
-        const response = await fetch('/api/admin/verify', {
-          headers: {
-            'Authorization': `Bearer ${token}`,
-          },
-        });
-
-        if (!response.ok) {
-          localStorage.removeItem('adminToken');
-          router.push('/admin/login');
-          return;
-        }
-
-        setIsAuthenticated(true);
-      } catch (error) {
-        console.error('Auth check failed:', error);
-        localStorage.removeItem('adminToken');
-        router.push('/admin/login');
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    checkAuth();
-  }, [router]);
-
-  const handleLogout = () => {
-    localStorage.removeItem('adminToken');
-    router.push('/admin/login');
-  };
 
   const navigation = [
     { name: 'Dashboard', href: '/admin', icon: Shield },
@@ -57,18 +12,6 @@ const AdminLayout = ({ children }) => {
     { name: 'User Management', href: '/admin/users', icon: Users },
     { name: 'Settings', href: '/admin/settings', icon: Settings },
   ];
-
-  if (isLoading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
-      </div>
-    );
-  }
-
-  if (!isAuthenticated) {
-    return null;
-  }
 
   return (
     <div className="min-h-screen bg-gray-100">
@@ -101,13 +44,9 @@ const AdminLayout = ({ children }) => {
             })}
           </nav>
           <div className="border-t border-gray-200 p-4">
-            <button
-              onClick={handleLogout}
-              className="group flex items-center px-2 py-2 text-sm font-medium rounded-md text-gray-600 hover:bg-gray-50 hover:text-gray-900 w-full"
-            >
-              <LogOut className="mr-3 h-5 w-5 text-gray-400 group-hover:text-gray-500" />
-              Logout
-            </button>
+            <div className="text-sm text-gray-500">
+              Demo Mode - Mock Data
+            </div>
           </div>
         </div>
       </div>
@@ -134,13 +73,9 @@ const AdminLayout = ({ children }) => {
             })}
           </nav>
           <div className="border-t border-gray-200 p-4">
-            <button
-              onClick={handleLogout}
-              className="group flex items-center px-2 py-2 text-sm font-medium rounded-md text-gray-600 hover:bg-gray-50 hover:text-gray-900 w-full"
-            >
-              <LogOut className="mr-3 h-5 w-5 text-gray-400 group-hover:text-gray-500" />
-              Logout
-            </button>
+            <div className="text-sm text-gray-500">
+              Demo Mode - Mock Data
+            </div>
           </div>
         </div>
       </div>
