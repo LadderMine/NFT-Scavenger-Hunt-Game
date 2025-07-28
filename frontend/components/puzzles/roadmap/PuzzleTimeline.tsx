@@ -1,6 +1,6 @@
 import PuzzleCard from './PuzzleCard';
 
-type Puzzle = {
+export type Puzzle = {
   id: string;
   title: string;
   description: string;
