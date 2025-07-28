@@ -2,7 +2,7 @@
 import React, { useState } from "react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import { Menu, X, Gamepad, Trophy, Book, User } from "lucide-react";
+import { Menu, X, Gamepad, Trophy, Book, User, Users } from "lucide-react";
 
 const NavigationHeader = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -48,6 +48,13 @@ const NavigationHeader = () => {
               >
                 <Book className="w-4 h-4" />
                 <span>Learn</span>
+              </Link>
+              <Link
+                href="/invite-friends"
+                className="text-gray-300 hover:text-white transition-colors flex items-center space-x-2"
+              >
+                <Users className="w-4 h-4" />
+                <span>Invite Friends</span>
               </Link>
               <Button className="bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600">
                 <Link
@@ -102,6 +109,13 @@ const NavigationHeader = () => {
               >
                 <Book className="w-4 h-4" />
                 <span>Learn</span>
+              </Link>
+              <Link
+                href="/invite-friends"
+                className="block px-3 py-2 rounded-md text-gray-300 hover:text-white hover:bg-white/10 transition-colors flex items-center space-x-2"
+              >
+                <Users className="w-4 h-4" />
+                <span>Invite Friends</span>
               </Link>
               <div className="px-3 py-2">
                 <Button className="w-full bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600">
