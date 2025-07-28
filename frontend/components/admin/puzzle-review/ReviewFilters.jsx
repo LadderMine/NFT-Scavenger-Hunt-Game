@@ -2,7 +2,6 @@ import { useState } from 'react';
 import { Search, Filter, Calendar } from 'lucide-react';
 import { Button } from '../../ui/button';
 import { Input } from '../../ui/input';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../../ui/select';
 
 const ReviewFilters = ({ filters, onFiltersChange, disabled }) => {
   const [isExpanded, setIsExpanded] = useState(false);
@@ -67,20 +66,16 @@ const ReviewFilters = ({ filters, onFiltersChange, disabled }) => {
             <label className="block text-sm font-medium text-gray-700 mb-2">
               Status
             </label>
-            <Select
+            <select
               value={filters.status || 'PENDING'}
-              onValueChange={(value) => handleFilterChange('status', value)}
+              onChange={(e) => handleFilterChange('status', e.target.value)}
               disabled={disabled}
+              className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              <SelectTrigger>
-                <SelectValue />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="PENDING">Pending</SelectItem>
-                <SelectItem value="APPROVED">Approved</SelectItem>
-                <SelectItem value="REJECTED">Rejected</SelectItem>
-              </SelectContent>
-            </Select>
+              <option value="PENDING">Pending</option>
+              <option value="APPROVED">Approved</option>
+              <option value="REJECTED">Rejected</option>
+            </select>
           </div>
 
           {/* Rating Filter */}
@@ -88,23 +83,19 @@ const ReviewFilters = ({ filters, onFiltersChange, disabled }) => {
             <label className="block text-sm font-medium text-gray-700 mb-2">
               Rating
             </label>
-            <Select
+            <select
               value={filters.rating || ''}
-              onValueChange={(value) => handleFilterChange('rating', value)}
+              onChange={(e) => handleFilterChange('rating', e.target.value)}
               disabled={disabled}
+              className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              <SelectTrigger>
-                <SelectValue placeholder="All ratings" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="">All ratings</SelectItem>
-                <SelectItem value="5">5 stars</SelectItem>
-                <SelectItem value="4">4 stars</SelectItem>
-                <SelectItem value="3">3 stars</SelectItem>
-                <SelectItem value="2">2 stars</SelectItem>
-                <SelectItem value="1">1 star</SelectItem>
-              </SelectContent>
-            </Select>
+              <option value="">All ratings</option>
+              <option value="5">5 stars</option>
+              <option value="4">4 stars</option>
+              <option value="3">3 stars</option>
+              <option value="2">2 stars</option>
+              <option value="1">1 star</option>
+            </select>
           </div>
 
           {/* Sort By */}
@@ -112,20 +103,16 @@ const ReviewFilters = ({ filters, onFiltersChange, disabled }) => {
             <label className="block text-sm font-medium text-gray-700 mb-2">
               Sort By
             </label>
-            <Select
+            <select
               value={filters.sortBy || 'createdAt'}
-              onValueChange={(value) => handleFilterChange('sortBy', value)}
+              onChange={(e) => handleFilterChange('sortBy', e.target.value)}
               disabled={disabled}
+              className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              <SelectTrigger>
-                <SelectValue />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="createdAt">Date Created</SelectItem>
-                <SelectItem value="rating">Rating</SelectItem>
-                <SelectItem value="helpfulCount">Helpful Votes</SelectItem>
-              </SelectContent>
-            </Select>
+              <option value="createdAt">Date Created</option>
+              <option value="rating">Rating</option>
+              <option value="helpfulCount">Helpful Votes</option>
+            </select>
           </div>
         </div>
 
@@ -138,23 +125,19 @@ const ReviewFilters = ({ filters, onFiltersChange, disabled }) => {
                 <label className="block text-sm font-medium text-gray-700 mb-2">
                   Min Rating
                 </label>
-                <Select
+                <select
                   value={filters.minRating || ''}
-                  onValueChange={(value) => handleFilterChange('minRating', value)}
+                  onChange={(e) => handleFilterChange('minRating', e.target.value)}
                   disabled={disabled}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 disabled:opacity-50 disabled:cursor-not-allowed"
                 >
-                  <SelectTrigger>
-                    <SelectValue placeholder="Any" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="">Any</SelectItem>
-                    <SelectItem value="1">1+ stars</SelectItem>
-                    <SelectItem value="2">2+ stars</SelectItem>
-                    <SelectItem value="3">3+ stars</SelectItem>
-                    <SelectItem value="4">4+ stars</SelectItem>
-                    <SelectItem value="5">5 stars only</SelectItem>
-                  </SelectContent>
-                </Select>
+                  <option value="">Any</option>
+                  <option value="1">1+ stars</option>
+                  <option value="2">2+ stars</option>
+                  <option value="3">3+ stars</option>
+                  <option value="4">4+ stars</option>
+                  <option value="5">5 stars only</option>
+                </select>
               </div>
 
               {/* Max Rating */}
@@ -162,23 +145,19 @@ const ReviewFilters = ({ filters, onFiltersChange, disabled }) => {
                 <label className="block text-sm font-medium text-gray-700 mb-2">
                   Max Rating
                 </label>
-                <Select
+                <select
                   value={filters.maxRating || ''}
-                  onValueChange={(value) => handleFilterChange('maxRating', value)}
+                  onChange={(e) => handleFilterChange('maxRating', e.target.value)}
                   disabled={disabled}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 disabled:opacity-50 disabled:cursor-not-allowed"
                 >
-                  <SelectTrigger>
-                    <SelectValue placeholder="Any" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="">Any</SelectItem>
-                    <SelectItem value="1">1 star max</SelectItem>
-                    <SelectItem value="2">2 stars max</SelectItem>
-                    <SelectItem value="3">3 stars max</SelectItem>
-                    <SelectItem value="4">4 stars max</SelectItem>
-                    <SelectItem value="5">5 stars max</SelectItem>
-                  </SelectContent>
-                </Select>
+                  <option value="">Any</option>
+                  <option value="1">1 star max</option>
+                  <option value="2">2 stars max</option>
+                  <option value="3">3 stars max</option>
+                  <option value="4">4 stars max</option>
+                  <option value="5">5 stars max</option>
+                </select>
               </div>
 
               {/* Review Type */}
@@ -186,21 +165,17 @@ const ReviewFilters = ({ filters, onFiltersChange, disabled }) => {
                 <label className="block text-sm font-medium text-gray-700 mb-2">
                   Review Type
                 </label>
-                <Select
+                <select
                   value={filters.reviewType || ''}
-                  onValueChange={(value) => handleFilterChange('reviewType', value)}
+                  onChange={(e) => handleFilterChange('reviewType', e.target.value)}
                   disabled={disabled}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 disabled:opacity-50 disabled:cursor-not-allowed"
                 >
-                  <SelectTrigger>
-                    <SelectValue placeholder="All types" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="">All types</SelectItem>
-                    <SelectItem value="RATING_ONLY">Rating only</SelectItem>
-                    <SelectItem value="TEXT_REVIEW">Text review</SelectItem>
-                    <SelectItem value="DETAILED">Detailed review</SelectItem>
-                  </SelectContent>
-                </Select>
+                  <option value="">All types</option>
+                  <option value="RATING_ONLY">Rating only</option>
+                  <option value="TEXT_REVIEW">Text review</option>
+                  <option value="DETAILED">Detailed review</option>
+                </select>
               </div>
 
               {/* Sort Order */}
@@ -208,19 +183,15 @@ const ReviewFilters = ({ filters, onFiltersChange, disabled }) => {
                 <label className="block text-sm font-medium text-gray-700 mb-2">
                   Sort Order
                 </label>
-                <Select
+                <select
                   value={filters.sortOrder || 'DESC'}
-                  onValueChange={(value) => handleFilterChange('sortOrder', value)}
+                  onChange={(e) => handleFilterChange('sortOrder', e.target.value)}
                   disabled={disabled}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 disabled:opacity-50 disabled:cursor-not-allowed"
                 >
-                  <SelectTrigger>
-                    <SelectValue />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="DESC">Newest first</SelectItem>
-                    <SelectItem value="ASC">Oldest first</SelectItem>
-                  </SelectContent>
-                </Select>
+                  <option value="DESC">Newest first</option>
+                  <option value="ASC">Oldest first</option>
+                </select>
               </div>
             </div>
           </div>
