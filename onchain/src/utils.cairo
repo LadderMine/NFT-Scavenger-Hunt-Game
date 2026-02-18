@@ -3,6 +3,8 @@ use core::byte_array::ByteArray;
 use core::felt252;
 use core::poseidon::poseidon_hash_span;
 
+/// Converts each byte of `byte_array` into a `felt252` and hashes the
+/// resulting array with Poseidon for use as a deterministic on-chain id.
 pub fn hash_byte_array(byte_array: ByteArray) -> felt252 {
     let mut felt_array: Array<felt252> = ArrayTrait::new();
     let len = byte_array.len();
@@ -16,4 +18,3 @@ pub fn hash_byte_array(byte_array: ByteArray) -> felt252 {
 
     poseidon_hash_span(felt_array.span())
 }
-
