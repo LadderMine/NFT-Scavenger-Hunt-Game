@@ -15,5 +15,8 @@ body {
 @layer base {
   :root {
     --radius: 0.5rem;
+    --brand-purple: 139 92 246;
+    --brand-pink: 236 72 153;
+    --brand-dark: 9 9 11;
   }
 }
