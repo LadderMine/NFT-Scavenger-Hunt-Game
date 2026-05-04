@@ -12,11 +12,13 @@ const getRarityColor = (rarity) => {
   return colors[rarity] || "from-gray-400 to-gray-600";
 };
 
+// Displays a single NFT with rarity gradient, lock state, and claim action.
 const NFTCard = ({ nft }) => {
   const [isHovered, setIsHovered] = useState(false);
 
   return (
     <div
+      aria-label={nft?.name ? `NFT: ${nft.name}` : "NFT card"}
       className="relative overflow-hidden transition-transform duration-300 group rounded-xl hover:scale-105"
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
