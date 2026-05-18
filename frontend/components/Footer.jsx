@@ -2,6 +2,8 @@ import React from "react";
 import Link from "next/link";
 import { Github, Twitter, Linkedin, ExternalLink } from "lucide-react";
 
+const CURRENT_YEAR = new Date().getFullYear();
+
 const Footer = () => {
   return (
     <footer className="w-full bg-black/20 backdrop-blur-lg border-t border-white/10 mt-auto">
