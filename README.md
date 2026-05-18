@@ -32,3 +32,13 @@ For support, please open an issue in the repository or contact the development t
 - Next.js team
 - Tailwind CSS team
 - All contributors and supporters
+
+## Tech Stack
+
+| Layer | Technology |
+|-------|------------|
+| Frontend | Next.js, TypeScript, Tailwind CSS |
+| Backend | NestJS, TypeScript, PostgreSQL |
+| Smart Contracts | Cairo, Scarb, Starknet Foundry |
+| Blockchain | StarkNet |
+
