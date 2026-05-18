@@ -13,9 +13,14 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: asdf-vm/actions/install@v3
+
+      - uses: software-mansion/setup-scarb@v1
+        with:
+          scarb-version: "2.8.4"
+
       - run: scarb fmt --check
         working-directory: onchain
+
       - run: scarb build
         working-directory: onchain
 
@@ -23,6 +28,14 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: asdf-vm/actions/install@v3
+
+      - uses: software-mansion/setup-scarb@v1
+        with:
+          scarb-version: "2.8.4"
+
+      - uses: foundry-rs/setup-snfoundry@v3
+        with:
+          starknet-foundry-version: "0.30.0"
+
       - run: snforge test
         working-directory: onchain
