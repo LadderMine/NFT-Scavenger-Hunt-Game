@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Sparkles, Lock, Shield } from "lucide-react";
+import { useToast } from "@/components/ui/toast";
 
 const getRarityColor = (rarity) => {
   const colors = {
@@ -15,6 +16,26 @@ const getRarityColor = (rarity) => {
 // Displays a single NFT with rarity gradient, lock state, and claim action.
 const NFTCard = ({ nft }) => {
   const [isHovered, setIsHovered] = useState(false);
+  const [isClaiming, setIsClaiming] = useState(false);
+  const { showToast } = useToast();
+
+  const handleClaim = async () => {
+    if (nft.locked || isClaiming) return;
+
+    setIsClaiming(true);
+    try {
+      // Placeholder for the real claim request until backend wiring lands here.
+      await new Promise((resolve) => setTimeout(resolve, 500));
+      showToast({ type: "success", message: `${nft.name} claimed successfully!` });
+    } catch (error) {
+      showToast({
+        type: "error",
+        message: `Failed to claim ${nft.name}. Please try again.`,
+      });
+    } finally {
+      setIsClaiming(false);
+    }
+  };
 
   return (
     <div
@@ -86,7 +107,8 @@ const NFTCard = ({ nft }) => {
                 ? "bg-white/10 text-gray-400 cursor-not-allowed"
                 : "bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600"
             }`}
-            disabled={nft.locked}
+            disabled={nft.locked || isClaiming}
+            onClick={handleClaim}
           >
             {nft.locked ? (
               <span className="flex items-center">
@@ -96,7 +118,7 @@ const NFTCard = ({ nft }) => {
             ) : (
               <span className="flex items-center">
                 <Sparkles className="w-4 h-4 mr-2" />
-                Claim NFT
+                {isClaiming ? "Claiming..." : "Claim NFT"}
               </span>
             )}
           </Button>
