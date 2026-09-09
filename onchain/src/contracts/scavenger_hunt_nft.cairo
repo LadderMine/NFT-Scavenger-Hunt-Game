@@ -3,12 +3,18 @@ use starknet::ContractAddress;
 
 #[starknet::interface]
 pub trait IScavengerHuntNFT<TContractState> {
+    /// Mints exactly one badge token for `level` to `recipient`.
+    /// Caller must hold `MINTER_ROLE`. Panics if `recipient` already owns this badge.
     fn mint_level_badge(ref self: TContractState, recipient: ContractAddress, level: Levels);
+    /// Returns whether `owner` holds the badge for `level`.
     fn has_level_badge(self: @TContractState, owner: ContractAddress, level: Levels) -> bool;
 
     // Access control functions
+    /// Grants `MINTER_ROLE` to `account`. Caller must hold `DEFAULT_ADMIN_ROLE`.
     fn grant_minter_role(ref self: TContractState, account: ContractAddress);
+    /// Revokes `MINTER_ROLE` from `account`. Caller must hold `DEFAULT_ADMIN_ROLE`.
     fn revoke_minter_role(ref self: TContractState, account: ContractAddress);
+    /// Returns whether `account` holds `MINTER_ROLE`.
     fn has_minter_role(self: @TContractState, account: ContractAddress) -> bool;
 }
 
