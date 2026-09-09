@@ -2,7 +2,8 @@ import {
   CanActivate,
   ExecutionContext,
   Injectable,
-  ForbiddenException,
+  HttpException,
+  HttpStatus,
 } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
 import { RateLimiterService } from './rate-limiter.service';
@@ -35,8 +36,9 @@ export class RateLimitGuard implements CanActivate {
     );
 
     if (isLimited) {
-      throw new ForbiddenException(
+      throw new HttpException(
         'Too many requests. Please try again later.',
+        HttpStatus.TOO_MANY_REQUESTS,
       );
     }
 
