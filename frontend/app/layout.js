@@ -4,6 +4,7 @@ import "./globals.css";
 // import StoreProvider from "@/store/StoreProvider";
 import Providers from "@/lib/queryClient";
 import Navbar from "@/components/Navbar";
+import { ThemeProvider } from "@/lib/ThemeProvider";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -27,12 +28,14 @@ export default function RootLayout({ children }) {
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <Providers>
-          {/* <StoreProvider> */}
-          <Navbar />
-          {children}
-          {/* </StoreProvider> */}
-        </Providers>
+        <ThemeProvider>
+          <Providers>
+            {/* <StoreProvider> */}
+            <Navbar />
+            {children}
+            {/* </StoreProvider> */}
+          </Providers>
+        </ThemeProvider>
       </body>
     </html>
   );

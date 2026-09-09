@@ -3,6 +3,7 @@ import React, { useState } from "react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Menu, X, Gamepad, Trophy, Book, User, Users } from "lucide-react";
+import ThemeToggle from "@/components/ThemeToggle";
 
 const NavigationHeader = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -65,10 +66,12 @@ const NavigationHeader = () => {
                   Connect Wallet
                 </Link>
               </Button>
+              <ThemeToggle />
             </div>
 
             {/* Mobile menu button */}
-            <div className="md:hidden">
+            <div className="md:hidden flex items-center space-x-2">
+              <ThemeToggle />
               <Button
                 variant="ghost"
                 size="icon"
