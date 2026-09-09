@@ -5,6 +5,7 @@ import "./globals.css";
 import Providers from "@/lib/queryClient";
 import Navbar from "@/components/Navbar";
 import { ToastProvider } from "@/components/ui/toast";
+import { ThemeProvider } from "@/lib/ThemeProvider";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -28,14 +29,16 @@ export default function RootLayout({ children }) {
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <ToastProvider>
-          <Providers>
-            {/* <StoreProvider> */}
-            <Navbar />
-            {children}
-            {/* </StoreProvider> */}
-          </Providers>
-        </ToastProvider>
+        <ThemeProvider>
+          <ToastProvider>
+            <Providers>
+              {/* <StoreProvider> */}
+              <Navbar />
+              {children}
+              {/* </StoreProvider> */}
+            </Providers>
+          </ToastProvider>
+        </ThemeProvider>
       </body>
     </html>
   );
