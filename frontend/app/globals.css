@@ -19,4 +19,14 @@ body {
     --brand-pink: 236 72 153;
     --brand-dark: 9 9 11;
   }
+
+  html.dark body {
+    background-color: #000000;
+    color: #ffffff;
+  }
+
+  html.light body {
+    background-color: #f8fafc;
+    color: #0f172a;
+  }
 }
